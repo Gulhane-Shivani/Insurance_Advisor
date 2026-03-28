@@ -78,6 +78,93 @@ const QuoteForm: React.FC = () => {
         </div>
       </div>
 
+      {/* Dynamic Fields for Car Insurance */}
+      {formData.insuranceType === 'car' && (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8 animate-fade-in">
+          <div className="flex flex-col gap-2">
+            <label className="text-sm font-semibold text-slate-700">Vehicle Make</label>
+            <input 
+              type="text" 
+              name="vehicleMake"
+              value={formData.vehicleMake}
+              onChange={handleChange}
+              placeholder="e.g. Toyota" 
+              className="px-5 py-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all"
+              required
+            />
+          </div>
+          <div className="flex flex-col gap-2">
+            <label className="text-sm font-semibold text-slate-700">Vehicle Model</label>
+            <input 
+              type="text" 
+              name="vehicleModel"
+              value={formData.vehicleModel}
+              onChange={handleChange}
+              placeholder="e.g. Camry" 
+              className="px-5 py-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all"
+              required
+            />
+          </div>
+          <div className="flex flex-col gap-2">
+            <label className="text-sm font-semibold text-slate-700">Manufacturing Year</label>
+            <input 
+              type="number" 
+              name="vehicleYear"
+              value={formData.vehicleYear}
+              onChange={handleChange}
+              placeholder="e.g. 2022" 
+              className="px-5 py-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all"
+              required
+            />
+          </div>
+          <div className="flex flex-col gap-2">
+            <label className="text-sm font-semibold text-slate-700">Registration Number</label>
+            <input 
+              type="text" 
+              name="registrationNumber"
+              value={formData.registrationNumber}
+              onChange={handleChange}
+              placeholder="ABC-1234" 
+              className="px-5 py-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all"
+              required
+            />
+          </div>
+        </div>
+      )}
+
+      {/* Dynamic Fields for Health Insurance */}
+      {formData.insuranceType === 'health' && (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8 animate-fade-in">
+          <div className="flex flex-col gap-2">
+            <label className="text-sm font-semibold text-slate-700">Primary Insured Age</label>
+            <input 
+              type="number" 
+              name="age"
+              value={formData.age}
+              onChange={handleChange}
+              placeholder="Years" 
+              className="px-5 py-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all"
+              required
+            />
+          </div>
+          <div className="flex flex-col gap-2 border-l-0">
+             <label className="text-sm font-semibold text-slate-700">Pre-existing Medical Conditions</label>
+              <select 
+                name="medicalConditions"
+                value={formData.medicalConditions}
+                onChange={handleChange}
+                className="px-5 py-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all text-slate-700"
+              >
+                <option value="none">None</option>
+                <option value="diabetes">Diabetes</option>
+                <option value="hypertension">Hypertension</option>
+                <option value="heart">Heart disease</option>
+                <option value="other">Other</option>
+              </select>
+          </div>
+        </div>
+      )}
+
       <div className="flex flex-col gap-2 mb-10">
         <label className="text-sm font-semibold text-slate-700">Your Message (Optional)</label>
         <textarea 

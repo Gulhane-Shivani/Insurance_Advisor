@@ -1,25 +1,23 @@
 /* src/app/quote/page.tsx */
 import React from 'react';
-import Navbar from '../../components/common/Navbar';
-import Footer from '../../components/common/Footer';
+import PageLayout from '../../components/common/PageLayout';
 import QuoteForm from '../../components/forms/QuoteForm';
 import SectionTitle from '../../components/common/SectionTitle';
 import '../../styles/globals.css';
 
 const QuotePage: React.FC = () => {
   return (
-    <main className="min-h-screen">
-      <Navbar />
-      <section className="pt-40 pb-24 bg-slate-50 relative overflow-hidden">
+    <PageLayout>
+      <section className="relative overflow-hidden mb-16">
         <div className="absolute top-0 right-0 w-1/4 h-full bg-blue-100/30 blur-3xl rounded-full translate-x-1/2 -z-10"></div>
         <div className="container relative z-10 max-w-4xl">
           <SectionTitle 
-            title="Get your insurance quote"
-            subtitle="Comparing plans and getting a personalized quote takes less than 2 minutes. Our advisors are standing by to help you choose the best plan."
-            badge="Get Started"
+            title="Get Your Personalized Quote"
+            subtitle="Fill out the form below and our AI engine will find the most competitive plans across 50+ providers instantly."
+            badge="Fast & Free"
             align="center"
           />
-          <div className="mt-16">
+          <div className="mt-16 bg-white p-2 rounded-[48px] shadow-2xl shadow-slate-200/50">
             <QuoteForm />
           </div>
           <div className="mt-24 p-16 bg-white rounded-[40px] border border-slate-100 shadow-2xl relative overflow-hidden group">
@@ -40,8 +38,7 @@ const QuotePage: React.FC = () => {
           </div>
         </div>
       </section>
-      <Footer />
-    </main>
+    </PageLayout>
   );
 };
 

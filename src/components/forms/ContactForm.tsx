@@ -20,8 +20,9 @@ const ContactForm: React.FC = () => {
   };
 
   return (
-    <div className="bg-white p-8 md:p-12 rounded-3xl border border-slate-100 shadow-xl shadow-slate-200/50">
-      <h3 className="text-3xl font-bold mb-8 text-slate-900 leading-tight">Drop us a line</h3>
+    <div className="bg-white p-10 md:p-14 rounded-[48px] border border-slate-100 shadow-2xl relative overflow-hidden group">
+      <div className="absolute top-0 right-0 w-64 h-64 bg-blue-50/50 blur-3xl rounded-full translate-x-1/2 -translate-y-1/2 group-hover:bg-blue-100/40 transition-colors"></div>
+      <h3 className="text-4xl font-black mb-10 text-slate-900 leading-tight">Got Questions? <br/><span className="text-blue-600">Let's Talk.</span></h3>
       {submitted && (
         <div className="mb-8 p-4 bg-green-50 text-green-700 rounded-2xl border border-green-100 font-medium flex items-center gap-3">
           <span className="text-xl">✅</span> Message sent successfully!

@@ -5,8 +5,15 @@ export interface QuoteFormData {
   name: string;
   email: string;
   phone: string;
-  insuranceType: string;
+  insuranceType: 'life' | 'health' | 'car' | 'business';
   message: string;
+  // Dynamic fields
+  vehicleMake?: string;
+  vehicleModel?: string;
+  vehicleYear?: string;
+  registrationNumber?: string;
+  age?: string;
+  medicalConditions?: string;
 }
 
 export const useQuoteForm = () => {
@@ -16,6 +23,12 @@ export const useQuoteForm = () => {
     phone: '',
     insuranceType: 'life',
     message: '',
+    vehicleMake: '',
+    vehicleModel: '',
+    vehicleYear: '',
+    registrationNumber: '',
+    age: '',
+    medicalConditions: '',
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);

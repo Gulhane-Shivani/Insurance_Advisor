@@ -1,39 +1,34 @@
 /* src/app/faq/page.tsx */
 import React from 'react';
-import Navbar from '../../components/common/Navbar';
-import Footer from '../../components/common/Footer';
+import PageLayout from '../../components/common/PageLayout';
 import SectionTitle from '../../components/common/SectionTitle';
 import '../../styles/globals.css';
 
 const FAQPage: React.FC = () => {
-  const faqs = [
-    { question: 'What is the best insurance for a family of four?', answer: 'The best insurance depends on your needs, but generally a comprehensive health and life insurance policy is recommended for a family of four.' },
-    { question: 'How much insurance do I need?', answer: 'A common rule of thumb is to have 10-15 times your annual income in life insurance, but this varies based on your financial goals and debts.' },
-    { question: 'What is the claim process?', answer: 'The claim process is straightforward: notify our support team, submit the required documents, and our advisors will handle the rest with the provider.' },
-    { question: 'Can I change my policy later?', answer: 'Yes, you can upgrade or modify your policy during the renewal period or when life circumstances change, like marriage or having a child.' },
-  ];
-
   return (
-    <main className="min-h-screen">
-      <Navbar />
-      <section className="pt-40 pb-24 bg-slate-50 relative overflow-hidden">
+    <PageLayout>
+      <section className="relative overflow-hidden mb-16">
         <div className="absolute top-0 right-0 w-1/4 h-full bg-blue-100/30 blur-3xl rounded-full translate-x-1/2 -z-10"></div>
         <div className="container relative z-10 max-w-4xl">
           <SectionTitle 
-            title="Have any questions?"
-            subtitle="Explore our most frequently asked questions or get in touch with our team for personalized assistance."
-            badge="FAQ"
+            title="Common Questions & Answers"
+            subtitle="Everything you need to know about our insurance policies and comparison platform."
+            badge="Help Center"
             align="center"
           />
-          <div className="flex flex-col gap-8 mt-16">
-            {faqs.map((faq, index) => (
-              <div key={index} className="bg-white rounded-3xl border border-slate-100 shadow-xl shadow-slate-200/50 p-10 group overflow-hidden">
-                <h3 className="text-2xl font-bold mb-6 text-slate-900 leading-tight group-hover:text-blue-600 transition-colors">
-                  {faq.question}
-                </h3>
-                <p className="text-xl text-slate-600 leading-relaxed font-medium">
-                  {faq.answer}
-                </p>
+          <div className="mt-20 flex flex-col gap-6">
+            {[
+              { q: "How does the comparison tool work?", a: "Our AI-powered engine analyzes thousands of data points across global carriers to find the best balance of coverage and price for your specific profile." },
+              { q: "Is my personal data secure?", a: "Absolutely. We use bank-grade encryption and never sell your lead data to third parties without your explicit consent." },
+              { q: "Can I cancel my policy online?", a: "Most policies can be managed or cancelled directly through our integrated User Dashboard or by contacting our 24/7 claims support." },
+              { q: "Do you charge any commission?", a: "Our service is free for users. We are compensated by our insurance partners, allowing us to offer you neutral, expert advice." },
+            ].map((faq, index) => (
+              <div key={index} className="bg-white p-8 rounded-[32px] border border-slate-100 shadow-sm hover:shadow-xl hover:border-blue-100 transition-all group cursor-pointer">
+                <h4 className="text-xl font-bold text-slate-900 mb-4 flex items-center justify-between group-hover:text-blue-600 transition-colors">
+                  {faq.q}
+                  <span className="text-2xl text-blue-500 group-hover:rotate-90 transition-transform">→</span>
+                </h4>
+                <p className="text-slate-500 font-medium leading-relaxed">{faq.a}</p>
               </div>
             ))}
           </div>
@@ -52,8 +47,7 @@ const FAQPage: React.FC = () => {
           </div>
         </div>
       </section>
-      <Footer />
-    </main>
+    </PageLayout>
   );
 };
 
