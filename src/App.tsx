@@ -2,30 +2,28 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
-import Home from './app/page';
+import Home from './app/Home';
 import AboutPage from './app/about/page';
-import BlogPage from './app/blog/page';
-import ComparePage from './app/compare/page';
+import ComparePage from './app/compare';
 import ContactPage from './app/contact/page';
-import FAQPage from './app/faq/page';
 import QuotePage from './app/quote/page';
 import LifeInsurancePage from './app/insurance/lifeInsurance';
 import HealthInsurancePage from './app/insurance/healthInsurance';
 import CarInsurancePage from './app/insurance/carInsurance';
 import BusinessInsurancePage from './app/insurance/businessInsurance';
 import DashboardPage from './app/dashboard/page';
+import ScrollToTop from './components/common/ScrollToTop';
 
 const App: React.FC = () => {
   return (
     <AuthProvider>
       <Router>
+        <ScrollToTop />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<AboutPage />} />
-          <Route path="/blog" element={<BlogPage />} />
           <Route path="/compare" element={<ComparePage />} />
           <Route path="/contact" element={<ContactPage />} />
-          <Route path="/faq" element={<FAQPage />} />
           <Route path="/quote" element={<QuotePage />} />
           <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="/insurance/life" element={<LifeInsurancePage />} />

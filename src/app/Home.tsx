@@ -6,9 +6,10 @@ import FAQ from '../components/home/FAQ';
 import QuoteForm from '../components/forms/QuoteForm';
 import '../styles/globals.css';
 
+
 const Home: React.FC = () => {
   return (
-    <PageLayout className="pt-0" bg="bg-white">
+    <PageLayout bg="bg-white">
       <Hero />
 
       {/* Trust Bar / Partners */}
@@ -38,7 +39,7 @@ const Home: React.FC = () => {
 
         <Testimonials />
 
-        <FAQ />
+        <FAQ/>
 
         <div className="py-24" id="getquote">
           <div className="container">
