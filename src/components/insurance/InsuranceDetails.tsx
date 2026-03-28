@@ -57,7 +57,7 @@ const InsuranceDetails: React.FC<InsuranceDetailsProps> = ({ type }) => {
   const currentDetails = details[type];
 
   return (
-    <div className="py-20 bg-slate-50 border-y border-slate-200">
+    <div className="py-20 bg-slate-50">
       <div className="container flex flex-col lg:flex-row gap-16 items-start">
         <div className="flex-1">
           <span className="inline-block px-4 py-1 rounded-full bg-blue-50 text-blue-600 font-bold text-xs uppercase tracking-wider mb-6 border border-blue-100 font-sans">Plan Highlights</span>

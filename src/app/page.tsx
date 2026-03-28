@@ -2,6 +2,7 @@ import PageLayout from '../components/common/PageLayout';
 import Hero from '../components/home/Hero';
 import Categories from '../components/home/Categories';
 import Testimonials from '../components/home/Testimonials';
+import FAQ from '../components/home/FAQ';
 import QuoteForm from '../components/forms/QuoteForm';
 import '../styles/globals.css';
 
@@ -36,6 +37,8 @@ const Home: React.FC = () => {
 
 
         <Testimonials />
+
+        <FAQ />
 
         <div className="py-24" id="getquote">
           <div className="container">
