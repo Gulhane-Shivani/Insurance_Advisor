@@ -1,10 +1,9 @@
 /* src/app/insurance/business/page.tsx */
 import React from 'react';
-import PageLayout from '../../../components/common/PageLayout';
-import InsuranceDetails from '../../../components/insurance/InsuranceDetails';
-import QuoteForm from '../../../components/forms/QuoteForm';
-import SectionTitle from '../../../components/common/SectionTitle';
-import '../../../styles/globals.css';
+import PageLayout from '../../components/common/PageLayout';
+import InsuranceDetails from '../../components/insurance/InsuranceDetails';
+import QuoteForm from '../../components/forms/QuoteForm';
+import SectionTitle from '../../components/common/SectionTitle';
 
 const BusinessInsurancePage: React.FC = () => {
   return (
