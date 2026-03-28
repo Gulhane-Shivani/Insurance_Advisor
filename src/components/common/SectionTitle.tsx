@@ -22,11 +22,11 @@ const SectionTitle: React.FC<SectionTitleProps> = ({
           {badge}
         </span>
       )}
-      <h2 className="text-3xl md:text-5xl font-bold mb-6 text-slate-900 leading-[1.15]">
+      <h2 className="text-2xl md:text-4xl font-bold mb-6 text-slate-900 leading-[1.15]">
         {title}
       </h2>
       {subtitle && (
-        <p className="text-slate-600 text-lg md:text-xl leading-relaxed">
+        <p className="text-base md:text-lg text-slate-600 leading-relaxed">
           {subtitle}
         </p>
       )}

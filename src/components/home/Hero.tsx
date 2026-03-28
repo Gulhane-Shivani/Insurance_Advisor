@@ -12,10 +12,10 @@ const Hero: React.FC = () => {
             <span className="flex h-2 w-2 rounded-full bg-blue-500 animate-pulse"></span>
             Trusted by 50,000+ Families
           </div>
-          <h1 className="text-5xl md:text-6xl font-black mb-8 text-slate-900 leading-[1.05] tracking-tight">
+          <h1 className="text-4xl md:text-5xl font-black mb-6 text-slate-900 leading-[1.05] tracking-tight">
             Smart Insurance for a <span className="text-blue-600">Secure Future</span>
           </h1>
-          <p className="text-xl text-slate-600 mb-10 leading-relaxed max-w-lg">
+          <p className="text-lg text-slate-600 mb-8 leading-relaxed max-w-lg">
             Compare the best insurance plans from top providers side-by-side. Get personalized quotes in minutes with zero hidden fees.
           </p>
           <div className="flex flex-col sm:flex-row gap-4">

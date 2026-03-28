@@ -4,28 +4,28 @@ import SectionTitle from '../common/SectionTitle';
 
 const faqs = [
   {
-    question: "How does the Beshak Community Connect Program work?",
-    answer: "You can go through the profiles of advisor listed on our website and choose the one that you prefer. With the help of the advisor, you can generate a personalized Beshak TruMatch report to understand which plans fit your needs the best. This report will be created by Beshak's research-backed algorithm and will be 100% unbiased. The advisor will discuss this report with you and help you make informed decisions. After you zero down on a plan and make the purchase, the advisor will be there by your side and help you throughout your insurance journey."
+    question: "How does the Insurance Advisor comparison engine work?",
+    answer: "Insurance Advisor uses a sophisticated AI-driven engine that scans over 50+ leading insurance providers in real-time. By analyzing your specific requirements—like age, health history, and coverage needs—we provide a sorted list of plans that offer the best value for your money, all in less than 60 seconds."
   },
   {
-    question: "How do I connect with the advisor?",
-    answer: "Connecting with an advisor is simple. Once you browse the profiles and find a match, just click the 'Connect' button. You can then schedule a call or start a chat directly through our specialized portal."
+    question: "Is there any fee for using Insurance Advisor's services?",
+    answer: "No, our service is completely free for all users. We believe that everyone should have access to the best insurance advice without any upfront costs. Our platform earns a small commission from insurance providers only when you choose to purchase through us, ensuring our goals are aligned with yours."
   },
   {
-    question: "Will I have to give my email id or mobile number before connecting with the advisor?",
-    answer: "Yes, for security and verification purposes, we require a valid email or mobile number. This ensures that only real users are connected with our expert advisors and helps in maintaining professional communication."
+    question: "How do I know which insurance plan is right for me?",
+    answer: "Our platform provides a detailed 'Match Score' for every plan based on its benefits, claim settlement ratio, and premium costs relative to your profile. Additionally, our certified expert advisors are available for a free consultation to help you understand the fine print."
   },
   {
-    question: "How can I book an appointment with the advisor?",
-    answer: "After selecting an advisor, you'll see their availability calendar. Simply pick a time slot that works for you, and you'll receive a confirmation email with all the necessary details for the meeting."
+    question: "Can I buy a policy directly through Insurance Advisor?",
+    answer: "Yes, once you find the perfect plan, you can complete the entire application and payment process directly on our secure platform. We handle all the paperwork and coordinate with the insurance company to ensure your policy is issued quickly."
   },
   {
-    question: "What if I don't want to continue with the advisor I chose?",
-    answer: "You are never locked in. If you feel the advisor isn't the right fit for your needs, you can simply stop the engagement and choose a different advisor from our community at any time."
+    question: "What support do I get after purchasing a policy?",
+    answer: "Our relationship doesn't end with a sale. Insurance Advisor provides lifelong support, including assistance with renewals, policy changes, and most importantly, step-by-step guidance during the claim settlement process to ensure your family gets the benefits they deserve."
   },
   {
-    question: "How can I connect with the Beshak Team in case of any queries?",
-    answer: "Our support team is available 24/7. You can reach out via the 'Contact Us' page, email us at support@futureinvo.com, or use the live chat feature on our website for instant assistance."
+    question: "Are the quotes provided by Insurance Advisor unbiased?",
+    answer: "Absolutely. Our comparison engine is built on transparency. We rank plans based on objective data like premium rates, coverage limits, and insurer track records. We do not prioritize any provider based on commissions, as our primary goal is your long-term security."
   }
 ];
 
