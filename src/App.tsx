@@ -9,10 +9,10 @@ import ComparePage from './app/compare/page';
 import ContactPage from './app/contact/page';
 import FAQPage from './app/faq/page';
 import QuotePage from './app/quote/page';
-import LifeInsurancePage from './app/insurance/life/page';
-import HealthInsurancePage from './app/insurance/health/page';
-import CarInsurancePage from './app/insurance/car/page';
-import BusinessInsurancePage from './app/insurance/business/page';
+import LifeInsurancePage from './app/insurance/lifeInsurance';
+import HealthInsurancePage from './app/insurance/healthInsurance';
+import CarInsurancePage from './app/insurance/carInsurance';
+import BusinessInsurancePage from './app/insurance/business/businessInsurance';
 import DashboardPage from './app/dashboard/page';
 
 const App: React.FC = () => {

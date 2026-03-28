@@ -1,9 +1,8 @@
 import { Link } from 'react-router-dom';
-import '../../styles/globals.css';
 
 const Hero: React.FC = () => {
   return (
-    <section className="relative overflow-hidden pt-32 pb-20 md:pt-48 md:pb-32 bg-slate-50">
+    <section className="relative overflow-hidden pt-24 pb-20 md:pt-36 md:pb-32 bg-slate-50">
       <div className="absolute top-0 right-0 w-1/3 h-full bg-blue-100/30 blur-3xl rounded-full translate-x-1/2 -translate-y-1/2 -z-10"></div>
       <div className="absolute bottom-0 left-0 w-1/4 h-3/4 bg-indigo-100/20 blur-2xl rounded-full -translate-x-1/2 translate-y-1/2 -z-10"></div>
 
@@ -13,7 +12,7 @@ const Hero: React.FC = () => {
             <span className="flex h-2 w-2 rounded-full bg-blue-500 animate-pulse"></span>
             Trusted by 50,000+ Families
           </div>
-          <h1 className="text-5xl md:text-7xl font-bold mb-8 text-slate-900 leading-[1.05] tracking-tight">
+          <h1 className="text-5xl md:text-6xl font-black mb-8 text-slate-900 leading-[1.05] tracking-tight">
             Smart Insurance for a <span className="text-blue-600">Secure Future</span>
           </h1>
           <p className="text-xl text-slate-600 mb-10 leading-relaxed max-w-lg">

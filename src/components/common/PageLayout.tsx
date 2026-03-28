@@ -3,7 +3,6 @@ import React from 'react';
 import type { ReactNode } from 'react';
 import Navbar from './Navbar';
 import Footer from './Footer';
-import '../../styles/globals.css';
 
 interface PageLayoutProps {
   children: ReactNode;
@@ -16,10 +15,12 @@ const PageLayout: React.FC<PageLayoutProps> = ({
   bg = 'bg-slate-50', 
   className = '' 
 }) => {
+  const hasPadding = className.includes('pt-') || className.includes('p-') || className.includes('py-');
+  
   return (
     <main className={`min-h-screen flex flex-col ${bg}`}>
       <Navbar />
-      <div className={`flex-grow pt-32 pb-20 ${className}`}>
+      <div className={`flex-grow ${!hasPadding ? 'pt-32 pb-20' : ''} ${className}`}>
         {children}
       </div>
       <Footer />

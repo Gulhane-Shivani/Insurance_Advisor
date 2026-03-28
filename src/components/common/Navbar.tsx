@@ -42,7 +42,7 @@ const Navbar: React.FC = () => {
             IA
           </div>
           <span className="font-bold text-xl tracking-tight text-slate-900">
-            Insu<span className="text-blue-600">Advisor</span>
+            Insurance<span className="text-blue-600">Advisor</span>
           </span>
         </Link>
 
