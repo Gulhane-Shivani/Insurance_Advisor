@@ -3,6 +3,7 @@ import React from 'react';
 import PageLayout from '../components/common/PageLayout';
 import SectionTitle from '../components/common/SectionTitle';
 import ComparisonSuite from '../components/compare/ComparisonSuite';
+import CompareTable from '../components/compare/CompareTable';
 import '../styles/globals.css';
 
 const ComparePage: React.FC = () => {
@@ -18,6 +19,11 @@ const ComparePage: React.FC = () => {
           />
           <div className="mt-12">
             <ComparisonSuite />
+          </div>
+          
+          <div className="mt-20">
+            <h2 className="text-3xl font-black text-slate-900 mb-8 text-center">At-a-Glance Plan Comparison</h2>
+            <CompareTable />
           </div>
           <div className="mt-16 p-10 bg-white rounded-[32px] border border-slate-100 shadow-xl relative overflow-hidden group">
             <div className="absolute top-0 right-0 w-80 h-80 bg-blue-50 blur-3xl rounded-full translate-x-1/2 -translate-y-1/2 group-hover:bg-blue-100/50 transition-all duration-700"></div>

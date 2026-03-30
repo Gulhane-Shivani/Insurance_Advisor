@@ -32,7 +32,7 @@ const Navbar: React.FC = () => {
       ]
     },
     { name: 'Quote', path: '/quote' },
-    { name: 'Compare', path: '/compare' },
+    { name: 'Insurance Plan', path: '/compare' },
     { name: 'About', path: '/about' },
     { name: 'Contact', path: '/contact' },
   ];
