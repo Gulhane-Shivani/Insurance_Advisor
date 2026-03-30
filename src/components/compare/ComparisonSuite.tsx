@@ -17,9 +17,16 @@ import {
 } from 'lucide-react';
 import { insurancePlans, carriers } from '../../data/carriers';
 import '../../styles/globals.css';
+interface ComparisonSuiteProps {
+  defaultCategory?: 'all' | 'life' | 'health' | 'car' | 'business';
+  hideCategoryFilter?: boolean;
+}
 
-const ComparisonSuite: React.FC = () => {
-  const [filterType, setFilterType] = useState<'all' | 'life' | 'health' | 'car' | 'business'>('all');
+const ComparisonSuite: React.FC<ComparisonSuiteProps> = ({ 
+  defaultCategory = 'all', 
+  hideCategoryFilter = false 
+}) => {
+  const [filterType, setFilterType] = useState<'all' | 'life' | 'health' | 'car' | 'business'>(defaultCategory);
   const [maxPrice, setMaxPrice] = useState<number>(3000);
   const [selectedCarrier, setSelectedCarrier] = useState<string>('all');
   const [viewingPlan, setViewingPlan] = useState<typeof insurancePlans[0] | null>(null);
@@ -51,20 +58,22 @@ const ComparisonSuite: React.FC = () => {
       <div className="flex flex-col gap-6">
         {/* Filters Hub */}
         <div className="bg-white p-6 rounded-3xl border border-slate-100 shadow-lg shadow-slate-200/50 flex flex-wrap items-center gap-6">
-          <div className="flex flex-col gap-3 min-w-[200px]">
-            <label className="text-xs font-bold uppercase tracking-widest text-slate-500">Insurance Category</label>
-            <select 
-              className="px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-blue-500/20"
-              value={filterType}
-              onChange={(e) => setFilterType(e.target.value as any)}
-            >
-              <option value="all">All Categories</option>
-              <option value="life">Life Insurance</option>
-              <option value="health">Health Insurance</option>
-              <option value="car">Car Insurance</option>
-              <option value="business">Business Insurance</option>
-            </select>
-          </div>
+          {!hideCategoryFilter && (
+            <div className="flex flex-col gap-3 min-w-[200px]">
+              <label className="text-xs font-bold uppercase tracking-widest text-slate-500">Insurance Category</label>
+              <select 
+                className="px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-blue-500/20"
+                value={filterType}
+                onChange={(e) => setFilterType(e.target.value as any)}
+              >
+                <option value="all">All Categories</option>
+                <option value="life">Life Insurance</option>
+                <option value="health">Health Insurance</option>
+                <option value="car">Car Insurance</option>
+                <option value="business">Business Insurance</option>
+              </select>
+            </div>
+          )}
 
           <div className="flex flex-col gap-3 min-w-[200px]">
             <label className="text-xs font-bold uppercase tracking-widest text-slate-500">Provider</label>

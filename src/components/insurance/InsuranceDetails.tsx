@@ -3,6 +3,7 @@ import React from 'react';
 import { Check, X, Shield, Clock } from 'lucide-react';
 import TrustBar from '../common/TrustBar';
 import ReviewsSection from './ReviewsSection';
+import ComparisonSuite from '../compare/ComparisonSuite';
 
 interface InsuranceDetailsProps {
   type: 'life' | 'health' | 'car' | 'business';
@@ -193,6 +194,16 @@ const InsuranceDetails: React.FC<InsuranceDetailsProps> = ({ type }) => {
            ))}
         </div>
       </div>
+
+      <section className="py-24 bg-slate-50 border-y border-slate-100">
+        <div className="container">
+          <div className="mb-12 text-center">
+            <h2 className="text-3xl md:text-4xl font-black text-slate-900 mb-4 tracking-tight">Available {type.charAt(0).toUpperCase() + type.slice(1)} Insurance Plans</h2>
+            <p className="text-slate-500 font-medium max-w-2xl mx-auto text-lg">Compare our top-rated {type} insurance packages and choose the coverage that perfectly aligns with your needs.</p>
+          </div>
+          <ComparisonSuite defaultCategory={type} hideCategoryFilter={true} />
+        </div>
+      </section>
 
       <ReviewsSection category={type} />
     </div>
