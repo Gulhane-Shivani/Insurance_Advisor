@@ -14,7 +14,6 @@ const ComparePage: React.FC = () => {
           <SectionTitle
             title="Policy Comparison Hub"
             subtitle="Compare top insurance policies side-by-side. Filter by price, coverage, and specific carriers to find your perfect match."
-            badge="Advanced Comparison"
             align="center"
           />
           <div className="mt-12">
