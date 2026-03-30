@@ -11,6 +11,7 @@ import LifeInsurancePage from './app/insurance/lifeInsurance';
 import HealthInsurancePage from './app/insurance/healthInsurance';
 import CarInsurancePage from './app/insurance/carInsurance';
 import BusinessInsurancePage from './app/insurance/businessInsurance';
+import InsuranceOverview from './app/insurance/Overview';
 import DashboardPage from './app/dashboard/page';
 import ScrollToTop from './components/common/ScrollToTop';
 
@@ -26,12 +27,11 @@ const App: React.FC = () => {
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/quote" element={<QuotePage />} />
           <Route path="/dashboard" element={<DashboardPage />} />
+          <Route path="/insurance" element={<InsuranceOverview />} />
           <Route path="/insurance/life" element={<LifeInsurancePage />} />
           <Route path="/insurance/health" element={<HealthInsurancePage />} />
           <Route path="/insurance/car" element={<CarInsurancePage />} />
           <Route path="/insurance/business" element={<BusinessInsurancePage />} />
-          {/* Redirect /insurance to /insurance/life or a common page if created */}
-          <Route path="/insurance" element={<LifeInsurancePage />} />
         </Routes>
       </Router>
     </AuthProvider>

@@ -1,6 +1,8 @@
 /* src/components/insurance/InsuranceDetails.tsx */
 import React from 'react';
-import '../../styles/globals.css';
+import { Check, X, Shield, Clock } from 'lucide-react';
+import TrustBar from '../common/TrustBar';
+import ReviewsSection from './ReviewsSection';
 
 interface InsuranceDetailsProps {
   type: 'life' | 'health' | 'car' | 'business';
@@ -9,47 +11,59 @@ interface InsuranceDetailsProps {
 const InsuranceDetails: React.FC<InsuranceDetailsProps> = ({ type }) => {
   const details = {
     life: {
-      title: 'Life Insurance Solutions',
-      points: ['Secure your family\'s financial future', 'Tax benefits under relevant sections', 'Flexibility in premium payments', 'Wealth creation with death benefit'],
+      title: 'Protect Your Legacy',
+      oneLiner: 'Comprehensive life protection for you and your family.',
+      points: ['Direct financial support for family', 'Tax-free death benefits (T&C)', 'Legacy for future generations', 'Debt & loan clearance protection'],
+      covered: ['Natural Death', 'Accidental Death', 'Critical Illness (optional)', 'Accidental Disability'],
+      notCovered: ['Suicide in first 12 months', 'Participation in risky sports', 'War or invasion related', 'Pre-existing medical conditions (undisclosed)'],
       stats: { cover: '$1M+', payout: '99.2%', clients: '250k+' },
       claimSteps: [
-        { title: 'Intimation', desc: 'Notify us immediately upon the event of a death.' },
-        { title: 'Documentation', desc: 'Submit death certificate and original policy documents.' },
-        { title: 'Verification', desc: 'Our team verifies the claim within 48 hours.' },
-        { title: 'Settlement', desc: 'Payout is credited to the nominee\'s account.' }
+        { title: 'Report Loss', desc: 'Call our 24/7 dedicated bereavement line.' },
+        { title: 'Upload Docs', desc: 'Securely upload certificates via mobile app.' },
+        { title: 'Verification', desc: 'Instant verification by our digital claims engine.' },
+        { title: 'Payout', desc: 'Funds cleared to nominee within 48 hours.' }
       ]
     },
     health: {
-      title: 'Global Health Coverage',
-      points: ['Network of 15,000+ hospital partners', '24/7 specialist access', 'Chronic illness management programs', 'International treatment options'],
+      title: 'Prioritize Your Wellness',
+      oneLiner: 'Quality medical care without financial stress.',
+      points: ['Cashless treatment at 15k+ hospitals', 'No-claim bonus up to 100%', 'Global specialist assistance', 'Digital health consultation'],
+      covered: ['In-patient Hospitalization', 'Pre & Post hospital expenses', 'Daycare Procedures (100% covered)', 'Ayurvedic & Alternative care'],
+      notCovered: ['Cosmetic or Plastic Surgery', 'Pregnancy (if within waiting period)', 'Alcohol or Drug related injuries', 'Optional dental treatments'],
       stats: { cover: 'Unlimited', claim: '2 hours', saved: '45%' },
       claimSteps: [
-        { title: 'Admission', desc: 'Present your health card at the network hospital desk.' },
-        { title: 'Pre-Auth', desc: 'Hospital sends pre-authorization request for approval.' },
-        { title: 'Approval', desc: 'Get cashless approval within 2 hours of request.' },
-        { title: 'Discharge', desc: 'Focus on recovery while we settle bills directly.' }
+        { title: 'ID Verification', desc: 'Show your e-card at any network hospital.' },
+        { title: 'Pre-Auth', desc: 'Hospital sends request; we approve in 2 hours.' },
+        { title: 'Medical Review', desc: 'Our doctors coordinate care with the hospital.' },
+        { title: 'Discharge', desc: 'Pay nothing; we settle direct with the facility.' }
       ]
     },
     car: {
-      title: 'Advanced Vehicle Guard',
-      points: ['Instant digital policy issuance', 'Cashless repairs at 4,000+ garages', 'Round-the-clock roadside assistance', 'Engine and gearbox protection'],
+      title: 'Drive with Confidence',
+      oneLiner: 'Smart protection for your vehicle and peace of mind.',
+      points: ['Instant cashless claim processing', 'Original spare parts guarantee', 'Zero depreciation coverage', 'Return to invoice benefit'],
+      covered: ['Accidental Damage', 'Theft & Partial Burglary', 'Natural Disasters (Flood/Fire)', 'Third-Party Liability'],
+      notCovered: ['Driving without a valid license', 'Mechanical or Electrical breakdown', 'Wear and Tear (Standard)', 'Drunken driving related damage'],
       stats: { quote: '2 mins', garages: '4k+', reviews: '4.8/5' },
       claimSteps: [
-        { title: 'Spot Photo', desc: 'Take clear photos of the vehicle damage on the spot.' },
-        { title: 'Towing', desc: 'Call 24/7 assistance if the vehicle is not drivable.' },
-        { title: 'Repair', desc: 'Choose a cashless garage for instant settlement.' },
-        { title: 'Survey', desc: 'Surveyor approves claim via digital assessment.' }
+        { title: 'Spot Survey', desc: 'Record a video of the damage on our app.' },
+        { title: 'Choice Garage', desc: 'Pickจาก 4,000+ garages for cashless repair.' },
+        { title: 'Repair Tracking', desc: 'Get live updates on your repair status.' },
+        { title: 'Quality Check', desc: 'Repair quality certified by independent surveyors.' }
       ]
     },
     business: {
-      title: 'Enterprise Risk Shield',
-      points: ['Comprehensive liability protection', 'Asset and machinery coverage', 'Employee health & accident benefits', 'Business interruption support'],
+      title: 'Shield Your Enterprise',
+      oneLiner: 'Mitigate operational risks and secure your assets.',
+      points: ['Tailored liability coverage', 'Business interruption loss recovery', 'Cyber security protection', 'Employee wellness & accident'],
+      covered: ['Property Damage (Fire/Theft)', 'Public & Legal Liability', 'Machine Breakdown', 'Money in Transit / Fidelity'],
+      notCovered: ['Gross negligence by management', 'Normal wear and tear of machinery', 'Consequential losses (non-insured)', 'War and Terrorism (optional)'],
       stats: { assets: '$10B+', companies: '10k+', expert: '300+' },
       claimSteps: [
-        { title: 'Assess', desc: 'Evaluate the damage to property or business assets.' },
-        { title: 'Report', desc: 'File a formal report with your dedicated advisor.' },
-        { title: 'Evidence', desc: 'Provide invoices, logs, and evidence of loss.' },
-        { title: 'Recovery', desc: 'Receive payout to start business restoration.' }
+        { title: 'Notify Advisor', desc: 'Get a dedicated claims manager for your case.' },
+        { title: 'On-site Survey', desc: 'Technical expert visits within 6 hours.' },
+        { title: 'Interim Payout', desc: 'Receive immediate funds for business continuity.' },
+        { title: 'Full Settlement', desc: 'Final audit and full loss recovery.' }
       ]
     }
   };
@@ -57,59 +71,133 @@ const InsuranceDetails: React.FC<InsuranceDetailsProps> = ({ type }) => {
   const currentDetails = details[type];
 
   return (
-    <div className="py-20 bg-slate-50">
-      <div className="container flex flex-col lg:flex-row gap-16 items-start">
-        <div className="flex-1">
-          <span className="inline-block px-4 py-1 rounded-full bg-blue-50 text-blue-600 font-bold text-xs uppercase tracking-wider mb-6 border border-blue-100 font-sans">Plan Highlights</span>
-          <h2 className="text-4xl md:text-5xl font-black mb-8 text-slate-900 leading-[1.1] tracking-tight">{currentDetails.title}</h2>
-          <ul className="flex flex-col gap-6 mb-12">
-            {currentDetails.points.map((pt, i) => (
-              <li key={i} className="flex items-start gap-4">
-                <span className="w-6 h-6 rounded-full bg-blue-600 flex items-center justify-center text-white text-[12px] shrink-0 mt-1 shadow-lg shadow-blue-500/20 font-bold">✔</span>
-                <p className="text-xl text-slate-700 font-medium leading-relaxed">{pt}</p>
-              </li>
-            ))}
-          </ul>
-
-          <div className="grid grid-cols-3 gap-6 pt-12 border-t border-slate-200">
+    <div className="bg-white">
+      {/* Hero-like Title Section */}
+      <div className="container pt-16 pb-10">
+        <div className="max-w-4xl">
+          <span className="inline-block px-4 py-1 rounded-full bg-blue-50 text-blue-600 font-bold text-xs uppercase tracking-widest mb-6 border border-blue-100">Plan Highlights</span>
+          <h1 className="text-4xl md:text-5xl font-black text-slate-900 leading-[1.1] tracking-tight mb-6">{currentDetails.title}</h1>
+          <p className="text-lg md:text-xl text-slate-600 font-medium leading-relaxed max-w-3xl mb-10">{currentDetails.oneLiner}</p>
+          
+          <div className="flex flex-wrap gap-12 pt-10 border-t border-slate-100">
             {Object.entries(currentDetails.stats).map(([label, val]) => (
               <div key={label}>
-                <p className="text-3xl md:text-4xl font-black text-blue-600 mb-2">{val}</p>
-                <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none">{label}</p>
+                <p className="text-4xl md:text-5xl font-black text-blue-600 mb-2">{val}</p>
+                <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] leading-none">{label}</p>
               </div>
             ))}
           </div>
-        </div>
-
-        <div className="lg:w-[450px] bg-white p-10 rounded-[48px] shadow-2xl border border-slate-100 relative group">
-          <div className="absolute top-0 right-0 w-32 h-32 bg-blue-50 blur-3xl rounded-full -translate-x-1/2 -translate-y-1/2 -z-10 group-hover:bg-blue-100 transition-colors"></div>
-          <h3 className="text-2xl font-black text-slate-900 mb-8 flex items-center gap-3">
-             <span className="w-12 h-12 bg-blue-600 rounded-2xl flex items-center justify-center text-white text-2xl shadow-lg shadow-blue-500/30">📜</span>
-             Claim Process
-          </h3>
-          <div className="flex flex-col gap-8">
-            {currentDetails.claimSteps.map((step, i) => (
-              <div key={i} className="flex gap-6 relative group/step">
-                {i < currentDetails.claimSteps.length - 1 && (
-                  <div className="absolute left-4 top-10 bottom-[-32px] w-[2px] bg-slate-100 group-hover/step:bg-blue-200 transition-colors"></div>
-                )}
-                <div className="w-8 h-8 rounded-full bg-slate-50 border-2 border-slate-200 flex items-center justify-center text-xs font-black text-slate-500 shrink-0 z-10 group-hover/step:bg-blue-600 group-hover/step:border-blue-600 group-hover/step:text-white transition-all duration-300">
-                  {i + 1}
-                </div>
-                <div>
-                  <h4 className="font-black text-slate-900 leading-none mb-2 uppercase text-xs tracking-widest">{step.title}</h4>
-                  <p className="text-slate-500 text-sm font-medium leading-relaxed">{step.desc}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-          <button className="mt-12 w-full bg-slate-900 text-white py-5 rounded-2xl font-black text-sm uppercase tracking-[0.2em] hover:bg-blue-600 transition-all shadow-xl active:scale-95 group-hover:-translate-y-1">
-            File a Claim Now
-          </button>
         </div>
       </div>
+
+      <TrustBar />
+
+      {/* Main Feature / Coverage Section */}
+      <div className="py-20 container bg-slate-50/50 rounded-[48px] my-10 overflow-hidden relative">
+        <div className="absolute top-0 right-0 w-96 h-96 bg-blue-100/30 blur-[100px] rounded-full translate-x-1/2 -translate-y-1/2"></div>
+        
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 relative z-10">
+          <div>
+            <h2 className="text-2xl md:text-3xl font-black text-slate-900 mb-8 leading-tight">Comprehensive <br />Coverage Breakdown</h2>
+            <div className="space-y-4 mb-16">
+              {currentDetails.points.map((pt, i) => (
+                <div key={i} className="flex items-start gap-4 p-5 bg-white rounded-3xl border border-slate-100 shadow-sm hover:translate-x-2 transition-transform">
+                  <div className="w-10 h-10 rounded-2xl bg-blue-600 flex items-center justify-center text-white shrink-0 shadow-lg shadow-blue-500/20">
+                     <Check className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <p className="text-lg text-slate-800 font-bold">{pt}</p>
+                    <p className="text-sm text-slate-500 font-medium mt-1">Detailed terms and conditions will apply to this benefit.</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Why Choose Us */}
+            <div className="pt-10 border-t border-slate-200">
+              <p className="text-[10px] font-black text-blue-600 uppercase tracking-[0.2em] mb-8">Why Thousands Trust Us</p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+                <div className="flex gap-4">
+                  <div className="w-12 h-12 bg-blue-50 rounded-2xl flex items-center justify-center text-blue-600 shrink-0"><Shield className="w-6 h-6" /></div>
+                  <div>
+                    <h4 className="font-black text-slate-900 text-sm uppercase mb-1">Maximum Trust</h4>
+                    <p className="text-xs text-slate-500 font-medium">Licensed and regulated by top global authorities.</p>
+                  </div>
+                </div>
+                <div className="flex gap-4">
+                  <div className="w-12 h-12 bg-blue-50 rounded-2xl flex items-center justify-center text-blue-600 shrink-0"><Clock className="w-6 h-6" /></div>
+                  <div>
+                    <h4 className="font-black text-slate-900 text-sm uppercase mb-1">Instant Quotes</h4>
+                    <p className="text-xs text-slate-500 font-medium">Get price in 2 mins, purchase in 5 mins.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="space-y-10">
+            {/* Covered vs Not Covered */}
+            <div className="bg-white p-8 rounded-[32px] shadow-2xl shadow-slate-200/50 border border-slate-100">
+              <h3 className="text-lg font-black text-slate-900 mb-6 flex items-center gap-3">
+                 <Shield className="w-8 h-8 text-green-500" />
+                 What is Covered?
+              </h3>
+              <div className="grid grid-cols-1 gap-4">
+                {currentDetails.covered.map((item, i) => (
+                  <div key={i} className="flex items-center gap-3 py-3 border-b border-slate-50 last:border-0">
+                    <Check className="w-5 h-5 text-green-500 shrink-0" />
+                    <span className="text-slate-700 font-bold">{item}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="bg-slate-900 text-white p-8 rounded-[32px] shadow-2xl shadow-slate-900/40 relative overflow-hidden group">
+               <div className="absolute top-0 right-0 w-32 h-32 bg-red-500/10 blur-3xl rounded-full -translate-x-1/2 -translate-y-1/2"></div>
+              <h3 className="text-lg font-black mb-6 flex items-center gap-3">
+                 <X className="w-8 h-8 text-red-500" />
+                 What is Not Covered?
+              </h3>
+              <div className="grid grid-cols-1 gap-4 opacity-80">
+                {currentDetails.notCovered.map((item, i) => (
+                  <div key={i} className="flex items-center gap-3 py-3 border-b border-white/5 last:border-0">
+                    <X className="w-5 h-5 text-red-400 shrink-0" />
+                    <span className="font-semibold text-sm">{item}</span>
+                  </div>
+                ))}
+              </div>
+              <p className="mt-8 text-[10px] text-slate-400 font-bold uppercase tracking-widest">* PLEASE READ POLICy DOCUMENT FOR FULL LIST OF EXCLUSIONS</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Process Section */}
+      <div className="py-20 container">
+        <div className="text-center mb-16">
+           <h2 className="text-3xl md:text-4xl font-black text-slate-900 mb-4 tracking-tight leading-tight">Simplified Claim Settlement</h2>
+           <p className="text-slate-500 font-medium text-lg">Stress-free process when you need it the most.</p>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
+           {currentDetails.claimSteps.map((step, i) => (
+             <div key={i} className="relative group">
+               <div className="w-16 h-16 bg-white border border-slate-100 rounded-2xl flex items-center justify-center text-2xl font-black text-blue-600 shadow-xl shadow-slate-200/50 mb-8 group-hover:bg-blue-600 group-hover:text-white transition-all duration-500 group-hover:scale-110">
+                 {i + 1}
+               </div>
+               <h3 className="text-sm font-black text-slate-900 uppercase tracking-widest mb-4 group-hover:text-blue-600 transition-colors">{step.title}</h3>
+               <p className="text-slate-500 font-medium leading-relaxed">{step.desc}</p>
+               {i < 3 && (
+                 <div className="hidden lg:block absolute top-8 left-[80px] w-full h-[1px] bg-slate-100 -z-10 bg-gradient-to-r from-slate-200 to-transparent"></div>
+               )}
+             </div>
+           ))}
+        </div>
+      </div>
+
+      <ReviewsSection category={type} />
     </div>
   );
 };
 
 export default InsuranceDetails;
+
