@@ -50,6 +50,20 @@ export const useQuoteForm = () => {
     setIsSubmitting(false);
     setIsSuccess(true);
     
+    // Find comparison section and scroll to it
+    const comparisonSection = document.getElementById('comparison-suite-section');
+    if (comparisonSection) {
+      setTimeout(() => {
+        comparisonSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        
+        // Highlight the comparison section temporarily to draw attention
+        comparisonSection.classList.add('ring-4', 'ring-blue-500', 'ring-offset-4', 'transition-all', 'duration-1000');
+        setTimeout(() => {
+           comparisonSection.classList.remove('ring-4', 'ring-blue-500', 'ring-offset-4');
+        }, 3000);
+      }, 100);
+    }
+    
     // Reset success message after 5 seconds
     setTimeout(() => setIsSuccess(false), 5000);
   };
