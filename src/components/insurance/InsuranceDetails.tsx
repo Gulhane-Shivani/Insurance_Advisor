@@ -4,6 +4,7 @@ import { Check, X, Shield, Clock } from 'lucide-react';
 import TrustBar from '../common/TrustBar';
 import ReviewsSection from './ReviewsSection';
 import ComparisonSuite from '../compare/ComparisonSuite';
+import HealthInsuCalculator from '../../components/forms/HealthInsuCalculator';
 
 interface InsuranceDetailsProps {
   type: 'life' | 'health' | 'car' | 'business';
@@ -204,6 +205,15 @@ const InsuranceDetails: React.FC<InsuranceDetailsProps> = ({ type }) => {
           <ComparisonSuite defaultCategory={type} hideCategoryFilter={true} />
         </div>
       </section>
+
+      {/* Render the new interactive Health Calculator Component below the Hero */}
+      {type === 'health' && (
+        <section className="bg-slate-50 relative -mt-8 pt-8 pb-16 z-20">
+           <div className="container relative">
+              <HealthInsuCalculator />
+           </div>
+        </section>
+      )}
 
       <ReviewsSection category={type} />
     </div>
