@@ -4,6 +4,7 @@ import Categories from '../components/home/Categories';
 import Testimonials from '../components/home/Testimonials';
 import FAQ from '../components/home/FAQ';
 import QuoteForm from '../components/forms/QuoteForm';
+import SmartAdvisor from '../components/advisor/SmartAdvisor';
 import '../styles/globals.css';
 
 
@@ -40,6 +41,16 @@ const Home: React.FC = () => {
         <Testimonials />
 
         <FAQ/>
+
+        <div className="py-24 bg-slate-50 relative" id="advisor">
+          <div className="container relative z-10">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl md:text-5xl font-black text-slate-900 mb-4 tracking-tight">Meet Your Digital <span className="text-blue-600">Insurance Advisor</span></h2>
+              <p className="text-slate-500 font-medium max-w-2xl mx-auto">Get unbiased, AI-powered recommendations based on your exact profile, goals, and risk appetite.</p>
+            </div>
+            <SmartAdvisor />
+          </div>
+        </div>
 
         <div className="py-24" id="getquote">
           <div className="container">
