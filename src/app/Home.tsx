@@ -17,32 +17,34 @@ const Home: React.FC = () => {
       {/* Trust Bar / Partners */}
       <div className="bg-slate-50 py-12 relative z-30 overflow-hidden">
         <div className="container">
-          <p className="text-center text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] mb-8">Trusted by 50+ Global Insurance Carriers</p>
-          <div className="flex items-center justify-start xl:justify-center gap-6 md:gap-10 opacity-100 transition-all duration-700 overflow-x-auto scrollbar-hide pb-4 px-4 sm:px-0">
-            {partners.map((partner) => (
-              <div key={partner.id} className="bg-white p-3 px-5 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all flex items-center justify-center min-w-[110px] md:min-w-[130px] group/partner">
-                <img
-                  src={`https://logo.clearbit.com/${partner.domain}`}
-                  alt={partner.name}
-                  className="h-6 md:h-8 object-contain transition-all duration-500"
-                  onError={(e) => {
-                    const target = e.target as HTMLImageElement;
-                    if (target.src.includes('clearbit.com')) {
-                      target.src = `https://www.google.com/s2/favicons?domain=${partner.domain}&sz=128`;
-                    } else {
-                      target.style.display = 'none';
-                      const parent = target.parentElement;
-                      if (parent) {
-                        const span = document.createElement('span');
-                        span.className = 'text-xs font-black text-slate-400';
-                        span.innerText = partner.name;
-                        parent.appendChild(span);
+          <p className="text-center text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] mb-12">Trusted by 50+ Global Insurance Carriers</p>
+          <div className="relative flex items-center overflow-hidden">
+            <div className="animate-marquee flex items-center gap-10 md:gap-16">
+              {[...partners, ...partners].map((partner, idx) => (
+                <div key={`${partner.id}-${idx}`} className="bg-white p-4 px-8 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all flex items-center justify-center min-w-[160px] flex-shrink-0 group/partner">
+                  <img
+                    src={`https://logo.clearbit.com/${partner.domain}`}
+                    alt={partner.name}
+                    className="h-8 md:h-10 object-contain transition-all duration-500"
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement;
+                      if (target.src.includes('clearbit.com')) {
+                        target.src = `https://www.google.com/s2/favicons?domain=${partner.domain}&sz=128`;
+                      } else {
+                        target.style.display = 'none';
+                        const parent = target.parentElement;
+                        if (parent) {
+                          const span = document.createElement('span');
+                          span.className = 'text-xs font-black text-slate-400';
+                          span.innerText = partner.name;
+                          parent.appendChild(span);
+                        }
                       }
-                    }
-                  }}
-                />
-              </div>
-            ))}
+                    }}
+                  />
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>
