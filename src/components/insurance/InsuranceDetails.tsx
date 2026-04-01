@@ -5,6 +5,9 @@ import TrustBar from '../common/TrustBar';
 import ReviewsSection from './ReviewsSection';
 import ComparisonSuite from '../compare/ComparisonSuite';
 import HealthInsuCalculator from '../../components/forms/HealthInsuCalculator';
+import LifeInsuCalculator from '../../components/forms/LifeInsuCalculator';
+import CarInsuCalculator from '../../components/forms/CarInsuCalculator';
+import BusinessInsuCalculator from '../../components/forms/BusinessInsuCalculator';
 
 interface InsuranceDetailsProps {
   type: 'life' | 'health' | 'car' | 'business';
@@ -206,14 +209,15 @@ const InsuranceDetails: React.FC<InsuranceDetailsProps> = ({ type }) => {
         </div>
       </section>
 
-      {/* Render the new interactive Health Calculator Component below the Hero */}
-      {type === 'health' && (
-        <section className="bg-slate-50 relative -mt-8 pt-8 pb-16 z-20">
-           <div className="container relative">
-              <HealthInsuCalculator />
-           </div>
-        </section>
-      )}
+      {/* Render the interactive Calculator Component depending on type */}
+      <section className="bg-slate-50 relative -mt-8 pt-8 pb-16 z-20">
+         <div className="container relative">
+            {type === 'health' && <HealthInsuCalculator />}
+            {type === 'life' && <LifeInsuCalculator />}
+            {type === 'car' && <CarInsuCalculator />}
+            {type === 'business' && <BusinessInsuCalculator />}
+         </div>
+      </section>
 
       <ReviewsSection category={type} />
     </div>

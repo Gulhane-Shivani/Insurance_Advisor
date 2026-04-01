@@ -56,13 +56,6 @@ const HealthInsurancePage: React.FC = () => {
         </div>
       </section>
 
-      {/* Render the new interactive Health Calculator Component below the Hero
-      <section className="bg-slate-50 relative -mt-8 pt-8 pb-16 z-20">
-         <div className="container relative">
-            <HealthInsuCalculator />
-         </div>
-      </section> */}
-
       <InsuranceDetails type="health" />
       
     </PageLayout>

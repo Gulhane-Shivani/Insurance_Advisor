@@ -59,8 +59,11 @@ const LifeInsurancePage: React.FC = () => {
           </div>
         </div>
       </section>
+      
+      
 
       <InsuranceDetails type="life" />
+      
 
       {/* Trust & CTA Section */}
       <section className="py-16 bg-slate-50">
