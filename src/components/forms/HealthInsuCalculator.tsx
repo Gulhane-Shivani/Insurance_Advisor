@@ -9,6 +9,7 @@ const CoverageOptions = ['5 Lac', '10 Lac', '25 Lac'];
 
 const HealthInsuCalculator: React.FC = () => {
   const [showResults, setShowResults] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleLogoError = (e: React.SyntheticEvent<HTMLImageElement, Event>, carrierName?: string) => {
     const target = e.target as HTMLImageElement;
@@ -40,7 +41,17 @@ const HealthInsuCalculator: React.FC = () => {
 
   const handleCalculate = (e: React.FormEvent) => {
     e.preventDefault();
-    setShowResults(true);
+    setIsLoading(true);
+    // Simulate calculation
+    setTimeout(() => {
+      setIsLoading(false);
+      setShowResults(true);
+      // Auto-scroll to results
+      const resultsElement = document.getElementById('results-section');
+      if (resultsElement) {
+        resultsElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }, 800);
   };
 
   const handleCompareToggle = (plan: typeof insurancePlans[0]) => {
@@ -114,15 +125,19 @@ const HealthInsuCalculator: React.FC = () => {
               {CoverageOptions.map(opt => <option key={opt} value={opt}>{opt}</option>)}
             </select>
             
-            <button type="submit" className="sm:w-32 bg-green-600 text-white px-4 py-3 rounded-xl font-bold text-sm shadow-md shadow-green-600/20 hover:bg-slate-900 hover:shadow-slate-900/20 transition-all active:scale-95 flex items-center justify-center">
-              Check
+            <button type="submit" disabled={isLoading} className="sm:w-32 bg-green-600 text-white px-4 py-3 rounded-xl font-bold text-sm shadow-md shadow-green-600/20 hover:bg-slate-900 hover:shadow-slate-900/20 transition-all active:scale-95 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed">
+              {isLoading ? (
+                <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+              ) : (
+                'Check'
+              )}
             </button>
           </form>
         </div>
       </div>
 
       {showResults && (
-        <div className="bg-slate-50 rounded-[32px] pb-20 pt-8 animate-in fade-in slide-in-from-top-4 duration-500">
+        <div id="results-section" className="bg-slate-50 rounded-[32px] pb-20 pt-8 animate-in fade-in slide-in-from-top-4 duration-500">
           <div className="container mb-8">
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-slate-200 pb-6">
               <div>

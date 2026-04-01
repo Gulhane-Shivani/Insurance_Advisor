@@ -7,6 +7,8 @@ const IdvOptions = ['3 Lac', '5 Lac', '8 Lac', '12 Lac'];
 
 const CarInsuCalculator: React.FC = () => {
   const [showResults, setShowResults] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [submittedData, setSubmittedData] = useState<any>(null);
   
   const handleLogoError = (e: React.SyntheticEvent<HTMLImageElement, Event>, carrierName?: string) => {
     const target = e.target as HTMLImageElement;
@@ -36,7 +38,14 @@ const CarInsuCalculator: React.FC = () => {
 
   const handleCalculate = (e: React.FormEvent) => {
     e.preventDefault();
-    setShowResults(true);
+    setIsLoading(true);
+    setTimeout(() => {
+      setIsLoading(false);
+      setSubmittedData({ carYear, previousClaim, coverage });
+      setShowResults(true);
+      const res = document.getElementById('car-results');
+      if (res) res.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 800);
   };
 
   const handleCompareToggle = (plan: typeof insurancePlans[0]) => {
@@ -101,15 +110,19 @@ const CarInsuCalculator: React.FC = () => {
               {IdvOptions.map(opt => <option key={opt} value={opt}>{opt}</option>)}
             </select>
             
-            <button type="submit" className="sm:w-32 bg-blue-600 text-white px-4 py-3 rounded-xl font-bold text-sm shadow-md shadow-blue-600/20 hover:bg-slate-900 hover:shadow-slate-900/20 transition-all active:scale-95 flex items-center justify-center">
-              Check
+            <button type="submit" disabled={isLoading} className="sm:w-32 bg-blue-600 text-white px-4 py-3 rounded-xl font-bold text-sm shadow-md shadow-blue-600/20 hover:bg-slate-900 hover:shadow-slate-900/20 transition-all active:scale-95 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed">
+              {isLoading ? (
+                <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+              ) : (
+                'Check'
+              )}
             </button>
           </form>
         </div>
       </div>
 
       {showResults && (
-        <div className="bg-slate-50 rounded-[32px] pb-20 pt-8 animate-in fade-in slide-in-from-top-4 duration-500">
+        <div id="car-results" className="bg-slate-50 rounded-[32px] pb-20 pt-8 animate-in fade-in slide-in-from-top-4 duration-500">
           <div className="container mb-8">
              <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-slate-200 pb-6">
                 <div>
@@ -158,7 +171,7 @@ const CarInsuCalculator: React.FC = () => {
                         <div className="flex flex-wrap gap-x-4 gap-y-2">
                           <div className="w-full sm:w-auto">
                             <span className="text-[10px] text-slate-400 font-bold uppercase tracking-widest block mb-0.5">IDV Cover</span>
-                            <span className="text-sm font-black text-slate-900">{coverage}</span>
+                            <span className="text-sm font-black text-slate-900">{submittedData?.coverage}</span>
                           </div>
                           <div className="w-px bg-slate-200 hidden sm:block"></div>
                           <div className="w-full sm:w-auto">
