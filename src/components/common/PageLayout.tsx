@@ -20,7 +20,7 @@ const PageLayout: React.FC<PageLayoutProps> = ({
   return (
     <main className={`min-h-screen flex flex-col ${bg}`}>
       <Navbar />
-      <div className={`flex-grow ${!hasPadding ? 'pt-32 pb-20' : ''} ${className}`}>
+      <div className={`flex-grow ${!hasPadding ? 'pt-16 pb-20' : ''} ${className}`}>
         {children}
       </div>
       <Footer />

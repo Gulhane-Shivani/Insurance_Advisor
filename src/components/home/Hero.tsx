@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 
 const Hero: React.FC = () => {
   return (
-    <section className="relative overflow-hidden pt-12 pb-20 md:pt-16 md:pb-32 bg-slate-50">
+    <section className="relative overflow-hidden pt-4 pb-20 md:pt-8 md:pb-32 bg-slate-50">
       <div className="absolute top-0 right-0 w-1/3 h-full bg-blue-100/30 blur-3xl rounded-full translate-x-1/2 -translate-y-1/2 -z-10"></div>
       <div className="absolute bottom-0 left-0 w-1/4 h-3/4 bg-indigo-100/20 blur-2xl rounded-full -translate-x-1/2 translate-y-1/2 -z-10"></div>
 

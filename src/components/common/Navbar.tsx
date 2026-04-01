@@ -40,15 +40,15 @@ const Navbar: React.FC = () => {
   return (
     <>
     <nav className={cn(
-      'fixed top-0 left-0 right-0 z-50 transition-all duration-300 py-4',
+      'fixed top-0 left-0 right-0 z-50 transition-all duration-300 py-2',
       isScrolled ? 'bg-white/90 backdrop-blur-md shadow-sm border-b border-slate-100' : 'bg-transparent'
     )}>
       <div className="container flex items-center justify-between">
         <Link to="/" className="flex items-center gap-2 group no-underline">
-          <div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center text-white font-black text-xl group-hover:scale-110 transition-transform shadow-lg shadow-blue-500/20">
+          <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white font-black text-lg group-hover:scale-110 transition-transform shadow-lg shadow-blue-500/20">
             IA
           </div>
-          <span className="font-bold text-xl tracking-tight text-slate-900">
+          <span className="font-bold text-lg tracking-tight text-slate-900">
             Insurance<span className="text-blue-600">Advisor</span>
           </span>
         </Link>
@@ -90,14 +90,14 @@ const Navbar: React.FC = () => {
           {user ? (
             <div className="flex items-center gap-6">
               <Link to="/dashboard" className="text-slate-900 font-black flex items-center gap-2 hover:text-blue-600 transition-colors">
-                <div className="w-8 h-8 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center font-black">
+                <div className="w-7 h-7 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center font-black text-xs">
                   {user.name[0]}
                 </div>
                 {user.name.split(' ')[0]}
               </Link>
               <button 
                 onClick={logout}
-                className="text-xs font-black uppercase tracking-widest text-slate-400 hover:text-red-500 transition-colors"
+                className="text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-red-500 transition-colors"
               >
                 Logout
               </button>
@@ -105,7 +105,7 @@ const Navbar: React.FC = () => {
           ) : (
             <button 
               onClick={() => setIsAuthOpen(true)}
-              className="bg-blue-600 text-white px-8 py-3 rounded-2xl font-black hover:bg-blue-700 shadow-xl shadow-blue-500/30 transition-all active:scale-95"
+              className="bg-blue-600 text-white px-6 py-2 rounded-xl font-black text-xs hover:bg-blue-700 shadow-xl shadow-blue-500/30 transition-all active:scale-95"
             >
               Log In
             </button>
