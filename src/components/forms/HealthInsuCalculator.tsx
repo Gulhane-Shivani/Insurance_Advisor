@@ -10,6 +10,14 @@ const CoverageOptions = ['5 Lac', '10 Lac', '25 Lac'];
 const HealthInsuCalculator: React.FC = () => {
   const [showResults, setShowResults] = useState(false);
   
+  const handleLogoError = (e: React.SyntheticEvent<HTMLImageElement, Event>, carrierName?: string) => {
+    const target = e.target as HTMLImageElement;
+    if (!target.src.includes('ui-avatars.com')) {
+      const name = carrierName || 'Insurance';
+      target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=f8fafc&color=475569&size=128&bold=true`;
+    }
+  };
+
   // Form State
   const [covered, setCovered] = useState<CoveredMember>('Couple');
   const [ageYou, setAgeYou] = useState('45');
@@ -84,7 +92,7 @@ const HealthInsuCalculator: React.FC = () => {
                     <div className="flex flex-col sm:flex-row gap-4 sm:items-center justify-between mb-4">
                       <div className="flex items-center gap-3">
                         <div className="w-12 h-12 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center p-1.5">
-                          <img src={plan.carrierLogo} alt={plan.carrierName} className="w-full h-full object-contain" />
+                          <img src={plan.carrierLogo} alt={plan.carrierName} className="w-full h-full object-contain" onError={(e) => handleLogoError(e, plan.carrierName)} />
                         </div>
                         <div>
                           <span className="text-[10px] font-black uppercase tracking-widest text-slate-500 bg-slate-100 px-2 py-0.5 rounded-md inline-block mb-1">{plan.carrierName}</span>
@@ -208,7 +216,7 @@ const HealthInsuCalculator: React.FC = () => {
                 <div className="flex -space-x-3">
                   {selectedComparePlans.map((p, i) => (
                     <div key={p.id} className="w-8 h-8 rounded-full border-2 border-slate-900 bg-white flex items-center justify-center overflow-hidden z-20" style={{zIndex: 10 - i}}>
-                      <img src={p.carrierLogo} className="w-full h-full object-contain p-1" />
+                      <img src={p.carrierLogo} className="w-full h-full object-contain p-1" alt={p.carrierName} onError={(e) => handleLogoError(e, p.carrierName)} />
                     </div>
                   ))}
                 </div>
@@ -257,7 +265,7 @@ const HealthInsuCalculator: React.FC = () => {
                        {selectedComparePlans.map(plan => (
                          <th key={plan.id} className="p-4 border-b-2 border-slate-100 text-center relative w-1/4">
                            <button onClick={() => setSelectedComparePlans(selectedComparePlans.filter(p => p.id !== plan.id))} className="absolute top-2 right-2 p-1 text-slate-400 hover:text-red-500"><X className="w-4 h-4" /></button>
-                           <img src={plan.carrierLogo} className="h-10 mx-auto mb-2 object-contain" alt={plan.carrierName}/>
+                           <img src={plan.carrierLogo} className="h-10 mx-auto mb-2 object-contain" alt={plan.carrierName} onError={(e) => handleLogoError(e, plan.carrierName)} />
                            <h3 className="font-black text-slate-900 text-sm line-clamp-1">{plan.planName}</h3>
                            <p className="text-[10px] text-slate-500 font-bold">{plan.carrierName}</p>
                          </th>
