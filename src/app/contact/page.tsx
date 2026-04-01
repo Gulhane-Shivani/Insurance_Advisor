@@ -18,9 +18,9 @@ const ContactPage: React.FC = () => {
             
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-10">
               {[
-                { icon: '📞', title: 'Call Us', details: '+91 81430 90697', sub: 'Thota Niharika Future Invo' },
-                { icon: '✉️', title: 'Email', details: 'niharika@futureinvo.com', sub: '24/7 Support' },
-                { icon: '📍', title: 'Office', details: '123 Business Way', sub: 'Heydrabad, Telangana, India' },
+                { icon: '📞', title: 'Call Us', details: '+91 7981107131', sub: 'Future Invo Solution' },
+                { icon: '✉️', title: 'Email', details: 'info@futureinvo.com', sub: '24/7 Support' },
+                { icon: '📍', title: 'Office', details: '13th floor, Manjeera Trinity Corporate, KPHB phase 3, beside LULU Mall', sub: 'Heydrabad, Telangana, India' },
                 { icon: '💬', title: 'Live Chat', details: 'Online Now', sub: 'Instant Response' },
               ].map((item, index) => (
                 <div key={index} className="flex flex-col gap-2 group">

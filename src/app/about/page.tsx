@@ -30,15 +30,15 @@ const AboutPage: React.FC = () => {
               ))}
             </div>
           </div>
-          <div className="grid grid-cols-2 gap-4">
-            <div className="rounded-2xl overflow-hidden shadow-lg h-64">
-              <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=800" alt="Workplace" className="w-full h-full object-cover" />
+          <div className="grid grid-cols-2 gap-6 items-start">
+            <div className="rounded-2xl overflow-hidden shadow-lg h-60 md:h-72">
+              <img src="https://media.istockphoto.com/id/1226082621/photo/insurance-concept-stack-of-wooden-blocks-with-words-life-health-legal-expenses-business-house.jpg?s=612x612&w=0&k=20&c=5bKk7pRl9jewZM_nmIquyGOj4Q7BVNiYRcJC9H1smfE=" alt="Insurance Concepts" className="w-full h-full object-cover" />
             </div>
-            <div className="rounded-2xl overflow-hidden shadow-lg h-64 mt-8">
-              <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=800" alt="Meeting" className="w-full h-full object-cover" />
+            <div className="rounded-2xl overflow-hidden shadow-lg h-60 md:h-72 translate-y-6">
+              <img src="https://www.avivaindia.com/sites/default/files/Types-of-Insurance.jpg" alt="Types of Insurance" className="w-full h-full object-cover" />
             </div>
-            <div className="col-span-2 rounded-2xl overflow-hidden shadow-lg h-48 -mt-8">
-              <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80&w=1200" alt="Office Desk" className="w-full h-full object-cover" />
+            <div className="col-span-2 rounded-2xl overflow-hidden shadow-lg h-56 md:h-64 mt-6">
+              <img src="https://static.investindia.gov.in/s3fs-public/2019-05/Insurance1.jpg" alt="Insurance Statistics" className="w-full h-full object-cover" />
             </div>
           </div>
         </div>
