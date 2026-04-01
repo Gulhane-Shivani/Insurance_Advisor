@@ -23,7 +23,7 @@ const Navbar: React.FC = () => {
     { name: 'Home', path: '/' },
     { 
       name: 'Insurance', 
-      path: '/insurance',
+      path: '',
       subLinks: [
         { name: 'Life Insurance', path: '/insurance/life' },
         { name: 'Health Insurance', path: '/insurance/health' },
