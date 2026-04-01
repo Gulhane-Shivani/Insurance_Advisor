@@ -123,24 +123,24 @@ const Navbar: React.FC = () => {
 
       {/* Mobile Menu */}
       {isMenuOpen && (
-        <div className="md:hidden absolute top-full left-0 right-0 bg-white border-t border-slate-100 p-8 flex flex-col gap-6 shadow-2xl animate-fade-in-down">
+        <div className="md:hidden absolute top-full left-4 right-4 bg-white rounded-3xl border border-slate-100 p-6 flex flex-col gap-4 shadow-2xl animate-fade-in-down z-[100] mt-2">
           {navLinks.map((link) => (
             <Link 
               key={link.name} 
               to={link.path}
-              className="text-slate-600 font-black text-2xl"
+              className="text-slate-700 font-bold text-base px-4 py-2 hover:bg-blue-50 rounded-xl transition-colors no-underline"
               onClick={() => setIsMenuOpen(false)}
             >
               {link.name}
             </Link>
           ))}
-          <div className="h-[1px] bg-slate-100 w-full mb-2"></div>
+          <div className="h-[1px] bg-slate-100 w-full my-2"></div>
           {user ? (
-            <div className="flex flex-col gap-6">
-               <Link to="/dashboard" className="text-2xl font-black text-slate-900" onClick={() => setIsMenuOpen(false)}>My Dashboard</Link>
+            <div className="flex flex-col gap-2">
+               <Link to="/dashboard" className="text-slate-900 font-bold text-base px-4 py-2 hover:bg-blue-50 rounded-xl transition-colors no-underline" onClick={() => setIsMenuOpen(false)}>My Dashboard</Link>
                <button 
                  onClick={() => { logout(); setIsMenuOpen(false); }}
-                 className="text-left text-xl font-black text-red-500 uppercase tracking-widest"
+                 className="text-left px-4 py-2 text-sm font-bold text-red-500 uppercase tracking-widest hover:bg-red-50 rounded-xl transition-all"
                >
                  Logout
                </button>
@@ -148,7 +148,7 @@ const Navbar: React.FC = () => {
           ) : (
             <button 
               onClick={() => { setIsAuthOpen(true); setIsMenuOpen(false); }}
-              className="bg-blue-600 text-white px-6 py-5 rounded-2xl w-full text-center font-black text-xl shadow-xl shadow-blue-500/30"
+              className="bg-blue-600 text-white px-6 py-3.5 rounded-xl w-full text-center font-black text-sm shadow-xl shadow-blue-500/20 active:scale-[0.98] transition-all"
             >
               Log In Now
             </button>

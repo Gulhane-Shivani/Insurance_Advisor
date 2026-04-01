@@ -20,7 +20,7 @@ const ContactPage: React.FC = () => {
               {[
                 { icon: '📞', title: 'Call Us', details: '+91 7981107131', sub: 'Future Invo Solution' },
                 { icon: '✉️', title: 'Email', details: 'info@futureinvo.com', sub: '24/7 Support' },
-                { icon: '📍', title: 'Office', details: '13th floor, Manjeera Trinity Corporate, KPHB phase 3, beside LULU Mall', sub: 'Heydrabad, Telangana, India' },
+                { icon: '📍', title: 'Office', details: '13th floor, Manjeera Trinity Corporate, KPHB phase 3, beside LULU Mall', sub: 'Hyderabad, Telangana, India' },
                 { icon: '💬', title: 'Live Chat', details: 'Online Now', sub: 'Instant Response' },
               ].map((item, index) => (
                 <div key={index} className="flex flex-col gap-2 group">
