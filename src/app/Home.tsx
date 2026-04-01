@@ -49,7 +49,7 @@ const Home: React.FC = () => {
         </div>
       </div>
 
-      <div className="relative z-20 -mt-20 rounded-[64px] shadow-2xl overflow-hidden pb-10 bg-white">
+      <div className="relative z-20 -mt-10 lg:-mt-20 rounded-[32px] md:rounded-[64px] shadow-2xl overflow-hidden pb-10 bg-white">
         <Categories />
 
 
