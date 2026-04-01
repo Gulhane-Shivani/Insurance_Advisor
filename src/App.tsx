@@ -19,6 +19,7 @@ import PrivacyPage from './app/legal/PrivacyPage';
 import ClaimsPage from './app/support/ClaimsPage';
 import RenewalPage from './app/support/RenewalPage';
 import CarePage from './app/support/CarePage';
+import HelpCenterPage from './app/support/HelpCenterPage';
 import ScrollToTop from './components/common/ScrollToTop';
 
 const App: React.FC = () => {
@@ -44,6 +45,7 @@ const App: React.FC = () => {
           <Route path="/claims" element={<ClaimsPage />} />
           <Route path="/renewal" element={<RenewalPage />} />
           <Route path="/care" element={<CarePage />} />
+          <Route path="/help" element={<HelpCenterPage />} />
         </Routes>
       </Router>
     </AuthProvider>

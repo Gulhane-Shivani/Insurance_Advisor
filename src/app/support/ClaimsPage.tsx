@@ -6,57 +6,54 @@ import SectionTitle from '../../components/common/SectionTitle';
 const ClaimsPage: React.FC = () => {
   return (
     <PageLayout>
-      <div className="container py-20">
-        <div className="flex flex-col md:flex-row items-center justify-between gap-12 mb-20 animate-fade-in">
-          <div className="flex-1">
+      <div className="container py-12">
+        <div className="flex flex-col lg:flex-row items-center justify-between gap-10 mb-16 animate-fade-in lg:px-10">
+          <div className="flex-1 max-w-xl">
              <SectionTitle 
                title="Professional Claim Center" 
-               subtitle="Need to file a claim? We provide end-to-end guidance to ensure your settlement is fast and stress-free."
+               subtitle="Need to file a claim? Expert guidance to ensure your settlement is fast and stress-free."
                badge="Claims"
                align="left"
              />
-             <div className="flex items-center gap-6 mt-10">
-               <div className="bg-white p-4 rounded-3xl border border-slate-100 shadow-xl flex items-center justify-center w-24 h-24 text-4xl shadow-blue-500/10">🔥</div>
+             <div className="flex items-center gap-5 mt-6">
+               <div className="bg-white p-3 rounded-2xl border border-slate-100 shadow-xl flex items-center justify-center w-16 h-16 text-3xl shadow-blue-500/5">🔥</div>
                <div>
-                  <h3 className="text-xl font-black text-slate-900 mb-1">98.5% Settlement Ratio</h3>
-                  <p className="text-slate-500 font-bold text-sm">Among our top-tier global partners</p>
+                  <h3 className="text-lg font-black text-slate-900 mb-0.5">98.5% Settlement Ratio</h3>
+                  <p className="text-slate-400 font-bold text-xs uppercase tracking-wider">Fastest approval in the industry</p>
                </div>
              </div>
           </div>
-          <div className="flex-1 bg-gradient-to-br from-blue-600 to-indigo-700 p-1 rounded-[48px] shadow-2xl relative group overflow-hidden">
-             <div className="bg-slate-900 p-10 md:p-14 rounded-[44px] text-white overflow-hidden relative">
-               <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500/20 blur-3xl rounded-full translate-x-1/2 -translate-y-1/2 group-hover:bg-blue-500/30 transition-all duration-700 pointer-events-none"></div>
-               <h3 className="text-2xl font-black mb-10 border-b border-white/10 pb-6">File Your Claim Now</h3>
-               <form className="space-y-6">
-                 <div>
-                   <label className="text-[10px] font-black uppercase tracking-widest text-white/50 block mb-3">Policy Number</label>
-                   <input className="w-full bg-white/5 border border-white/10 rounded-xl px-5 py-3.5 focus:bg-white/10 outline-none transition-all" placeholder="IA-XXXX-XXXX-XXXX" />
-                 </div>
-                 <div>
-                   <label className="text-[10px] font-black uppercase tracking-widest text-white/50 block mb-3">Your Email Address</label>
-                   <input className="w-full bg-white/5 border border-white/10 rounded-xl px-5 py-3.5 focus:bg-white/10 outline-none transition-all" placeholder="user@domain.com" />
-                 </div>
-                 <button className="w-full bg-white text-slate-900 py-4 rounded-xl font-black text-sm uppercase tracking-widest shadow-xl shadow-white/10 active:scale-95 transition-all">Submit Case</button>
-               </form>
-             </div>
+          <div className="w-full lg:w-[420px] bg-white p-8 rounded-[32px] overflow-hidden relative shadow-2xl border border-slate-100">
+             <h3 className="text-lg font-black text-slate-900 mb-8 border-b border-slate-50 pb-4">File Your Claim Now</h3>
+             <form className="space-y-5">
+               <div>
+                 <label className="text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 block mb-2">Policy Number</label>
+                 <input className="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 text-sm focus:bg-white focus:border-blue-200 outline-none transition-all placeholder:text-slate-300" placeholder="IA-XXXX-XXXX" />
+               </div>
+               <div>
+                 <label className="text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 block mb-2">Email Address</label>
+                 <input className="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 text-sm focus:bg-white focus:border-blue-200 outline-none transition-all placeholder:text-slate-300" placeholder="your@email.com" />
+               </div>
+               <button className="w-full bg-blue-600 text-white py-3.5 rounded-xl font-black text-[10px] uppercase tracking-[0.2em] shadow-xl shadow-blue-600/20 active:scale-95 transition-all mt-2">Submit Claim Case</button>
+             </form>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-          <div className="bg-white p-10 rounded-[40px] border border-slate-100 shadow-xl shadow-slate-200/50 hover:-translate-y-2 transition-all duration-500">
-             <div className="w-16 h-16 rounded-2xl bg-orange-50 text-orange-600 flex items-center justify-center text-3xl mb-8">🔔</div>
-             <h3 className="text-xl font-black text-slate-900 mb-4 tracking-tight">Step 1: Notify Us</h3>
-             <p className="text-slate-500 font-medium leading-relaxed">Inform us within 24 hours of the incident or hospitalization for smooth cashless processing.</p>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="bg-white p-7 rounded-[32px] border border-slate-100 shadow-lg shadow-slate-200/30 hover:-translate-y-1.5 transition-all duration-500">
+             <div className="w-12 h-12 rounded-xl bg-orange-50 text-orange-600 flex items-center justify-center text-xl mb-6">🔔</div>
+             <h3 className="text-base font-black text-slate-900 mb-3 tracking-tight">1. Notify Us</h3>
+             <p className="text-[11px] font-bold text-slate-500 leading-relaxed italic">Inform us within 24 hours of the incident for smooth cashless processing.</p>
           </div>
-          <div className="bg-blue-600 p-10 rounded-[40px] border border-blue-500 shadow-xl shadow-blue-500/20 hover:-translate-y-2 transition-all duration-500 text-white">
-             <div className="w-16 h-16 rounded-2xl bg-white/10 text-white flex items-center justify-center text-3xl mb-8">📄</div>
-             <h3 className="text-xl font-black mb-4 tracking-tight">Step 2: Collect Documents</h3>
-             <p className="text-white/70 font-medium leading-relaxed">Keep all bills, medical reports, and policy details ready. Our advisors help organize them digitally.</p>
+          <div className="bg-blue-600 p-7 rounded-[32px] shadow-xl shadow-blue-600/20 hover:-translate-y-1.5 transition-all duration-500 text-white">
+             <div className="w-12 h-12 rounded-xl bg-white/10 text-white flex items-center justify-center text-xl mb-6">📄</div>
+             <h3 className="text-base font-black mb-3 tracking-tight text-white">2. Collect Docs</h3>
+             <p className="text-[11px] font-bold text-white/70 leading-relaxed italic">Keep bills and medical reports ready. Our advisors help organize them.</p>
           </div>
-          <div className="bg-white p-10 rounded-[40px] border border-slate-100 shadow-xl shadow-slate-200/50 hover:-translate-y-2 transition-all duration-500">
-             <div className="w-16 h-16 rounded-2xl bg-green-50 text-green-600 flex items-center justify-center text-3xl mb-8">💰</div>
-             <h3 className="text-xl font-black text-slate-900 mb-4 tracking-tight">Step 3: Fast Settlement</h3>
-             <p className="text-slate-500 font-medium leading-relaxed">Once verified, your claim is approved and the settlement amount is disbursed to your bank or hospital.</p>
+          <div className="bg-white p-7 rounded-[32px] border border-slate-100 shadow-lg shadow-slate-200/30 hover:-translate-y-1.5 transition-all duration-500">
+             <div className="w-12 h-12 rounded-xl bg-green-50 text-green-600 flex items-center justify-center text-xl mb-6">💰</div>
+             <h3 className="text-base font-black text-slate-900 mb-3 tracking-tight">3. Settlement</h3>
+             <p className="text-[11px] font-bold text-slate-500 leading-relaxed italic">Once verified, the settlement amount is disbursed to your bank or hospital.</p>
           </div>
         </div>
       </div>

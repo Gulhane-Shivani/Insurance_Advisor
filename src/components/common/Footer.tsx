@@ -19,7 +19,7 @@ const Footer: React.FC = () => {
     {
       title: 'Resources',
       links: [
-        { name: 'Help Center', href: '#' },
+        { name: 'Help Center', href: '/help' },
         { name: 'Meet Your Advisor', href: '/#advisor' },
         { name: 'Compare Plans', href: '/compare' },
         { name: 'FAQ', href: '/#faq' },
@@ -108,7 +108,6 @@ const Footer: React.FC = () => {
           <div className="flex items-center gap-8">
             <Link to="/privacy" className="hover:text-slate-300">Privacy Policy</Link>
             <Link to="/terms" className="hover:text-slate-300">Terms of Service</Link>
-            <Link to="#" className="hover:text-slate-300">Cookies Policy</Link>
           </div>
         </div>
       </div>
