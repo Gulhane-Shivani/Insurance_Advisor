@@ -145,38 +145,38 @@ const SmartAdvisor: React.FC = () => {
     <div className="bg-white rounded-[40px] shadow-2xl shadow-blue-900/5 border border-slate-100 max-w-5xl mx-auto overflow-hidden flex flex-col md:flex-row relative">
       
       {/* Left Sidebar Wizard Progress */}
-      <div className="md:w-1/3 bg-slate-900 text-white p-8 md:p-10 relative overflow-hidden">
+      <div className="md:w-1/3 bg-slate-900 text-white p-6 md:p-10 relative overflow-hidden">
         <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-blue-600/20 to-transparent"></div>
         <div className="relative z-10">
-          <div className="flex items-center gap-2 mb-12">
+          <div className="flex items-center gap-2 mb-6 md:mb-12">
             <div className="w-8 h-8 rounded-lg bg-blue-500 flex items-center justify-center">
               <Shield className="w-4 h-4 text-white" />
             </div>
             <span className="font-black text-xl tracking-tight">SmartAdvisor™</span>
           </div>
 
-          <p className="text-slate-400 font-medium mb-8 text-sm leading-relaxed">Let our AI engine analyze your profile and find the exact coverage your family needs.</p>
+          <p className="text-slate-400 font-medium mb-6 md:mb-8 text-sm leading-relaxed hidden md:block">Let our AI engine analyze your profile and find the exact coverage your family needs.</p>
 
-          <div className="space-y-6">
-            <div className={`flex items-start gap-4 transition-opacity ${step === 1 ? 'opacity-100' : 'opacity-50'}`}>
-              <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs shrink-0 ${step >= 1 ? 'bg-blue-500 text-white' : 'bg-slate-800 text-slate-500'}`}>1</div>
-              <div>
-                <h4 className={`font-bold text-sm ${step >= 1 ? 'text-white' : 'text-slate-400'}`}>Basic Profile</h4>
-                <p className="text-xs text-slate-500 mt-1">Age, Income & Family setup</p>
+          <div className="flex md:flex-col gap-4 md:gap-6 overflow-x-auto pb-2 md:pb-0 scrollbar-hide">
+            <div className={`flex items-start gap-4 transition-opacity flex-shrink-0 ${step === 1 ? 'opacity-100' : 'opacity-40 md:opacity-50'}`}>
+              <div className={`w-7 h-7 md:w-8 md:h-8 rounded-full flex items-center justify-center font-bold text-[10px] md:text-xs shrink-0 ${step >= 1 ? 'bg-blue-500 text-white' : 'bg-slate-800 text-slate-500'}`}>1</div>
+              <div className="hidden sm:block">
+                <h4 className={`font-bold text-[10px] md:text-sm whitespace-nowrap ${step >= 1 ? 'text-white' : 'text-slate-400'}`}>Basic Profile</h4>
+                <p className="text-[10px] text-slate-500 mt-1 hidden md:block">Age & Family</p>
               </div>
             </div>
-            <div className={`flex items-start gap-4 transition-opacity ${step === 2 ? 'opacity-100' : 'opacity-50'}`}>
-              <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs shrink-0 ${step >= 2 ? 'bg-blue-500 text-white' : 'bg-slate-800 text-slate-500'}`}>2</div>
-              <div>
-                <h4 className={`font-bold text-sm ${step >= 2 ? 'text-white' : 'text-slate-400'}`}>Protection Goals</h4>
-                <p className="text-xs text-slate-500 mt-1">What matters most to you</p>
+            <div className={`flex items-start gap-4 transition-opacity flex-shrink-0 ${step === 2 ? 'opacity-100' : 'opacity-40 md:opacity-50'}`}>
+              <div className={`w-7 h-7 md:w-8 md:h-8 rounded-full flex items-center justify-center font-bold text-[10px] md:text-xs shrink-0 ${step >= 2 ? 'bg-blue-500 text-white' : 'bg-slate-800 text-slate-500'}`}>2</div>
+              <div className="hidden sm:block">
+                <h4 className={`font-bold text-[10px] md:text-sm whitespace-nowrap ${step >= 2 ? 'text-white' : 'text-slate-400'}`}>Goals</h4>
+                <p className="text-[10px] text-slate-500 mt-1 hidden md:block">What matters most</p>
               </div>
             </div>
-            <div className={`flex items-start gap-4 transition-opacity ${step === 3 ? 'opacity-100' : 'opacity-50'}`}>
-              <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs shrink-0 ${step >= 3 ? 'bg-blue-500 text-white' : 'bg-slate-800 text-slate-500'}`}>3</div>
-              <div>
-                <h4 className={`font-bold text-sm ${step >= 3 ? 'text-white' : 'text-slate-400'}`}>Smart Recommendations</h4>
-                <p className="text-xs text-slate-500 mt-1">Your 100% unbiased matches</p>
+            <div className={`flex items-start gap-4 transition-opacity flex-shrink-0 ${step === 3 ? 'opacity-100' : 'opacity-40 md:opacity-50'}`}>
+              <div className={`w-7 h-7 md:w-8 md:h-8 rounded-full flex items-center justify-center font-bold text-[10px] md:text-xs shrink-0 ${step >= 3 ? 'bg-blue-500 text-white' : 'bg-slate-800 text-slate-500'}`}>3</div>
+              <div className="hidden sm:block">
+                <h4 className={`font-bold text-[10px] md:text-sm whitespace-nowrap ${step >= 3 ? 'text-white' : 'text-slate-400'}`}>Matches</h4>
+                <p className="text-[10px] text-slate-500 mt-1 hidden md:block">Your matches</p>
               </div>
             </div>
           </div>

@@ -59,7 +59,7 @@ const ComparisonSuite: React.FC<ComparisonSuiteProps> = ({
     <>
       <div className="flex flex-col gap-6">
         {/* Filters Hub */}
-        <div className="bg-white p-6 rounded-3xl border border-slate-100 shadow-lg shadow-slate-200/50 flex flex-wrap items-center gap-6">
+        <div className="bg-white p-4 sm:p-6 rounded-3xl border border-slate-100 shadow-lg shadow-slate-200/50 flex flex-col md:flex-row items-stretch md:items-center gap-4 sm:gap-6">
           {!hideCategoryFilter && (
             <div className="flex flex-col gap-3 min-w-[200px]">
               <label className="text-xs font-bold uppercase tracking-widest text-slate-500">Insurance Category</label>
@@ -201,7 +201,7 @@ const ComparisonSuite: React.FC<ComparisonSuiteProps> = ({
 
       {/* Compare Action Bar */}
       {selectedComparePlans.length > 0 && (
-        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 bg-slate-900 text-white pl-4 pr-2 py-2 rounded-full shadow-[0_20px_40px_-10px_rgba(0,0,0,0.5)] flex items-center gap-4 z-40 border border-white/10 animate-fade-in whitespace-nowrap">
+        <div className="fixed bottom-6 left-2 right-2 sm:left-1/2 sm:-translate-x-1/2 sm:w-auto bg-slate-900 text-white pl-4 pr-2 py-2 rounded-2xl sm:rounded-full shadow-[0_20px_40px_-10px_rgba(0,0,0,0.5)] flex items-center justify-between sm:justify-start gap-3 sm:gap-4 z-40 border border-white/10 animate-fade-in">
            <div className="flex items-center gap-3">
               <div className="flex -space-x-3">
                 {selectedComparePlans.map((p, i) => (

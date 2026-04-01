@@ -12,10 +12,10 @@ const Hero: React.FC = () => {
             <span className="flex h-2 w-2 rounded-full bg-blue-500 animate-pulse"></span>
             Trusted by 50,000+ Families
           </div>
-          <h1 className="text-4xl md:text-5xl font-black mb-6 text-slate-900 leading-[1.05] tracking-tight">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-black mb-6 text-slate-900 leading-[1.1] tracking-tight">
             Smart Insurance for a <span className="text-blue-600">Secure Future</span>
           </h1>
-          <p className="text-lg text-slate-600 mb-8 leading-relaxed max-w-lg">
+          <p className="text-base sm:text-lg text-slate-600 mb-8 leading-relaxed max-w-lg">
             Compare the best insurance plans from top providers side-by-side. Get personalized quotes in minutes with zero hidden fees.
           </p>
           <div className="flex flex-col sm:flex-row gap-4">
@@ -46,22 +46,22 @@ const Hero: React.FC = () => {
           </div>
         </div>
 
-        <div className="relative group perspective-1000">
-          <div className="relative z-10 rounded-3xl overflow-hidden shadow-2xl skew-y-3 group-hover:skew-y-0 transition-transform duration-700 border-8 border-white/50 backdrop-blur-sm">
+        <div className="relative group perspective-1000 mt-12 lg:mt-0">
+          <div className="relative z-10 rounded-3xl overflow-hidden shadow-2xl lg:skew-y-3 group-hover:skew-y-0 transition-transform duration-700 border-8 border-white/50 backdrop-blur-sm">
             <img 
               src="https://images.unsplash.com/photo-1573164713714-d95e436ab8d6?auto=format&fit=crop&q=80&w=1200" 
               alt="Insurance Planning" 
               className="w-full object-cover aspect-[4/3]"
             />
           </div>
-          <div className="absolute -bottom-8 -left-8 z-20 bg-white p-6 rounded-2xl shadow-2xl border border-slate-100 animate-bounce-slow">
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 bg-green-50 rounded-xl flex items-center justify-center text-green-600 text-2xl">
+          <div className="absolute -bottom-4 -left-4 sm:-bottom-8 sm:-left-8 z-20 bg-white p-4 sm:p-6 rounded-xl sm:rounded-2xl shadow-2xl border border-slate-100 animate-bounce-slow">
+            <div className="flex items-center gap-3 sm:gap-4">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-green-50 rounded-lg sm:rounded-xl flex items-center justify-center text-green-600 text-xl sm:text-2xl">
                 🛡️
               </div>
               <div>
-                <p className="font-bold text-slate-900">$2.5M+</p>
-                <p className="text-slate-500 text-xs">Claims Settled Weekly</p>
+                <p className="font-bold text-slate-900 text-sm sm:text-base">$2.5M+</p>
+                <p className="text-slate-500 text-[10px] sm:text-xs">Claims Settled Weekly</p>
               </div>
             </div>
           </div>

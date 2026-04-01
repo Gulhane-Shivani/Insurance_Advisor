@@ -43,8 +43,8 @@ const Navbar: React.FC = () => {
       'fixed top-0 left-0 right-0 z-50 transition-all duration-300 py-2',
       isScrolled ? 'bg-white/90 backdrop-blur-md shadow-sm border-b border-slate-100' : 'bg-transparent'
     )}>
-      <div className="container flex items-center justify-between">
-        <Link to="/" className="flex items-center gap-2 group no-underline">
+      <div className="container flex items-center gap-x-4 justify-between">
+        <Link to="/" className="flex items-center gap-2 group no-underline flex-shrink-0">
           <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white font-black text-lg group-hover:scale-110 transition-transform shadow-lg shadow-blue-500/20">
             IA
           </div>
@@ -54,12 +54,12 @@ const Navbar: React.FC = () => {
         </Link>
 
         {/* Desktop Menu */}
-        <div className="hidden md:flex items-center gap-8">
+        <div className="hidden md:flex items-center gap-4 lg:gap-8 flex-shrink-0 ml-auto">
           {navLinks.map((link) => (
             <div key={link.name} className="relative group/nav">
               <Link 
                 to={link.path}
-                className="text-slate-600 hover:text-blue-600 font-bold transition-colors text-xs uppercase tracking-widest flex items-center gap-1 no-underline py-2"
+                className="text-slate-600 hover:text-blue-600 font-bold transition-colors text-[10px] lg:text-xs uppercase tracking-widest flex items-center gap-1 no-underline py-2 whitespace-nowrap"
               >
                 {link.name}
                 {link.subLinks && <span className="text-[10px] opacity-50 group-hover/nav:rotate-180 transition-transform duration-300">▼</span>}
@@ -88,12 +88,12 @@ const Navbar: React.FC = () => {
           <div className="h-6 w-[1px] bg-slate-200 mx-2"></div>
 
           {user ? (
-            <div className="flex items-center gap-6">
-              <Link to="/dashboard" className="text-slate-900 font-black flex items-center gap-2 hover:text-blue-600 transition-colors">
+            <div className="flex items-center gap-4 lg:gap-6 flex-shrink-0">
+              <Link to="/dashboard" className="text-slate-900 font-black flex items-center gap-2 hover:text-blue-600 transition-colors whitespace-nowrap">
                 <div className="w-7 h-7 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center font-black text-xs">
                   {user.name[0]}
                 </div>
-                {user.name.split(' ')[0]}
+                <span className="hidden lg:inline">{user.name.split(' ')[0]}</span>
               </Link>
               <button 
                 onClick={logout}
@@ -105,7 +105,7 @@ const Navbar: React.FC = () => {
           ) : (
             <button 
               onClick={() => setIsAuthOpen(true)}
-              className="bg-blue-600 text-white px-6 py-2 rounded-xl font-black text-xs hover:bg-blue-700 shadow-xl shadow-blue-500/30 transition-all active:scale-95"
+              className="bg-blue-600 text-white px-5 lg:px-6 py-2 rounded-xl font-black text-[10px] lg:text-xs hover:bg-blue-700 shadow-xl shadow-blue-500/30 transition-all active:scale-95 whitespace-nowrap flex-shrink-0"
             >
               Log In
             </button>

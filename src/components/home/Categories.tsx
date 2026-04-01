@@ -6,14 +6,14 @@ import '../../styles/globals.css';
 
 const Categories: React.FC = () => {
   return (
-    <section className="py-24 container">
+    <section className="py-16 md:py-24 container">
       <SectionTitle 
         title="Comprehensive Insurance for Every Need"
         subtitle="Explore our wide range of insurance products tailored to protect what matters most to you."
         align="center"
         badge="Our Coverage"
       />
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
         {insuranceCategories.map((category) => (
           <InsuranceCard key={category.id} category={category} />
         ))}

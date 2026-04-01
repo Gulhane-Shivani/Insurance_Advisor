@@ -6,7 +6,7 @@ import '../../styles/globals.css';
 
 const Testimonials: React.FC = () => {
   return (
-    <section className="py-24 bg-slate-50">
+    <section className="py-16 md:py-24 bg-slate-50">
       <div className="container">
         <SectionTitle 
           title="What Our Clients Say"
@@ -14,15 +14,15 @@ const Testimonials: React.FC = () => {
           align="center"
           badge="Testimonials"
         />
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-10">
           {testimonials.map((test) => (
-            <div key={test.id} className="bg-white p-10 rounded-3xl border border-slate-100 shadow-xl shadow-slate-200/50 flex flex-col items-start relative overflow-hidden group">
+            <div key={test.id} className="bg-white p-6 sm:p-10 rounded-3xl border border-slate-100 shadow-xl shadow-slate-200/50 flex flex-col items-start relative overflow-hidden group">
               <div className="absolute top-0 right-0 w-32 h-32 bg-blue-50/30 rounded-full blur-2xl translate-x-1/2 -translate-y-1/2"></div>
-              <div className="text-4xl text-blue-500/30 font-serif mb-6 leading-none">"</div>
-              <p className="text-xl text-slate-700 font-medium mb-10 leading-relaxed relative z-10 italic">
+              <div className="text-4xl text-blue-500/30 font-serif mb-4 sm:mb-6 leading-none">"</div>
+              <p className="text-lg sm:text-xl text-slate-700 font-medium mb-8 sm:mb-10 leading-relaxed relative z-10 italic">
                 {test.comment}
               </p>
-              <div className="flex items-center justify-between w-full mt-auto relative z-10">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between w-full mt-auto relative z-10 gap-4 sm:gap-0">
                 <div className="flex items-center gap-4">
                   <div className="w-14 h-14 rounded-full bg-slate-200 overflow-hidden">
                     <img 
