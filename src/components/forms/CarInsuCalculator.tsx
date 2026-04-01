@@ -65,7 +65,7 @@ const CarInsuCalculator: React.FC = () => {
       <div className="bg-white rounded-[24px] p-4 md:p-5 shadow-xl shadow-slate-200/50 border border-slate-100 max-w-6xl mx-auto w-full relative overflow-hidden group">
         <div className="flex flex-col lg:flex-row lg:items-center gap-4 relative z-10 w-full">
           <div className="shrink-0 flex items-center gap-3">
-             <div className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-blue-500"><Shield className="w-5 h-5" /></div>
+             <div className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-blue-500 shadow-sm"><Shield className="w-5 h-5" /></div>
              <h2 className="text-sm font-black text-slate-900 uppercase tracking-widest hidden lg:block">Quoter</h2>
           </div>
           
@@ -101,7 +101,7 @@ const CarInsuCalculator: React.FC = () => {
               {IdvOptions.map(opt => <option key={opt} value={opt}>{opt}</option>)}
             </select>
             
-            <button type="submit" className="sm:w-32 bg-blue-500 text-white px-4 py-3 rounded-xl font-bold text-sm shadow-md shadow-blue-500/20 hover:bg-slate-900 hover:shadow-slate-900/20 transition-all active:scale-95 flex items-center justify-center gap-1">
+            <button type="submit" className="sm:w-32 bg-blue-600 text-white px-4 py-3 rounded-xl font-bold text-sm shadow-md shadow-blue-600/20 hover:bg-slate-900 hover:shadow-slate-900/20 transition-all active:scale-95 flex items-center justify-center">
               Check
             </button>
           </form>

@@ -62,16 +62,16 @@ const BusinessInsuCalculator: React.FC = () => {
       </div>
 
       {/* Horizontal Compact Calculator */}
-      <div className="bg-white rounded-[24px] p-4 md:p-5 shadow-xl shadow-slate-200/50 border border-slate-100 max-w-6xl mx-auto w-full relative overflow-hidden group">
-        <div className="flex flex-col lg:flex-row lg:items-center gap-4 relative z-10 w-full">
-          <div className="shrink-0 flex items-center gap-3">
-             <div className="w-10 h-10 rounded-full bg-amber-50 flex items-center justify-center text-amber-500"><Briefcase className="w-5 h-5" /></div>
-             <h2 className="text-sm font-black text-slate-900 uppercase tracking-widest hidden lg:block">Quoter</h2>
+      <div className="bg-white rounded-[32px] p-6 md:p-8 shadow-2xl shadow-slate-200/50 border border-slate-100 max-w-6xl mx-auto w-full relative overflow-hidden group">
+        <div className="flex flex-col lg:flex-row lg:items-center gap-6 relative z-10 w-full">
+          <div className="shrink-0 flex items-center gap-4">
+             <div className="w-12 h-12 rounded-full bg-amber-50 flex items-center justify-center text-amber-500 shadow-sm"><Briefcase className="w-6 h-6" /></div>
+             <h2 className="text-base font-black text-slate-900 uppercase tracking-widest hidden lg:block">Quoter</h2>
           </div>
           
-          <form onSubmit={handleCalculate} className="flex-1 w-full flex flex-col sm:flex-row gap-3">
+          <form onSubmit={handleCalculate} className="flex-1 w-full flex flex-col sm:flex-row gap-4">
             <select 
-              className="flex-1 min-w-0 px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 outline-none transition-all text-slate-700 font-bold text-sm"
+              className="flex-1 min-w-0 px-6 py-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-4 focus:ring-amber-500/10 focus:border-amber-500 outline-none transition-all text-slate-700 font-bold text-base"
               value={industry}
               onChange={e => setIndustry(e.target.value)}
               required
@@ -83,7 +83,7 @@ const BusinessInsuCalculator: React.FC = () => {
             <input 
               type="number" 
               placeholder="Employees"
-              className="flex-1 min-w-0 px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 outline-none transition-all text-slate-900 font-bold text-sm" 
+              className="flex-1 min-w-0 px-6 py-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-4 focus:ring-amber-500/10 focus:border-amber-500 outline-none transition-all text-slate-900 font-bold text-base" 
               value={employees}
               onChange={e => setEmployees(e.target.value)}
               required
@@ -92,7 +92,7 @@ const BusinessInsuCalculator: React.FC = () => {
             />
             
             <select 
-              className="flex-1 min-w-0 px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 outline-none transition-all text-slate-700 font-bold text-sm"
+              className="flex-1 min-w-0 px-6 py-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-4 focus:ring-amber-500/10 focus:border-amber-500 outline-none transition-all text-slate-700 font-bold text-base"
               value={coverage}
               onChange={e => setCoverage(e.target.value)}
               required
@@ -101,8 +101,8 @@ const BusinessInsuCalculator: React.FC = () => {
               {CoverageOptions.map(opt => <option key={opt} value={opt}>{opt}</option>)}
             </select>
             
-            <button type="submit" className="sm:w-32 bg-amber-500 text-white px-4 py-3 rounded-xl font-bold text-sm shadow-md shadow-amber-500/20 hover:bg-slate-900 hover:shadow-slate-900/20 transition-all active:scale-95 flex items-center justify-center gap-1">
-              Check
+            <button type="submit" className="sm:w-40 bg-amber-500 text-white px-8 py-4 rounded-2xl font-black text-base shadow-lg shadow-amber-500/20 hover:bg-slate-900 hover:shadow-slate-900/20 transition-all active:scale-95 flex items-center justify-center">
+              Check Prices
             </button>
           </form>
         </div>
