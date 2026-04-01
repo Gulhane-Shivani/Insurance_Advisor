@@ -127,7 +127,7 @@ const CarInsuCalculator: React.FC = () => {
              <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-slate-200 pb-6">
                 <div>
                    <h2 className="text-3xl font-black text-slate-900 tracking-tight">Best <span className="text-blue-500">Auto Plans</span></h2>
-                   <p className="text-slate-500 font-medium text-sm mt-2">Showing tailored matches for your <strong className="text-slate-700">{carYear}</strong> vehicle.</p>
+                   <p className="text-slate-500 font-medium text-sm mt-2">Showing tailored matches for your <strong className="text-slate-700">{submittedData?.carYear}</strong> vehicle.</p>
                 </div>
              </div>
           </div>
@@ -328,7 +328,7 @@ const CarInsuCalculator: React.FC = () => {
                        <tr>
                          <td className="p-4 border-b border-slate-100 font-bold text-sm text-slate-700 bg-slate-50/50">IDV Value</td>
                          {selectedComparePlans.map(plan => (
-                           <td key={plan.id} className="p-4 border-b border-slate-100 text-center font-bold text-slate-900">{coverage}</td>
+                           <td key={plan.id} className="p-4 border-b border-slate-100 text-center font-bold text-slate-900">{submittedData?.coverage}</td>
                          ))}
                        </tr>
                        <tr>
@@ -349,7 +349,7 @@ const CarInsuCalculator: React.FC = () => {
                            <td key={plan.id} className="p-4 border-b border-slate-100 align-top">
                              <ul className="flex flex-col gap-2">
                                {plan.benefits.map((b, i) => (
-                                 <li key={i} className="flex items-start gap-2 text-[11px] font-semibold text-slate-600">
+                                 <li key={i} className="flex items-start gap-3 text-[11px] font-semibold text-slate-600">
                                    <Check className="w-3 h-3 text-blue-500 flex-shrink-0" /> <span>{b}</span>
                                  </li>
                                ))}

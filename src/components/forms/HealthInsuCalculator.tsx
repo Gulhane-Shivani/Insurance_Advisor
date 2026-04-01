@@ -10,6 +10,7 @@ const CoverageOptions = ['5 Lac', '10 Lac', '25 Lac'];
 const HealthInsuCalculator: React.FC = () => {
   const [showResults, setShowResults] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [submittedData, setSubmittedData] = useState<any>(null);
 
   const handleLogoError = (e: React.SyntheticEvent<HTMLImageElement, Event>, carrierName?: string) => {
     const target = e.target as HTMLImageElement;
@@ -45,6 +46,7 @@ const HealthInsuCalculator: React.FC = () => {
     // Simulate calculation
     setTimeout(() => {
       setIsLoading(false);
+      setSubmittedData({ covered, ageYou, pincode, coverage });
       setShowResults(true);
       // Auto-scroll to results
       const resultsElement = document.getElementById('results-section');
@@ -142,7 +144,7 @@ const HealthInsuCalculator: React.FC = () => {
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-slate-200 pb-6">
               <div>
                 <h2 className="text-3xl font-black text-slate-900 tracking-tight">Recommended <span className="text-green-600">Health Plans</span></h2>
-                <p className="text-slate-500 font-medium text-sm mt-2">Showing tailored matches for <strong className="text-slate-700">{covered}</strong> residing in <strong className="text-slate-700">{pincode}</strong>.</p>
+                <p className="text-slate-500 font-medium text-sm mt-2">Showing tailored matches for <strong className="text-slate-700">{submittedData?.covered}</strong> residing in <strong className="text-slate-700">{submittedData?.pincode}</strong>.</p>
               </div>
             </div>
           </div>
@@ -186,7 +188,7 @@ const HealthInsuCalculator: React.FC = () => {
                       <div className="flex flex-wrap gap-x-4 gap-y-2">
                         <div className="w-full sm:w-auto">
                           <span className="text-[10px] text-slate-400 font-bold uppercase tracking-widest block mb-0.5">Coverage</span>
-                          <span className="text-sm font-black text-slate-900">{coverage}</span>
+                          <span className="text-sm font-black text-slate-900">{submittedData?.coverage}</span>
                         </div>
                         <div className="w-px bg-slate-200 hidden sm:block"></div>
                         <div className="w-full sm:w-auto">
@@ -355,7 +357,7 @@ const HealthInsuCalculator: React.FC = () => {
                       <tr>
                         <td className="p-4 border-b border-slate-100 font-bold text-sm text-slate-700 bg-slate-50/50">Coverage Amount</td>
                         {selectedComparePlans.map(plan => (
-                          <td key={plan.id} className="p-4 border-b border-slate-100 text-center font-bold text-slate-900">{coverage}</td>
+                          <td key={plan.id} className="p-4 border-b border-slate-100 text-center font-bold text-slate-900">{submittedData?.coverage}</td>
                         ))}
                       </tr>
                       <tr>
