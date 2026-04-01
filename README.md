@@ -1,75 +1,177 @@
-# React + TypeScript + Vite
+# 🛡️ Insurance Advisor Web Application
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## 📌 Overview
 
-Currently, two official plugins are available:
+The **Insurance Advisor Web Application** is a smart, user-friendly platform designed to help users choose the right insurance plans based on their personal profile, financial goals, and protection needs.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+It provides a guided experience that mimics a real insurance advisor by analyzing user inputs and generating personalized recommendations for:
 
-## React Compiler
+* Life Insurance
+* Health Insurance
+* Vehicle Insurance
+* Business Insurance
 
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
+---
 
-Note: This will impact Vite dev & build performances.
+## 🚀 Features
 
-## Expanding the ESLint configuration
+### 🔹 1. 3-Step Smart Advisor Flow
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+A structured and interactive wizard-based interface:
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+* **Step 1: Basic Profile**
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+  * Age
+  * Location (City/Pincode)
+  * Annual Income
+  * Family Members to Protect (Self, Spouse, Kids, Parents)
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+* **Step 2: Protection Goals**
+
+  * Select insurance priorities:
+
+    * Health
+    * Life
+    * Vehicle
+    * Business
+
+* **Step 3: Smart Recommendations**
+
+  * Personalized insurance suggestions
+  * Risk profiling
+  * Match score system
+  * Coverage estimation
+
+---
+
+### 🔹 2. Dynamic Insurance Calculation Engine
+
+The system calculates recommended coverage based on:
+
+* User income
+* Financial responsibilities
+* Number of dependents
+* Risk category
+
+---
+
+### 🔹 3. Premium Estimation (Planned / Optional Feature)
+
+* Estimate insurance premiums
+* Improve transparency
+* Help users make informed decisions before contacting an advisor
+
+---
+
+### 🔹 4. Responsive & Professional UI
+
+* Fully responsive design
+* Clean and modern layout
+* Sidebar progress indicator
+* Smooth user experience across devices
+
+---
+
+### 🔹 5. Static to Dynamic Data Transition
+
+* Current version uses **static/dummy data**
+* Backend & database integration will enable:
+
+  * Real-time insurance plans
+  * Live partner data
+  * Accurate pricing
+
+---
+
+## 🛠️ Tech Stack
+
+### Frontend
+
+* React.js
+* Tailwind CSS
+
+
+### Other Tools
+
+* Git & GitHub
+* REST APIs
+
+
+
+---
+
+## ⚙️ Installation & Setup
+
+1. Clone the repository:
+
+```bash
+git clone <your-repo-link>
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+2. Navigate to the project directory:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+cd insurance-advisor
 ```
+
+3. Install dependencies:
+
+```bash
+npm install
+```
+
+4. Run the development server:
+
+```bash
+npm run dev
+```
+
+5. Open in browser:
+
+```
+http://localhost:3000
+```
+
+---
+
+## 📊 How It Works
+
+1. User enters personal details
+2. Selects insurance goals
+3. System processes data using logic engine
+4. Displays personalized recommendations with insights
+
+---
+
+## 🔮 Future Enhancements
+
+* Backend integration
+* Real insurance provider APIs
+* Premium calculator
+* User authentication
+* Save & compare plans
+* Admin dashboard
+
+---
+
+## 🤝 Contribution
+
+Contributions are welcome. Please fork the repository and create a pull request with proper description.
+
+---
+
+## 📬 Contact
+
+For any queries or suggestions, feel free to reach out.
+
+---
+
+## 📄 License
+
+This project is for educational and development purposes.
+
+---
+
+## ✨ Acknowledgement
+
+This project is inspired by modern insurance platforms and aims to simplify insurance decision-making through technology.

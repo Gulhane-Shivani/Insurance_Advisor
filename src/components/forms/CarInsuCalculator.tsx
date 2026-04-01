@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { createPortal } from 'react-dom';
-import { Check, X, Shield, Phone, ArrowRight, Star, ChevronRight, Play } from 'lucide-react';
+import { Check, X, Shield, Phone, Star, ChevronRight, Play } from 'lucide-react';
 import { insurancePlans } from '../../data/carriers';
 
 const IdvOptions = ['3 Lac', '5 Lac', '8 Lac', '12 Lac'];
@@ -17,9 +17,9 @@ const CarInsuCalculator: React.FC = () => {
   };
 
   // Form State
-  const [carYear, setCarYear] = useState('2020');
-  const [previousClaim, setPreviousClaim] = useState('No');
-  const [coverage, setCoverage] = useState('5 Lac');
+  const [carYear, setCarYear] = useState('');
+  const [previousClaim, setPreviousClaim] = useState('');
+  const [coverage, setCoverage] = useState('');
 
   // Results State
   const [selectedComparePlans, setSelectedComparePlans] = useState<typeof insurancePlans[0][]>([]);
@@ -305,69 +305,52 @@ const CarInsuCalculator: React.FC = () => {
     );
   }
 
-  // Initial Calculator Form
+  // Horizontal Compact Calculator
   return (
-    <div className="bg-white rounded-[32px] p-6 md:p-10 shadow-xl shadow-slate-200/50 border border-slate-100 max-w-4xl mx-auto my-10 relative overflow-hidden group">
-      <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500/5 blur-[80px] rounded-full translate-x-1/2 -translate-y-1/4"></div>
-      <h2 className="text-2xl md:text-3xl font-black text-slate-900 mb-8 tracking-tight relative z-10">Car Insurance <span className="text-blue-500">Calculator</span></h2>
-      
-      <form onSubmit={handleCalculate} className="space-y-8 relative z-10">
-        <div className="flex flex-wrap gap-4 pb-8 border-b border-slate-100">
-          <div className="flex-1 min-w-[200px] flex flex-col gap-1.5 focus-within:text-blue-500 transition-colors">
-            <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Enter Car Purchase Year</label>
-            <input 
-              type="number" 
-              className="w-full px-5 py-3.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all text-slate-900 font-bold" 
-              value={carYear}
-              onChange={e => setCarYear(e.target.value)}
-            />
-          </div>
-          <div className="flex-1 min-w-[200px] flex flex-col gap-1.5">
-            <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Made a claim last year?</label>
-            <div className="flex gap-3 h-full items-center">
-              {['Yes', 'No'].map(opt => (
-                <button
-                  key={opt}
-                  type="button"
-                  onClick={() => setPreviousClaim(opt)}
-                  className={`flex-1 py-3 rounded-xl border-2 transition-all font-black text-sm active:scale-95 ${previousClaim === opt ? 'border-blue-500 text-blue-600 bg-blue-50' : 'border-slate-100 text-slate-600 bg-slate-50 hover:bg-slate-100 hover:border-slate-200'}`}
-                >
-                  {opt}
-                </button>
-              ))}
-            </div>
-          </div>
+    <div className="bg-white rounded-[24px] p-4 md:p-5 shadow-xl shadow-slate-200/50 border border-slate-100 max-w-6xl mx-auto my-4 relative overflow-hidden group">
+      <div className="flex flex-col lg:flex-row lg:items-center gap-4 relative z-10 w-full">
+        <div className="shrink-0 flex items-center gap-3">
+           <div className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-blue-500"><Shield className="w-5 h-5" /></div>
+           <h2 className="text-sm font-black text-slate-900 uppercase tracking-widest hidden lg:block">Quoter</h2>
         </div>
+        
+        <form onSubmit={handleCalculate} className="flex-1 w-full flex flex-col sm:flex-row gap-3">
+          <input 
+            type="number" 
+            placeholder="Car Year"
+            className="flex-1 min-w-0 px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all text-slate-900 font-bold text-sm" 
+            value={carYear}
+            onChange={e => setCarYear(e.target.value)}
+            required
+            min="1990"
+            max="2026"
+          />
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div className="col-span-1 md:col-span-2">
-            <label className="block text-xs font-bold uppercase tracking-widest text-slate-500 mb-4">Choose required IDV (Expected Value)</label>
-            <div className="flex flex-wrap gap-3">
-              {IdvOptions.map(opt => (
-                <button
-                  key={opt}
-                  type="button"
-                  onClick={() => setCoverage(opt)}
-                  className={`px-5 py-3 rounded-xl border-2 transition-all flex items-center gap-2 font-black text-sm active:scale-95 ${coverage === opt ? 'border-blue-500 bg-blue-50 text-blue-700' : 'border-slate-100 bg-slate-50 text-slate-600 hover:border-slate-200'}`}
-                >
-                  {opt}
-                  {coverage === opt && <div className="w-4 h-4 rounded-full bg-blue-500 text-white flex items-center justify-center shadow-sm shadow-blue-500/30"><Check className="w-3 h-3" /></div>}
-                </button>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        <div className="pt-8 border-t border-slate-100 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-          <button type="submit" className="w-full md:w-auto bg-blue-500 text-white px-10 py-4 rounded-xl font-black text-xs uppercase tracking-[0.15em] shadow-xl shadow-blue-500/20 hover:bg-slate-900 hover:shadow-slate-900/20 transition-all active:scale-95 flex items-center justify-center gap-2">
-            View Quotes <ArrowRight className="w-4 h-4" />
-          </button>
+          <select 
+            className="flex-1 min-w-0 px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all text-slate-700 font-bold text-sm"
+            value={previousClaim}
+            onChange={e => setPreviousClaim(e.target.value)}
+            required
+          >
+            <option value="" disabled>Previous Claim?</option>
+            {['Yes', 'No'].map(opt => <option key={opt} value={opt}>{opt}</option>)}
+          </select>
           
-          <p className="text-[10px] text-slate-500 font-bold max-w-sm text-center md:text-right">
-            <span className="text-slate-800 uppercase tracking-widest block mb-1">Disclaimer</span> Actual Premium might vary basis IDV and Claim history.
-          </p>
-        </div>
-      </form>
+          <select 
+            className="flex-1 min-w-0 px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all text-slate-700 font-bold text-sm"
+            value={coverage}
+            onChange={e => setCoverage(e.target.value)}
+            required
+          >
+            <option value="" disabled>IDV Cover</option>
+            {IdvOptions.map(opt => <option key={opt} value={opt}>{opt}</option>)}
+          </select>
+          
+          <button type="submit" className="sm:w-32 bg-blue-500 text-white px-4 py-3 rounded-xl font-bold text-sm shadow-md shadow-blue-500/20 hover:bg-slate-900 hover:shadow-slate-900/20 transition-all active:scale-95 flex items-center justify-center gap-1">
+            Check
+          </button>
+        </form>
+      </div>
     </div>
   );
 };

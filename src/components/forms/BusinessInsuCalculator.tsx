@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { createPortal } from 'react-dom';
-import { Check, X, Shield, Phone, ArrowRight, Star, ChevronRight, Briefcase } from 'lucide-react';
+import { Check, X, Shield, Phone, Star, ChevronRight, Briefcase } from 'lucide-react';
 import { insurancePlans } from '../../data/carriers';
 
 const CoverageOptions = ['50 Lac', '1 Cr', '3 Cr', '5 Cr'];
@@ -17,9 +17,9 @@ const BusinessInsuCalculator: React.FC = () => {
   };
 
   // Form State
-  const [industry, setIndustry] = useState('Services');
-  const [employees, setEmployees] = useState('50');
-  const [coverage, setCoverage] = useState('1 Cr');
+  const [industry, setIndustry] = useState('');
+  const [employees, setEmployees] = useState('');
+  const [coverage, setCoverage] = useState('');
 
   // Results State
   const [selectedComparePlans, setSelectedComparePlans] = useState<typeof insurancePlans[0][]>([]);
@@ -305,69 +305,52 @@ const BusinessInsuCalculator: React.FC = () => {
     );
   }
 
-  // Initial Calculator Form
+  // Horizontal Compact Calculator
   return (
-    <div className="bg-white rounded-[32px] p-6 md:p-10 shadow-xl shadow-slate-200/50 border border-slate-100 max-w-4xl mx-auto my-10 relative overflow-hidden group">
-      <div className="absolute top-0 right-0 w-64 h-64 bg-amber-500/5 blur-[80px] rounded-full translate-x-1/2 -translate-y-1/4"></div>
-      <h2 className="text-2xl md:text-3xl font-black text-slate-900 mb-8 tracking-tight relative z-10">Business Protection <span className="text-amber-500">Calculator</span></h2>
-      
-      <form onSubmit={handleCalculate} className="space-y-8 relative z-10">
-        <div className="flex flex-wrap gap-4 pb-8 border-b border-slate-100">
-          <div className="flex-1 min-w-[200px] flex flex-col gap-1.5 ">
-            <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Industry Sub-Sector</label>
-            <div className="flex gap-3 h-full items-center flex-wrap">
-              {['Services', 'Manufacturing', 'Retail', 'IT/Tech'].map(opt => (
-                <button
-                  key={opt}
-                  type="button"
-                  onClick={() => setIndustry(opt)}
-                  className={`flex-1 py-3 px-2 rounded-xl border-2 transition-all font-black text-xs min-w-[90px] active:scale-95 ${industry === opt ? 'border-amber-500 text-amber-600 bg-amber-50' : 'border-slate-100 text-slate-600 bg-slate-50 hover:bg-slate-100 hover:border-slate-200'}`}
-                >
-                  {opt}
-                </button>
-              ))}
-            </div>
-          </div>
-          <div className="flex-none w-full md:w-48 flex flex-col gap-1.5 focus-within:text-amber-500 transition-colors">
-            <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">No. of Employees</label>
-            <input 
-              type="number" 
-              className="w-full h-full px-5 py-3.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 outline-none transition-all text-slate-900 font-bold" 
-              value={employees}
-              onChange={e => setEmployees(e.target.value)}
-            />
-          </div>
+    <div className="bg-white rounded-[24px] p-4 md:p-5 shadow-xl shadow-slate-200/50 border border-slate-100 max-w-6xl mx-auto my-4 relative overflow-hidden group">
+      <div className="flex flex-col lg:flex-row lg:items-center gap-4 relative z-10 w-full">
+        <div className="shrink-0 flex items-center gap-3">
+           <div className="w-10 h-10 rounded-full bg-amber-50 flex items-center justify-center text-amber-500"><Briefcase className="w-5 h-5" /></div>
+           <h2 className="text-sm font-black text-slate-900 uppercase tracking-widest hidden lg:block">Quoter</h2>
         </div>
+        
+        <form onSubmit={handleCalculate} className="flex-1 w-full flex flex-col sm:flex-row gap-3">
+          <select 
+            className="flex-1 min-w-0 px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 outline-none transition-all text-slate-700 font-bold text-sm"
+            value={industry}
+            onChange={e => setIndustry(e.target.value)}
+            required
+          >
+            <option value="" disabled>Industry</option>
+            {['Services', 'Manufacturing', 'Retail', 'IT/Tech'].map(opt => <option key={opt} value={opt}>{opt}</option>)}
+          </select>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div className="col-span-1 md:col-span-2">
-            <label className="block text-xs font-bold uppercase tracking-widest text-slate-500 mb-4">Select Desired Asset Coverage Limit</label>
-            <div className="flex flex-wrap gap-3">
-              {CoverageOptions.map(opt => (
-                <button
-                  key={opt}
-                  type="button"
-                  onClick={() => setCoverage(opt)}
-                  className={`px-5 py-3 rounded-xl border-2 transition-all flex items-center gap-2 font-black text-sm active:scale-95 ${coverage === opt ? 'border-amber-500 bg-amber-50 text-amber-700' : 'border-slate-100 bg-slate-50 text-slate-600 hover:border-slate-200'}`}
-                >
-                  {opt}
-                  {coverage === opt && <div className="w-4 h-4 rounded-full bg-amber-500 text-white flex items-center justify-center shadow-sm shadow-amber-500/30"><Check className="w-3 h-3" /></div>}
-                </button>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        <div className="pt-8 border-t border-slate-100 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-          <button type="submit" className="w-full md:w-auto bg-amber-500 text-white px-10 py-4 rounded-xl font-black text-xs uppercase tracking-[0.15em] shadow-xl shadow-amber-500/20 hover:bg-slate-900 hover:shadow-slate-900/20 transition-all active:scale-95 flex items-center justify-center gap-2">
-            Build Quotation <ArrowRight className="w-4 h-4" />
-          </button>
+          <input 
+            type="number" 
+            placeholder="Employees"
+            className="flex-1 min-w-0 px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 outline-none transition-all text-slate-900 font-bold text-sm" 
+            value={employees}
+            onChange={e => setEmployees(e.target.value)}
+            required
+            min="1"
+            max="10000"
+          />
           
-          <p className="text-[10px] text-slate-500 font-bold max-w-sm text-center md:text-right">
-            <span className="text-slate-800 uppercase tracking-widest block mb-1">Disclaimer</span> Final Premium is determined after underwriter evaluation.
-          </p>
-        </div>
-      </form>
+          <select 
+            className="flex-1 min-w-0 px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 outline-none transition-all text-slate-700 font-bold text-sm"
+            value={coverage}
+            onChange={e => setCoverage(e.target.value)}
+            required
+          >
+            <option value="" disabled>Asset Cover</option>
+            {CoverageOptions.map(opt => <option key={opt} value={opt}>{opt}</option>)}
+          </select>
+          
+          <button type="submit" className="sm:w-32 bg-amber-500 text-white px-4 py-3 rounded-xl font-bold text-sm shadow-md shadow-amber-500/20 hover:bg-slate-900 hover:shadow-slate-900/20 transition-all active:scale-95 flex items-center justify-center gap-1">
+            Check
+          </button>
+        </form>
+      </div>
     </div>
   );
 };
