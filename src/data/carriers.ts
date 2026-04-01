@@ -97,7 +97,7 @@ export const insurancePlans: InsurancePlan[] = [
     coverageAmount: '₹1,00,00,000',
     benefits: ['Critical Illness', 'Terminal Illness Cover', 'Accident Rider'],
     rating: 4.8,
-    features: { }
+    features: {}
   },
   {
     id: 'plan-6',
@@ -123,7 +123,7 @@ export const insurancePlans: InsurancePlan[] = [
     coverageAmount: '₹50,0,000',
     benefits: ['Fire & Burglary', 'Employee Liability', 'Digital Assets'],
     rating: 4.6,
-    features: { }
+    features: {}
   },
   {
     id: 'plan-8',
@@ -136,7 +136,7 @@ export const insurancePlans: InsurancePlan[] = [
     coverageAmount: '₹25,0,000',
     benefits: ['Public Liability', 'Machinery Breakdown', 'Money Cover'],
     rating: 4.5,
-    features: { }
+    features: {}
   },
   {
     id: 'plan-9',
@@ -175,7 +175,7 @@ export const insurancePlans: InsurancePlan[] = [
     coverageAmount: '₹50,00,000',
     benefits: ['Waiver of Premium', 'Accident Death', 'Life Stage Protect'],
     rating: 4.8,
-    features: { }
+    features: {}
   },
   {
     id: 'plan-12',
@@ -188,7 +188,7 @@ export const insurancePlans: InsurancePlan[] = [
     coverageAmount: '₹1,50,00,000',
     benefits: ['Whole Life Cover', 'Return of Premium', 'Income Benefit'],
     rating: 4.7,
-    features: { }
+    features: {}
   },
   {
     id: 'plan-13',
@@ -201,6 +201,6 @@ export const insurancePlans: InsurancePlan[] = [
     coverageAmount: '₹10,00,000',
     benefits: ['Stock Protection', 'Interruption Cover', 'Glass Cover'],
     rating: 4.3,
-    features: { }
+    features: {}
   }
 ];

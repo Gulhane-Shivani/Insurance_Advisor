@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { createPortal } from 'react-dom';
-import { Check, X, Shield, Phone, Zap, ArrowRight } from 'lucide-react';
+import { Check, X, Shield, Phone, Zap, ArrowRight, Star, ChevronRight, Activity } from 'lucide-react';
 import { insurancePlans } from '../../data/carriers';
 
 type CoveredMember = 'You' | 'Couple' | 'Family' | 'Father' | 'Mother';
@@ -50,41 +50,21 @@ const HealthInsuCalculator: React.FC = () => {
 
   if (showResults) {
     return (
-      <div className="bg-slate-50 min-h-screen pb-20">
-        {/* Top Search Bar / Filters */}
-        <div className="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-sm">
-           <div className="container py-4 flex flex-wrap items-center justify-between gap-4">
-              <div className="flex items-center gap-6">
-                 <div className="flex items-center gap-2">
-                    <Shield className="w-5 h-5 text-green-500" />
-                    <span className="font-black text-slate-900 text-lg">InsuranceAdvisor</span>
-                 </div>
-                 <div className="h-8 w-px bg-slate-200"></div>
-                 <div>
-                    <p className="text-sm font-bold text-slate-900">{covered}</p>
-                    <p className="text-xs text-blue-600 font-medium cursor-pointer flex items-center gap-1 hover:underline" onClick={() => setShowResults(false)}>
-                      {pincode} <span className="text-[10px]">Edit details</span>
-                    </p>
-                 </div>
+      <div className="bg-slate-50 min-h-screen pb-20 pt-8">
+        <div className="container mb-8">
+           <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-slate-200 pb-6">
+              <div>
+                 <h2 className="text-3xl font-black text-slate-900 tracking-tight">Recommended <span className="text-green-600">Health Plans</span></h2>
+                 <p className="text-slate-500 font-medium text-sm mt-2">Showing tailored matches for <strong className="text-slate-700">{covered}</strong> residing in <strong className="text-slate-700">{pincode}</strong>.</p>
               </div>
-              <div className="flex items-center gap-2 text-slate-700 bg-green-50 px-3 py-1.5 rounded-full border border-green-200">
-                 <Phone className="w-4 h-4 text-green-600" />
-                 <span className="text-sm font-bold">755-11-96989</span>
-              </div>
-           </div>
-
-           <div className="container pb-3 flex flex-wrap gap-3">
-              {['Plan Type : Base', `Coverage: ₹ ${coverage}`, 'Insurers: Select Insurers', 'Features: Select Features', 'Tenure: 1 Year', 'Sort By: Relevance'].map((filter, i) => (
-                <button key={i} className="px-4 py-2 bg-white border border-slate-200 rounded-lg text-xs font-bold text-slate-600 shadow-sm hover:bg-slate-50">
-                  {filter} ▼
-                </button>
-              ))}
-              <label className="flex items-center gap-2 text-xs font-bold text-slate-600 ml-2">
-                 <input type="checkbox" className="w-4 h-4 rounded border-slate-300" /> Portability
-              </label>
+              <button 
+                 onClick={() => setShowResults(false)}
+                 className="bg-white border-2 border-slate-200 text-slate-600 px-5 py-2.5 rounded-xl font-bold text-xs uppercase tracking-widest hover:border-slate-300 hover:bg-slate-100 transition-colors active:scale-95"
+              >
+                 Edit Profile
+              </button>
            </div>
         </div>
-
         <div className="container mt-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2 space-y-4">
              {healthPlans.map((plan) => {
@@ -92,72 +72,80 @@ const HealthInsuCalculator: React.FC = () => {
                const isCompared = !!selectedComparePlans.find(p => p.id === plan.id);
                
                return (
-                 <div key={plan.id} className="bg-white rounded-[24px] shadow-md shadow-slate-200/50 border border-slate-100 overflow-hidden group hover:border-green-300 hover:shadow-xl transition-all">
-                    <div className="p-5 flex flex-col md:flex-row gap-6 relative">
-                       {/* Discount Badge */}
-                       {metrics.discount && (
-                         <div className="absolute top-0 right-4 bg-green-50 text-green-700 px-2 py-0.5 rounded-b-md text-[10px] font-bold flex items-center gap-1 border border-t-0 border-green-200">
-                           <span className="w-1.5 h-1.5 rounded-full bg-green-500"></span>
-                           {metrics.discount}
-                         </div>
-                       )}
-                       
-                       {/* Left - Logo & Plan Name */}
-                       <div className="w-full md:w-1/3 flex flex-col items-center md:items-start text-center md:text-left pt-2">
-                          <img src={plan.carrierLogo} alt={plan.carrierName} className="h-12 object-contain mb-3" />
-                          <h3 className="font-black text-slate-900 text-sm">{plan.carrierName}</h3>
-                          <p className="text-xs text-slate-500 font-medium">{plan.planName}</p>
-                          
-                          <div className="flex flex-wrap gap-2 mt-4">
-                             <span className="text-[10px] text-green-700 bg-green-50 px-2 py-1 rounded border border-green-100 flex items-center gap-1 font-bold">
-                               <Check className="w-3 h-3" /> 25% no claim bonus
-                             </span>
-                             <span className="text-[10px] text-green-700 bg-green-50 px-2 py-1 rounded border border-green-100 flex items-center gap-1 font-bold">
-                               <Check className="w-3 h-3" /> Unlimited restoration
-                             </span>
-                          </div>
-                          <button className="text-xs text-blue-600 font-bold mt-2 hover:underline">View Features &gt;</button>
-                       </div>
+                 <div key={plan.id} className="bg-white border border-slate-200 rounded-2xl p-5 relative overflow-hidden group hover:border-blue-300 transition-colors shadow-sm mb-4">
+                    {/* Discount Badge */}
+                    {metrics.discount && (
+                      <div className="absolute top-0 right-4 bg-green-50 text-green-700 px-2 py-0.5 rounded-b-md text-[10px] font-bold flex items-center gap-1 border border-t-0 border-green-200">
+                        <span className="w-1.5 h-1.5 rounded-full bg-green-500"></span>
+                        {metrics.discount}
+                      </div>
+                    )}
 
-                       {/* Middle - Metrics */}
-                       <div className="w-full md:w-1/3 grid grid-cols-3 gap-2 border-y md:border-y-0 md:border-x border-slate-100 py-4 md:py-0 md:px-4 text-center items-center">
-                          <div>
-                            <p className="text-[10px] text-slate-500 font-bold mb-1">Cashless Hospital</p>
-                            <p className="text-sm font-black text-blue-600">{metrics.cashless} &gt;</p>
-                          </div>
-                          <div>
-                            <p className="text-[10px] text-slate-500 font-bold mb-1">Claim Settled</p>
-                            <p className="text-sm font-black text-slate-900">{metrics.claim}</p>
-                          </div>
-                          <div>
-                            <p className="text-[10px] text-slate-500 font-bold mb-1">Cover Amount</p>
-                            <p className="text-sm font-black text-slate-900">{coverage} ˅</p>
-                          </div>
-                       </div>
-
-                       {/* Right - Price & Action */}
-                       <div className="w-full md:w-1/3 flex flex-col items-center justify-center pt-2">
-                          <button className="w-full max-w-[180px] border-2 border-green-600 text-green-600 font-black px-4 py-2.5 rounded-xl hover:bg-green-50 transition-colors flex items-center justify-center gap-1.5 shadow-sm group-hover:bg-green-600 group-hover:text-white group-hover:shadow-green-500/20">
-                            ₹{plan.monthlyPrice}/Month <ArrowRight className="w-4 h-4" />
-                          </button>
-                          <p className="text-[10px] text-slate-400 font-bold mt-1 line-through">₹{plan.monthlyPrice * 12 + 1500}/Yr</p>
-                          
-                          <label className="flex items-center gap-2 mt-4 cursor-pointer group/cb">
-                             <div className={`w-4 h-4 rounded-md border flex items-center justify-center transition-colors ${isCompared ? 'bg-green-600 border-green-600 text-white' : 'border-slate-300 bg-slate-50 group-hover/cb:border-green-400'}`}>
-                               {isCompared && <Check className="w-3 h-3" />}
-                             </div>
-                             <span className="text-xs font-bold text-slate-600">Add to Compare</span>
-                             <input 
-                               type="checkbox" 
-                               className="hidden" 
-                               checked={isCompared} 
-                               onChange={() => handleCompareToggle(plan)} 
-                             />
-                          </label>
-                       </div>
+                    <div className="flex flex-col sm:flex-row gap-4 sm:items-center justify-between mb-4">
+                      <div className="flex items-center gap-3">
+                        <div className="w-12 h-12 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center p-1.5">
+                          <img src={plan.carrierLogo} alt={plan.carrierName} className="w-full h-full object-contain" />
+                        </div>
+                        <div>
+                          <span className="text-[10px] font-black uppercase tracking-widest text-slate-500 bg-slate-100 px-2 py-0.5 rounded-md inline-block mb-1">{plan.carrierName}</span>
+                          <h3 className="font-black text-slate-900 leading-tight">{plan.planName}</h3>
+                        </div>
+                      </div>
+                      <div className="text-left sm:text-right flex flex-row sm:flex-col items-center sm:items-end justify-between">
+                        <p className="text-xl font-black text-slate-900">₹{plan.monthlyPrice}/mo</p>
+                        <div className="flex items-center gap-1 bg-green-50 text-green-700 px-2 py-1 rounded-md mt-1 border border-green-100">
+                          <Star className="w-3 h-3 fill-current" />
+                          <span className="text-[10px] font-black">{Math.round(plan.rating * 20)}% Match Score</span>
+                        </div>
+                      </div>
                     </div>
-                    <div className="bg-slate-50 py-2 text-center border-t border-slate-100">
-                       <button className="text-xs text-blue-600 font-bold hover:underline">View 6 More Plans &gt;</button>
+
+                    <div className="bg-slate-50 rounded-xl p-4 mb-4 border border-slate-100">
+                      <p className="text-xs text-slate-700 font-medium mb-3"><strong className="text-slate-900 font-bold">Why this plan?</strong> Best-in-class health coverage tailored for your current profile.</p>
+                      <div className="flex flex-wrap gap-x-4 gap-y-2">
+                        <div className="w-full sm:w-auto">
+                          <span className="text-[10px] text-slate-400 font-bold uppercase tracking-widest block mb-0.5">Coverage</span>
+                          <span className="text-sm font-black text-slate-900">{coverage}</span>
+                        </div>
+                        <div className="w-px bg-slate-200 hidden sm:block"></div>
+                        <div className="w-full sm:w-auto">
+                          <span className="text-[10px] text-slate-400 font-bold uppercase tracking-widest block mb-0.5">Trust Metric</span>
+                          <span className="text-xs font-bold text-green-600 flex items-center gap-1"><Shield className="w-3 h-3" /> {metrics.claim} Claim Settlement</span>
+                        </div>
+                        <div className="w-px bg-slate-200 hidden sm:block"></div>
+                        <div className="w-full sm:w-auto">
+                          <span className="text-[10px] text-slate-400 font-bold uppercase tracking-widest block mb-0.5">Network</span>
+                          <span className="text-xs font-bold text-blue-600 flex items-center gap-1"><Activity className="w-3 h-3" /> {metrics.cashless} Hospitals</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+                      <ul className="flex flex-wrap gap-2 flex-1">
+                        {plan.benefits.slice(0, 3).map((f, i) => (
+                          <li key={i} className="text-[10px] font-bold text-slate-500 bg-white border border-slate-200 px-2 py-1 rounded-md flex items-center gap-1">
+                            <Check className="w-3 h-3 text-blue-500" /> {f}
+                          </li>
+                        ))}
+                      </ul>
+                      
+                      <div className="flex items-center gap-4 w-full sm:w-auto shrink-0">
+                        <label className="flex items-center gap-2 cursor-pointer group/cb">
+                          <div className={`w-4 h-4 rounded-md border flex items-center justify-center transition-colors ${isCompared ? 'bg-green-600 border-green-600 text-white' : 'border-slate-300 bg-slate-50 group-hover/cb:border-green-400'}`}>
+                            {isCompared && <Check className="w-3 h-3" />}
+                          </div>
+                          <span className="text-[10px] font-bold uppercase tracking-widest text-slate-500">Compare</span>
+                          <input 
+                            type="checkbox" 
+                            className="hidden" 
+                            checked={isCompared} 
+                            onChange={() => handleCompareToggle(plan)} 
+                          />
+                        </label>
+                        <button className="flex-1 sm:flex-none bg-slate-900 text-white px-6 py-2.5 rounded-xl font-black text-xs hover:bg-blue-600 transition-colors shadow-md active:scale-95 flex items-center justify-center gap-2">
+                          Buy Policy <ChevronRight className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
                     </div>
                  </div>
                );
