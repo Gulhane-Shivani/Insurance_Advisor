@@ -14,6 +14,11 @@ import BusinessInsurancePage from './app/insurance/businessInsurance';
 import InsuranceOverview from './app/insurance/Overview';
 import DashboardPage from './app/dashboard/page';
 import FeedbackPage from './app/feedback/page';
+import TermsPage from './app/legal/TermsPage';
+import PrivacyPage from './app/legal/PrivacyPage';
+import ClaimsPage from './app/support/ClaimsPage';
+import RenewalPage from './app/support/RenewalPage';
+import CarePage from './app/support/CarePage';
 import ScrollToTop from './components/common/ScrollToTop';
 
 const App: React.FC = () => {
@@ -34,6 +39,11 @@ const App: React.FC = () => {
           <Route path="/insurance/health" element={<HealthInsurancePage />} />
           <Route path="/insurance/car" element={<CarInsurancePage />} />
           <Route path="/insurance/business" element={<BusinessInsurancePage />} />
+          <Route path="/terms" element={<TermsPage />} />
+          <Route path="/privacy" element={<PrivacyPage />} />
+          <Route path="/claims" element={<ClaimsPage />} />
+          <Route path="/renewal" element={<RenewalPage />} />
+          <Route path="/care" element={<CarePage />} />
         </Routes>
       </Router>
     </AuthProvider>

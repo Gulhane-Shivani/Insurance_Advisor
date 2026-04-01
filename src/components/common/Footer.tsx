@@ -30,16 +30,16 @@ const Footer: React.FC = () => {
       links: [
         { name: 'About Us', href: '/about' },
         { name: 'Contact', href: '/contact' },
-        { name: 'Terms of Service', href: '#' },
-        { name: 'Privacy Policy', href: '#' },
+        { name: 'Terms of Service', href: '/terms' },
+        { name: 'Privacy Policy', href: '/privacy' },
       ],
     },
     {
       title: 'Support',
       links: [
-        { name: 'Claim Center', href: '#' },
-        { name: 'Policy Renewal', href: '#' },
-        { name: 'Customer Care', href: '#' },
+        { name: 'Claim Center', href: '/claims' },
+        { name: 'Policy Renewal', href: '/renewal' },
+        { name: 'Customer Care', href: '/care' },
         { name: 'Feedback', href: '/feedback' },
       ],
     },
@@ -106,8 +106,8 @@ const Footer: React.FC = () => {
         <div className="border-t border-slate-800 pt-10 flex flex-col md:flex-row items-center justify-between gap-6 text-sm text-slate-500">
           <p>© {currentYear} Insurance Advisor. All Rights Reserved.</p>
           <div className="flex items-center gap-8">
-            <Link to="#" className="hover:text-slate-300">Privacy Policy</Link>
-            <Link to="#" className="hover:text-slate-300">Terms of Service</Link>
+            <Link to="/privacy" className="hover:text-slate-300">Privacy Policy</Link>
+            <Link to="/terms" className="hover:text-slate-300">Terms of Service</Link>
             <Link to="#" className="hover:text-slate-300">Cookies Policy</Link>
           </div>
         </div>
