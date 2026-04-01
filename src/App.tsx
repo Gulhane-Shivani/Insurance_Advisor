@@ -13,6 +13,7 @@ import CarInsurancePage from './app/insurance/carInsurance';
 import BusinessInsurancePage from './app/insurance/businessInsurance';
 import InsuranceOverview from './app/insurance/Overview';
 import DashboardPage from './app/dashboard/page';
+import FeedbackPage from './app/feedback/page';
 import ScrollToTop from './components/common/ScrollToTop';
 
 const App: React.FC = () => {
@@ -27,6 +28,7 @@ const App: React.FC = () => {
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/quote" element={<QuotePage />} />
           <Route path="/dashboard" element={<DashboardPage />} />
+          <Route path="/feedback" element={<FeedbackPage />} />
           <Route path="/insurance" element={<InsuranceOverview />} />
           <Route path="/insurance/life" element={<LifeInsurancePage />} />
           <Route path="/insurance/health" element={<HealthInsurancePage />} />
