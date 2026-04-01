@@ -37,7 +37,7 @@ const FAQ: React.FC = () => {
   };
 
   return (
-    <section id="faq" className="py-24 bg-white">
+    <section id="faq" className="py-24 bg-white scroll-mt-28">
       <div className="container max-w-4xl">
         <div className="text-center mb-16">
           <SectionTitle 

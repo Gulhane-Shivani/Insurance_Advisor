@@ -57,7 +57,7 @@ const Home: React.FC = () => {
 
         <FAQ/>
 
-        <div className="pt-8 pb-24 bg-slate-50 relative" id="advisor">
+        <div className="pt-8 pb-24 bg-slate-50 relative scroll-mt-28" id="advisor">
           <div className="container relative z-10">
             <div className="text-center mb-8">
               <h2 className="text-2xl md:text-3xl font-black text-slate-900 mb-3 tracking-tight">Meet Your Digital <span className="text-blue-600">Insurance Advisor</span></h2>
