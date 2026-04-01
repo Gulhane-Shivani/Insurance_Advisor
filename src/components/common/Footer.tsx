@@ -1,5 +1,6 @@
 /* src/components/common/Footer.tsx */
 import React from 'react';
+import { Link } from 'react-router-dom';
 import '../../styles/globals.css';
 
 const Footer: React.FC = () => {
@@ -8,19 +9,39 @@ const Footer: React.FC = () => {
   const footerSections = [
     {
       title: 'Our Solutions',
-      links: ['Life Insurance', 'Health Insurance', 'Car Insurance', 'Business Insurance'],
+      links: [
+        { name: 'Life Insurance', href: '/insurance/life' },
+        { name: 'Health Insurance', href: '/insurance/health' },
+        { name: 'Car Insurance', href: '/insurance/car' },
+        { name: 'Business Insurance', href: '/insurance/business' },
+      ],
     },
     {
       title: 'Resources',
-      links: ['Help Center', 'Blog', 'Compare Plans', 'FAQ'],
+      links: [
+        { name: 'Help Center', href: '#' },
+        { name: 'Blog', href: '/#advisor' },
+        { name: 'Compare Plans', href: '/compare' },
+        { name: 'FAQ', href: '/#faq' },
+      ],
     },
     {
       title: 'Company',
-      links: ['About Us', 'Contact', 'Terms of Service', 'Privacy Policy'],
+      links: [
+        { name: 'About Us', href: '/about' },
+        { name: 'Contact', href: '/contact' },
+        { name: 'Terms of Service', href: '#' },
+        { name: 'Privacy Policy', href: '#' },
+      ],
     },
     {
       title: 'Support',
-      links: ['Claim Center', 'Policy Renewal', 'Customer Care','Feedback'],
+      links: [
+        { name: 'Claim Center', href: '#' },
+        { name: 'Policy Renewal', href: '#' },
+        { name: 'Customer Care', href: '#' },
+        { name: 'Feedback', href: '#' },
+      ],
     },
   ];
 
@@ -29,14 +50,14 @@ const Footer: React.FC = () => {
       <div className="container">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 mb-16">
           <div className="lg:col-span-1">
-            <div className="flex items-center gap-2 mb-6">
+            <Link to="/" className="flex items-center gap-2 mb-6">
               <div className="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center text-white font-bold text-lg">
                 IA
               </div>
               <span className="font-bold text-xl tracking-tight text-white">
                 Insurance<span className="text-blue-500">Advisor</span>
               </span>
-            </div>
+            </Link>
             <p className="text-slate-400 mb-6 leading-relaxed">
               Empowering families and businesses with reliable, affordable, and smart insurance solutions.
             </p>
@@ -61,10 +82,20 @@ const Footer: React.FC = () => {
               <h4 className="font-semibold text-white mb-6 text-lg">{section.title}</h4>
               <ul className="flex flex-col gap-4">
                 {section.links.map((link) => (
-                  <li key={link}>
-                    <a href="#" className="hover:text-blue-500 transition-colors">
-                      {link}
-                    </a>
+                  <li key={link.name}>
+                    {link.href.startsWith('/#') ? (
+                      <a href={link.href} className="hover:text-blue-500 transition-colors">
+                        {link.name}
+                      </a>
+                    ) : link.href.startsWith('http') || link.href === '#' ? (
+                      <a href={link.href} className="hover:text-blue-500 transition-colors">
+                        {link.name}
+                      </a>
+                    ) : (
+                      <Link to={link.href} className="hover:text-blue-500 transition-colors">
+                        {link.name}
+                      </Link>
+                    )}
                   </li>
                 ))}
               </ul>
@@ -75,9 +106,9 @@ const Footer: React.FC = () => {
         <div className="border-t border-slate-800 pt-10 flex flex-col md:flex-row items-center justify-between gap-6 text-sm text-slate-500">
           <p>© {currentYear} Insurance Advisor. All Rights Reserved.</p>
           <div className="flex items-center gap-8">
-            <a href="#" className="hover:text-slate-300">Privacy Policy</a>
-            <a href="#" className="hover:text-slate-300">Terms of Service</a>
-            <a href="#" className="hover:text-slate-300">Cookies Policy</a>
+            <Link to="#" className="hover:text-slate-300">Privacy Policy</Link>
+            <Link to="#" className="hover:text-slate-300">Terms of Service</Link>
+            <Link to="#" className="hover:text-slate-300">Cookies Policy</Link>
           </div>
         </div>
       </div>
