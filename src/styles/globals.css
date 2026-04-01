@@ -11,8 +11,48 @@
   }
   
   body {
-    @apply bg-slate-50 overflow-x-hidden m-0 p-0;
+    @apply bg-slate-50 overflow-x-hidden m-0 p-0 text-[15px] sm:text-base leading-relaxed tracking-normal;
     font-family: var(--font-sans);
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply tracking-tight text-slate-900;
+  }
+
+  h1 {
+    @apply font-bold text-4xl sm:text-5xl md:text-6xl leading-tight;
+  }
+  
+  h2 {
+    @apply font-semibold text-2xl md:text-3xl lg:text-4xl leading-snug;
+  }
+  
+  h3 {
+    @apply font-semibold text-xl md:text-2xl lg:text-3xl leading-snug;
+  }
+
+  h4, h5, h6 {
+    @apply font-medium text-lg md:text-xl leading-snug;
+  }
+
+  p {
+    @apply font-normal leading-relaxed text-slate-600;
+  }
+
+  a {
+    @apply font-medium transition-colors duration-200;
+  }
+
+  button, .btn {
+    @apply font-medium tracking-wide;
+  }
+
+  input, select, textarea {
+    @apply font-medium text-slate-800 focus:outline-none placeholder:text-slate-400 placeholder:font-normal;
+  }
+
+  label {
+    @apply font-medium text-slate-700;
   }
 
   .container {
