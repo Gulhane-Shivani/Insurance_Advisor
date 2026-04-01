@@ -107,14 +107,14 @@ const ComparisonSuite: React.FC<ComparisonSuiteProps> = ({
         </div>
 
         {/* Plans Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {filteredPlans.length > 0 ? (
             filteredPlans.map((plan) => (
-              <div key={plan.id} className="bg-white rounded-3xl border border-slate-100 shadow-md hover:shadow-xl hover:border-blue-200 transition-all p-5 flex flex-col gap-5 group relative overflow-hidden">
+              <div key={plan.id} className="bg-white rounded-[24px] border border-slate-100 shadow-sm hover:shadow-lg hover:border-blue-200 transition-all p-4 flex flex-col gap-3 group relative overflow-hidden">
                 <div className="absolute top-0 right-0 w-24 h-24 bg-blue-50/30 blur-2xl rounded-full translate-x-1/2 -translate-y-1/2 group-hover:bg-blue-100/40 transition-colors"></div>
                 
                 <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-lg bg-slate-50 flex items-center justify-center p-1.5 border border-slate-100 shadow-sm overflow-hidden flex-shrink-0">
+                  <div className="w-10 h-10 rounded-lg bg-slate-50 flex items-center justify-center p-1.5 border border-slate-100 shadow-sm overflow-hidden flex-shrink-0">
                     <img 
                       src={plan.carrierLogo} 
                       alt={plan.carrierName} 
@@ -123,7 +123,7 @@ const ComparisonSuite: React.FC<ComparisonSuiteProps> = ({
                     />
                   </div>
                   <div className="flex-1">
-                     <h3 className="text-lg font-black text-slate-900 line-clamp-1">{plan.planName}</h3>
+                     <h3 className="text-base font-black text-slate-900 line-clamp-1">{plan.planName}</h3>
                      <div className="flex items-center gap-2">
                        <span className="text-[10px] font-bold text-slate-500">{plan.carrierName}</span>
                        <span className="px-1.5 py-0.5 rounded-md bg-yellow-50 text-yellow-600 text-[8px] font-bold uppercase tracking-tighter flex items-center gap-0.5">
@@ -132,22 +132,22 @@ const ComparisonSuite: React.FC<ComparisonSuiteProps> = ({
                      </div>
                   </div>
                   <div className="text-right">
-                     <p className="text-xl font-black text-blue-600">₹{plan.monthlyPrice}</p>
-                     <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest">per month</p>
+                     <p className="text-lg font-black text-blue-600">₹{plan.monthlyPrice}</p>
+                     <p className="text-[7px] font-bold text-slate-400 uppercase tracking-widest">per month</p>
                   </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-4 py-4 border-y border-slate-50">
+                <div className="grid grid-cols-2 gap-3 py-3 border-y border-slate-50">
                   <div>
-                    <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Coverage</p>
-                    <p className="text-sm font-black text-slate-900">{plan.coverageAmount}</p>
+                    <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest mb-1">Coverage</p>
+                    <p className="text-xs font-black text-slate-900">{plan.coverageAmount}</p>
                   </div>
                   <div>
-                    <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Top Benefits</p>
+                    <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest mb-1">Top Benefits</p>
                     <ul className="flex flex-col gap-0.5">
                       {plan.benefits.slice(0, 2).map((b, i) => (
-                        <li key={i} className="text-[10px] font-semibold text-slate-600 flex items-center gap-1">
-                          <Check className="w-2.5 h-2.5 text-green-500" />
+                        <li key={i} className="text-[9px] font-semibold text-slate-600 flex items-center gap-1">
+                          <Check className="w-2 h-2 text-green-500" />
                           <span className="line-clamp-1">{b}</span>
                         </li>
                       ))}
@@ -155,12 +155,12 @@ const ComparisonSuite: React.FC<ComparisonSuiteProps> = ({
                   </div>
                 </div>
 
-                <div className="flex items-center justify-between gap-2 mt-2 pt-4 border-t border-slate-50">
+                <div className="flex items-center justify-between gap-2 mt-1 pt-3 border-t border-slate-50">
                   <label className="flex items-center gap-1.5 cursor-pointer group/checkbox flex-1">
-                    <div className={`w-4 h-4 rounded border flex items-center justify-center transition-colors ${selectedComparePlans.find(p => p.id === plan.id) ? 'bg-blue-600 border-blue-600 text-white' : 'border-slate-300 bg-white group-hover/checkbox:border-blue-400'}`}>
-                      {selectedComparePlans.find(p => p.id === plan.id) && <Check className="w-3 h-3" />}
+                    <div className={`w-3.5 h-3.5 rounded border flex items-center justify-center transition-colors ${selectedComparePlans.find(p => p.id === plan.id) ? 'bg-blue-600 border-blue-600 text-white' : 'border-slate-300 bg-white group-hover/checkbox:border-blue-400'}`}>
+                      {selectedComparePlans.find(p => p.id === plan.id) && <Check className="w-2.5 h-2.5" />}
                     </div>
-                    <span className={`text-[10px] font-black uppercase tracking-wider transition-colors ${selectedComparePlans.find(p => p.id === plan.id) ? 'text-blue-600' : 'text-slate-400 group-hover/checkbox:text-slate-600'}`}>Compare</span>
+                    <span className={`text-[9px] font-black uppercase tracking-wider transition-colors ${selectedComparePlans.find(p => p.id === plan.id) ? 'text-blue-600' : 'text-slate-400 group-hover/checkbox:text-slate-600'}`}>Compare</span>
                     <input 
                       type="checkbox"
                       className="hidden"
@@ -179,9 +179,9 @@ const ComparisonSuite: React.FC<ComparisonSuiteProps> = ({
                   <div className="flex flex-1 items-center justify-end gap-3">
                     <button 
                       onClick={() => setViewingPlan(plan)}
-                      className="flex items-center justify-center gap-1.5 bg-slate-900 text-white px-4 py-2 rounded-xl font-bold text-[10px] uppercase hover:bg-blue-600 transition-colors shadow-md active:scale-95 whitespace-nowrap"
+                      className="flex items-center justify-center gap-1 bg-slate-900 text-white px-3 py-1.5 rounded-lg font-bold text-[9px] uppercase hover:bg-blue-600 transition-colors shadow-md active:scale-95 whitespace-nowrap"
                     >
-                      View Plan <ArrowRight className="w-3.5 h-3.5" />
+                      View Plan <ArrowRight className="w-3 h-3" />
                     </button>
                   </div>
                 </div>
