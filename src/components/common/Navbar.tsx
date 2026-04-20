@@ -11,20 +11,7 @@ const Navbar: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isAuthOpen, setIsAuthOpen] = useState(false);
 
-  const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
 
-  const toggleDropdown = (name: string, e: React.MouseEvent) => {
-    if (navLinks.find(l => l.name === name)?.subLinks) {
-      e.preventDefault();
-      setActiveDropdown(activeDropdown === name ? null : name);
-    }
-  };
-
-  useEffect(() => {
-    const handleClickOutside = () => setActiveDropdown(null);
-    window.addEventListener('click', handleClickOutside);
-    return () => window.removeEventListener('click', handleClickOutside);
-  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
