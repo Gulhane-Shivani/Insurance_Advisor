@@ -13,7 +13,7 @@ import '../styles/globals.css';
 
 const Home: React.FC = () => {
   return (
-    <PageLayout bg="bg-white">
+    <PageLayout bg="bg-white" noPadding>
       <Hero />
 
       {/* Trust Bar / Partners */}
