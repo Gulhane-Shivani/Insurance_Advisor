@@ -20,62 +20,72 @@ const Navbar: React.FC = () => {
   }, []);
 
   const navLinks = [
-    { name: 'Home', path: '/' },
     { 
       name: 'Insurance', 
       path: '',
       subLinks: [
-        { name: 'Life Insurance', path: '/insurance/life' },
-        { name: 'Health Insurance', path: '/insurance/health' },
-        { name: 'Car Insurance', path: '/insurance/car' },
-        { name: 'Business Insurance', path: '/insurance/business' },
+        { name: 'Life Insurance', path: '/insurance/life', desc: 'Secure your family\'s financial future', icon: '❤️' },
+        { name: 'Health Insurance', path: '/insurance/health', desc: 'Medical coverage for peace of mind', icon: '🏥' },
+        { name: 'Car Insurance', path: '/insurance/car', desc: 'Protection for your vehicle on the road', icon: '🚗' },
+        { name: 'Business Insurance', path: '/insurance/business', desc: 'Custom solutions for your enterprise', icon: '💼' },
       ]
     },
-    { name: 'Quote', path: '/quote' },
-    { name: 'Insurance Plan', path: '/compare' },
-    { name: 'About', path: '/about' },
+    { 
+      name: 'AI & Tools', 
+      path: '',
+      subLinks: [
+        { name: 'AI Smart Advisor', path: '/#advisor', desc: 'Personalized AI-driven recommendations', icon: '🤖' },
+        { name: 'Premium Calculator', path: '/tools/calculator', desc: 'Estimate your insurance costs instantly', icon: '📊' },
+        { name: 'Tax Benefits', path: '/tools/tax', desc: 'Check your applicable tax savings', icon: '💰' },
+      ]
+    },
+    { name: 'Compare', path: '/compare' },
     { name: 'Contact', path: '/contact' },
   ];
 
   return (
     <>
     <nav className={cn(
-      'fixed top-0 left-0 right-0 z-50 transition-all duration-300 py-2',
+      'fixed top-0 left-0 right-0 z-50 transition-all duration-300 py-3',
       isScrolled ? 'bg-white/90 backdrop-blur-md shadow-sm border-b border-slate-100' : 'bg-transparent'
     )}>
-      <div className="container flex items-center gap-x-4 justify-between">
+      <div className="container flex items-center justify-between">
         <Link to="/" className="flex items-center gap-2 group no-underline flex-shrink-0">
-          <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white font-black text-lg group-hover:scale-110 transition-transform shadow-lg shadow-blue-500/20">
+          <div className="w-9 h-9 bg-blue-600 rounded-xl flex items-center justify-center text-white font-bold text-xl group-hover:scale-105 transition-transform shadow-lg shadow-blue-500/20">
             IA
           </div>
-          <span className="font-bold text-lg tracking-tight text-slate-900">
+          <span className="font-bold text-xl tracking-tight text-slate-900">
             Insurance<span className="text-blue-600">Advisor</span>
           </span>
         </Link>
-
-        {/* Desktop Menu */}
-        <div className="hidden md:flex items-center gap-4 lg:gap-8 flex-shrink-0 ml-auto">
+        <div className="hidden md:flex items-center gap-8 ml-auto">
           {navLinks.map((link) => (
             <div key={link.name} className="relative group/nav">
               <Link 
                 to={link.path}
-                className="text-slate-600 hover:text-blue-600 font-bold transition-colors text-[10px] lg:text-xs uppercase tracking-widest flex items-center gap-1 no-underline py-2 whitespace-nowrap"
+                className="text-slate-600 hover:text-blue-600 font-semibold transition-colors text-sm flex items-center gap-1.5 no-underline py-2 whitespace-nowrap"
               >
                 {link.name}
-                {link.subLinks && <span className="text-[10px] opacity-50 group-hover/nav:rotate-180 transition-transform duration-300">▼</span>}
+                {link.subLinks && <span className="text-[10px] opacity-40 group-hover/nav:rotate-180 transition-transform duration-300">▼</span>}
               </Link>
               
               {link.subLinks && (
-                <div className="absolute top-full left-0 pt-2 opacity-0 invisible group-hover/nav:opacity-100 group-hover/nav:visible transition-all duration-300 translate-y-2 group-hover/nav:translate-y-0 z-50">
-                  <div className="bg-white rounded-2xl shadow-2xl border border-slate-100 p-4 min-w-[220px]">
-                    <div className="flex flex-col gap-1">
+                <div className="absolute top-full left-1/2 -translate-x-1/2 pt-2 opacity-0 invisible group-hover/nav:opacity-100 group-hover/nav:visible transition-all duration-300 translate-y-2 group-hover/nav:translate-y-0 z-50">
+                  <div className="bg-white rounded-[2rem] shadow-[0_20px_50px_rgba(0,0,0,0.1)] border border-slate-100 p-6 min-w-[320px]">
+                    <div className="flex flex-col gap-2">
                       {link.subLinks.map((sub) => (
                         <Link 
                           key={sub.name}
                           to={sub.path}
-                          className="px-4 py-3 rounded-xl hover:bg-blue-50 text-slate-600 hover:text-blue-600 font-bold text-sm transition-all no-underline whitespace-nowrap"
+                          className="flex items-start gap-4 p-4 rounded-2xl hover:bg-blue-50 transition-all no-underline group/item"
                         >
-                          {sub.name}
+                          <div className="w-12 h-12 rounded-xl bg-slate-50 flex items-center justify-center text-xl shadow-sm border border-slate-100 group-hover/item:bg-white group-hover/item:shadow-md transition-all">
+                            {sub.icon}
+                          </div>
+                          <div>
+                            <p className="font-bold text-slate-900 text-sm mb-0.5 group-hover/item:text-blue-600 transition-colors">{sub.name}</p>
+                            <p className="text-slate-400 text-[11px] font-medium leading-tight">{(sub as any).desc}</p>
+                          </div>
                         </Link>
                       ))}
                     </div>
@@ -85,19 +95,19 @@ const Navbar: React.FC = () => {
             </div>
           ))}
           
-          <div className="h-6 w-[1px] bg-slate-200 mx-2"></div>
+          <div className="h-6 w-[1px] bg-slate-200 mx-1"></div>
 
           {user ? (
-            <div className="flex items-center gap-4 lg:gap-6 flex-shrink-0">
-              <Link to="/dashboard" className="text-slate-900 font-black flex items-center gap-2 hover:text-blue-600 transition-colors whitespace-nowrap">
-                <div className="w-7 h-7 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center font-black text-xs">
+            <div className="flex items-center gap-4 flex-shrink-0">
+              <Link to="/dashboard" className="text-slate-900 font-bold flex items-center gap-2 hover:text-blue-600 transition-colors whitespace-nowrap">
+                <div className="w-8 h-8 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center font-bold text-xs border border-blue-100">
                   {user.name[0]}
                 </div>
                 <span className="hidden lg:inline">{user.name.split(' ')[0]}</span>
               </Link>
               <button 
                 onClick={logout}
-                className="text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-red-500 transition-colors"
+                className="text-xs font-semibold text-slate-400 hover:text-red-500 transition-colors"
               >
                 Logout
               </button>
@@ -105,7 +115,7 @@ const Navbar: React.FC = () => {
           ) : (
             <button 
               onClick={() => setIsAuthOpen(true)}
-              className="bg-blue-600 text-white px-5 lg:px-6 py-2 rounded-xl font-black text-[10px] lg:text-xs hover:bg-blue-700 shadow-xl shadow-blue-500/30 transition-all active:scale-95 whitespace-nowrap flex-shrink-0"
+              className="bg-blue-600 text-white px-6 py-2.5 rounded-xl font-bold text-sm hover:bg-blue-700 shadow-xl shadow-blue-500/20 transition-all active:scale-95 whitespace-nowrap flex-shrink-0"
             >
               Log In
             </button>

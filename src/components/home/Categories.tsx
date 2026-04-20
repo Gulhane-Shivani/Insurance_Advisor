@@ -6,7 +6,7 @@ import '../../styles/globals.css';
 
 const Categories: React.FC = () => {
   return (
-    <section className="py-16 md:py-24 container">
+    <section className="py-8 md:py-12 container">
       <SectionTitle 
         title="Comprehensive Insurance for Every Need"
         subtitle="Explore our wide range of insurance products tailored to protect what matters most to you."

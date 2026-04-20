@@ -52,7 +52,7 @@ const Testimonials: React.FC = () => {
   }, []);
 
   return (
-    <section className="py-24 bg-white overflow-hidden relative border-y border-slate-50">
+    <section className="py-8 md:py-12 bg-white overflow-hidden relative border-y border-slate-50">
       <div className="absolute top-0 right-0 w-1/4 h-full bg-blue-50/20 blur-[120px] rounded-full translate-x-1/2 -z-10"></div>
       
       <div className="container relative">
