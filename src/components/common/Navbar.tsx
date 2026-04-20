@@ -76,16 +76,21 @@ const Navbar: React.FC = () => {
                 
                 {link.subLinks && (
                   <div className="absolute top-full left-0 pt-2 opacity-0 invisible group-hover/nav:opacity-100 group-hover/nav:visible transition-all duration-300 translate-y-1 group-hover/nav:translate-y-0 z-50">
-                    <div className="bg-white rounded-xl shadow-2xl border border-slate-100 p-2 min-w-[220px]">
-                      <div className="flex flex-col gap-0.5">
+                    <div className="bg-white rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.1)] border border-slate-100 p-3 min-w-[320px]">
+                      <div className="flex flex-col gap-1">
                         {link.subLinks.map((sub) => (
                           <Link 
                             key={sub.name}
                             to={sub.path}
-                            className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-blue-50 text-slate-700 hover:text-blue-600 font-bold text-[13px] transition-all no-underline whitespace-nowrap"
+                            className="flex items-start gap-4 p-3 rounded-2xl hover:bg-blue-50 transition-all no-underline group/item"
                           >
-                            <span className="text-base">{sub.icon}</span>
-                            {sub.name}
+                            <div className="w-11 h-11 rounded-xl bg-white flex items-center justify-center text-xl shadow-sm border border-slate-50 group-hover/item:border-blue-100 transition-all shrink-0">
+                              {sub.icon}
+                            </div>
+                            <div className="min-w-0 pt-0.5">
+                              <p className="font-bold text-slate-900 text-sm mb-0.5 group-hover/item:text-blue-600 transition-colors leading-tight">{sub.name}</p>
+                              <p className="text-slate-400 text-[10px] font-medium leading-tight line-clamp-1">{(sub as any).desc}</p>
+                            </div>
                           </Link>
                         ))}
                       </div>
