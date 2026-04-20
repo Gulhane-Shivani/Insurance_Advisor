@@ -117,7 +117,7 @@ export const insurancePlans: InsurancePlan[] = [
     carrierId: 'icici-lombard',
     carrierName: 'ICICI Lombard',
     carrierLogo: 'https://www.google.com/s2/favicons?sz=128&domain=icicilombard.com',
-    planName: 'Business Safeguard',
+    planName: 'Business Shield',
     type: 'business',
     monthlyPrice: 2800,
     coverageAmount: '₹50,0,000',

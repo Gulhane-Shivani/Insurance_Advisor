@@ -20,7 +20,7 @@ const SectionTitle: React.FC<SectionTitleProps> = ({
   const isLight = variant === 'light';
 
   return (
-    <div className={`mb-12 ${align === 'center' ? 'text-center mx-auto max-w-2xl' : ''}`}>
+    <div className={`mb-12 ${align === 'center' ? 'text-center mx-auto max-w-4xl' : ''}`}>
       {badge && (
         <span className={`inline-block px-4 py-1.5 rounded-full font-semibold text-sm mb-4 border ${isLight ? 'bg-white/10 text-white border-white/20' : 'bg-blue-50 text-blue-600 border-blue-100'
           }`}>

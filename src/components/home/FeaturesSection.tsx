@@ -32,7 +32,7 @@ const FeaturesSection: React.FC = () => {
   return (
     <section className="py-8 md:py-12 container">
       <SectionTitle 
-        title="Why Thousands Trust SafeGuard"
+        title="Why Thousands Trust Insurance Advisor"
         subtitle="We've reimagined insurance thinking of you first. Transparent, fast, and always reliable."
         align="center"
         badge="Our Advantages"
