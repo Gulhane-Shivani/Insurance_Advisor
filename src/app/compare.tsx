@@ -11,7 +11,7 @@ const ComparePage: React.FC = () => {
     <PageLayout>
       <section className="relative overflow-hidden mb-12">
         <div className="absolute top-0 right-0 w-1/4 h-full bg-blue-100/30 blur-3xl rounded-full translate-x-1/2 -z-10"></div>
-        <div className="container relative z-10">
+        <div className="container relative z-10 pt-16">
           <SectionTitle
             title="Policy Comparison Hub"
             subtitle="Compare top insurance policies side-by-side. Filter by price, coverage, and specific carriers to find your perfect match."
