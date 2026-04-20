@@ -11,6 +11,21 @@ const Navbar: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isAuthOpen, setIsAuthOpen] = useState(false);
 
+  const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+
+  const toggleDropdown = (name: string, e: React.MouseEvent) => {
+    if (navLinks.find(l => l.name === name)?.subLinks) {
+      e.preventDefault();
+      setActiveDropdown(activeDropdown === name ? null : name);
+    }
+  };
+
+  useEffect(() => {
+    const handleClickOutside = () => setActiveDropdown(null);
+    window.addEventListener('click', handleClickOutside);
+    return () => window.removeEventListener('click', handleClickOutside);
+  }, []);
+
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
@@ -61,26 +76,48 @@ const Navbar: React.FC = () => {
           </Link>
           <div className="hidden md:flex items-center gap-8 ml-auto">
             {navLinks.map((link) => (
-              <div key={link.name} className="relative group/nav">
-                <Link
-                  to={link.path}
-                  className="text-slate-600 hover:text-blue-600 font-semibold transition-colors text-sm flex items-center gap-1.5 no-underline py-2 whitespace-nowrap"
-                >
-                  {link.name}
-                  {link.subLinks && <span className="text-[10px] opacity-40 group-hover/nav:rotate-180 transition-transform duration-300">▼</span>}
-                </Link>
-
-                {link.subLinks && (
-                  <div className="absolute top-full left-0 pt-3 opacity-0 invisible group-hover/nav:opacity-100 group-hover/nav:visible transition-all duration-300 translate-y-1 group-hover/nav:translate-y-0 z-50">
-                    <div className="bg-white rounded-2xl shadow-xl border border-slate-100 p-2 min-w-[240px]">
-                      <div className="flex flex-col gap-1">
+              <div key={link.name} className="relative" onClick={(e) => e.stopPropagation()}>
+                {link.subLinks ? (
+                  <button
+                    className={cn(
+                      "text-slate-600 hover:text-blue-600 font-semibold transition-colors text-sm flex items-center gap-1.5 py-2 whitespace-nowrap outline-none",
+                      activeDropdown === link.name && "text-blue-600"
+                    )}
+                    onClick={(e) => toggleDropdown(link.name, e)}
+                  >
+                    {link.name}
+                    <span className={cn(
+                      "text-[10px] opacity-40 transition-transform duration-300",
+                      activeDropdown === link.name ? "rotate-180" : "rotate-0"
+                    )}>▼</span>
+                  </button>
+                ) : (
+                  <Link
+                    to={link.path}
+                    className="text-slate-600 hover:text-blue-600 font-semibold transition-colors text-sm flex items-center gap-1.5 no-underline py-2 whitespace-nowrap"
+                  >
+                    {link.name}
+                  </Link>
+                )}
+                
+                {link.subLinks && activeDropdown === link.name && (
+                  <div className="absolute top-full left-1/2 -translate-x-1/2 pt-3 z-50 animate-in fade-in slide-in-from-top-2 duration-300">
+                    <div className="bg-white rounded-[1.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.15)] border border-slate-100 p-4 min-w-[320px]">
+                      <div className="grid grid-cols-1 gap-1">
                         {link.subLinks.map((sub) => (
                           <Link 
                             key={sub.name}
                             to={sub.path}
-                            className="px-4 py-3 rounded-xl hover:bg-blue-50 text-slate-600 hover:text-blue-600 font-semibold text-sm transition-all no-underline whitespace-nowrap"
+                            className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-blue-50 transition-all no-underline group/item"
+                            onClick={() => setActiveDropdown(null)}
                           >
-                            {sub.name}
+                            <div className="w-9 h-9 rounded-lg bg-slate-50 flex items-center justify-center text-lg shadow-sm border border-slate-100 group-hover/item:bg-white group-hover/item:shadow-md transition-all shrink-0">
+                              {sub.icon}
+                            </div>
+                            <div className="min-w-0">
+                              <p className="font-bold text-slate-900 text-[13px] mb-0.5 group-hover/item:text-blue-600 transition-colors leading-tight">{sub.name}</p>
+                              <p className="text-slate-400 text-[10px] font-medium leading-tight truncate">{(sub as any).desc}</p>
+                            </div>
                           </Link>
                         ))}
                       </div>
