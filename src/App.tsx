@@ -21,6 +21,8 @@ import RenewalPage from './app/support/RenewalPage';
 import CarePage from './app/support/CarePage';
 import HelpCenterPage from './app/support/HelpCenterPage';
 import CalculatorPage from './app/tools/CalculatorPage';
+import LoginPage from './app/auth/LoginPage';
+import RegisterPage from './app/auth/RegisterPage';
 import ScrollToTop from './components/common/ScrollToTop';
 
 const App: React.FC = () => {
@@ -30,6 +32,8 @@ const App: React.FC = () => {
         <ScrollToTop />
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
           <Route path="/tools/calculator/:type" element={<CalculatorPage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/compare" element={<ComparePage />} />
