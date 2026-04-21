@@ -10,6 +10,7 @@ const Navbar: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isAuthOpen, setIsAuthOpen] = useState(false);
+  const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
 
 
 
@@ -103,19 +104,52 @@ const Navbar: React.FC = () => {
             <div className="h-6 w-[1px] bg-slate-200 mx-1"></div>
 
             {user ? (
-              <div className="flex items-center gap-4 flex-shrink-0">
-                <Link to="/dashboard" className="text-slate-900 font-bold flex items-center gap-2 hover:text-blue-600 transition-colors whitespace-nowrap">
-                  <div className="w-8 h-8 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center font-bold text-xs border border-blue-100">
-                    {user.name[0]}
-                  </div>
-                  <span className="hidden lg:inline">{user.name.split(' ')[0]}</span>
-                </Link>
-                <button
-                  onClick={logout}
-                  className="text-xs font-semibold text-slate-400 hover:text-red-500 transition-colors"
+              <div className="relative flex items-center flex-shrink-0">
+                <button 
+                  onClick={() => setIsUserDropdownOpen(!isUserDropdownOpen)}
+                  className="flex items-center gap-2 text-slate-900 font-bold hover:text-blue-600 transition-colors whitespace-nowrap focus:outline-none bg-transparent border-none p-0 cursor-pointer"
                 >
-                  Logout
+                  <div className="w-8 h-8 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center font-bold text-xs border border-blue-100">
+                    {(user.full_name || user.name || 'U')[0]}
+                  </div>
+                  <span className="hidden lg:inline">{(user.full_name || user.name || 'User').split(' ')[0]}</span>
+                  <span className={`text-[10px] opacity-40 transition-transform duration-300 ${isUserDropdownOpen ? 'rotate-180' : ''}`}>▼</span>
                 </button>
+                
+                {isUserDropdownOpen && (
+                  <>
+                    <div 
+                      className="fixed inset-0 z-40" 
+                      onClick={() => setIsUserDropdownOpen(false)}
+                    ></div>
+                    <div className="absolute top-full right-0 mt-2 z-50 animate-fade-in-down">
+                      <div className="bg-white rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.1)] border border-slate-100 p-2 min-w-[200px]">
+                        <div className="flex flex-col">
+                          <div className="px-4 py-3 border-b border-slate-100 mb-1">
+                            <p className="text-sm font-bold text-slate-900 truncate">{user.full_name || user.name || 'User'}</p>
+                            <p className="text-xs text-slate-500 truncate">{user.email || ''}</p>
+                          </div>
+                          <Link
+                            to="/dashboard"
+                            className="px-4 py-2.5 text-sm font-bold text-slate-700 hover:text-blue-600 hover:bg-blue-50 rounded-xl transition-colors text-left flex items-center gap-2 no-underline"
+                            onClick={() => setIsUserDropdownOpen(false)}
+                          >
+                            Dashboard
+                          </Link>
+                          <button
+                            onClick={() => {
+                              logout();
+                              setIsUserDropdownOpen(false);
+                            }}
+                            className="px-4 py-2.5 text-sm font-bold text-red-600 hover:bg-red-50 rounded-xl transition-colors text-left flex items-center gap-2 bg-transparent border-none cursor-pointer"
+                          >
+                            Logout
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </>
+                )}
               </div>
             ) : (
               <button

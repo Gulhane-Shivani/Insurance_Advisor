@@ -14,7 +14,7 @@ const DashboardPage: React.FC = () => {
       <div className="container">
         <div className="flex flex-col md:flex-row justify-between items-end gap-6 mb-16">
           <SectionTitle 
-            title={`Welcome back, ${user.name.split(' ')[0]}!`}
+            title={`Welcome back, ${(user.full_name || user.name || 'User').split(' ')[0]}!`}
             subtitle="Manage your active policies and track your recent quote requests."
             badge="User Dashboard"
           />
