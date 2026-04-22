@@ -25,6 +25,12 @@ import LoginPage from './app/auth/LoginPage';
 import RegisterPage from './app/auth/RegisterPage';
 import ScrollToTop from './components/common/ScrollToTop';
 
+// Admin imports
+import AdminLayout from './app/admin/AdminLayout';
+import AdminDashboard from './app/admin/AdminDashboard';
+import AdminUsers from './app/admin/AdminUsers';
+import AdminInsurance from './app/admin/AdminInsurance';
+
 const App: React.FC = () => {
   return (
     <AuthProvider>
@@ -52,6 +58,13 @@ const App: React.FC = () => {
           <Route path="/renewal" element={<RenewalPage />} />
           <Route path="/care" element={<CarePage />} />
           <Route path="/help" element={<HelpCenterPage />} />
+
+          {/* Admin Routes */}
+          <Route path="/admin" element={<AdminLayout />}>
+            <Route path="dashboard" element={<AdminDashboard />} />
+            <Route path="users" element={<AdminUsers />} />
+            <Route path="insurance" element={<AdminInsurance />} />
+          </Route>
         </Routes>
       </Router>
     </AuthProvider>

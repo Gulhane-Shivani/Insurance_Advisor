@@ -18,9 +18,13 @@ const LoginPage: React.FC = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      await login(formData);
+      const userData = await login(formData);
       toast.success('Logged in successfully!');
-      navigate('/dashboard');
+      if (userData && userData.email === 'admin@gmail.com') {
+        navigate('/admin/dashboard');
+      } else {
+        navigate('/dashboard');
+      }
     } catch (error: any) {
       const errorMsg = error.response?.data?.detail || 'Invalid email or password';
       toast.error(errorMsg);
