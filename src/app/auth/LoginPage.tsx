@@ -20,7 +20,7 @@ const LoginPage: React.FC = () => {
     try {
       const userData = await login(formData);
       toast.success('Logged in successfully!');
-      if (userData && userData.email === 'admin@gmail.com') {
+      if (userData && userData.role === 'admin') {
         navigate('/admin/dashboard');
       } else {
         navigate('/dashboard');

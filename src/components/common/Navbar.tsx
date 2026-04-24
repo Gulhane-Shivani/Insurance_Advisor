@@ -130,11 +130,11 @@ const Navbar: React.FC = () => {
                             <p className="text-xs text-slate-500 truncate">{user.email || ''}</p>
                           </div>
                           <Link
-                            to={user?.email === 'admin@gmail.com' ? '/admin/dashboard' : '/dashboard'}
+                            to={user?.role === 'admin' ? '/admin/dashboard' : '/dashboard'}
                             className="px-4 py-2.5 text-sm font-bold text-slate-700 hover:text-blue-600 hover:bg-blue-50 rounded-xl transition-colors text-left flex items-center gap-2 no-underline"
                             onClick={() => setIsUserDropdownOpen(false)}
                           >
-                            {user?.email === 'admin@gmail.com' ? 'Admin Dashboard' : 'Dashboard'}
+                            {user?.role === 'admin' ? 'Admin Dashboard' : 'Dashboard'}
                           </Link>
                           <button
                             onClick={() => {
@@ -186,8 +186,8 @@ const Navbar: React.FC = () => {
             <div className="h-[1px] bg-slate-100 w-full my-2"></div>
             {user ? (
               <div className="flex flex-col gap-2">
-                <Link to={user?.email === 'admin@gmail.com' ? '/admin/dashboard' : '/dashboard'} className="text-slate-900 font-bold text-base px-4 py-2 hover:bg-blue-50 rounded-xl transition-colors no-underline" onClick={() => setIsMenuOpen(false)}>
-                  {user?.email === 'admin@gmail.com' ? 'Admin Dashboard' : 'My Dashboard'}
+                <Link to={user?.role === 'admin' ? '/admin/dashboard' : '/dashboard'} className="text-slate-900 font-bold text-base px-4 py-2 hover:bg-blue-50 rounded-xl transition-colors no-underline" onClick={() => setIsMenuOpen(false)}>
+                  {user?.role === 'admin' ? 'Admin Dashboard' : 'My Dashboard'}
                 </Link>
                 <button
                   onClick={() => { logout(); setIsMenuOpen(false); }}
