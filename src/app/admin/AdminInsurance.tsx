@@ -12,6 +12,7 @@ interface InsurancePolicy {
   vehicle_model: string;
   manufacturing_year: string;
   registration_number: string;
+  message?: string;
   applied_date: string;
   status: 'Pending' | 'Approved' | 'Rejected';
 }
@@ -87,9 +88,24 @@ const AdminInsurance: React.FC = () => {
                 <td className="px-4 py-2.5 whitespace-nowrap text-xs font-bold text-slate-800">#{ins.id}</td>
                 <td className="px-4 py-2.5 whitespace-nowrap text-xs font-bold text-slate-600">{ins.full_name}</td>
                 <td className="px-4 py-2.5 whitespace-nowrap text-xs font-medium text-slate-500 capitalize">{ins.insurance_type}</td>
-                <td className="px-4 py-2.5 whitespace-nowrap text-xs font-medium text-slate-500">
-                  {ins.insurance_type === 'car' ? `${ins.vehicle_make} ${ins.vehicle_model} (${ins.manufacturing_year})` : 
-                   ins.phone_number}
+                <td className="px-4 py-2.5 text-xs font-medium text-slate-500">
+                  {ins.insurance_type === 'car' && ins.vehicle_make && ins.vehicle_make !== 'N/A' ? (
+                    <div>
+                      <span className="font-bold text-slate-700">{ins.vehicle_make} {ins.vehicle_model}</span>
+                      <span className="text-slate-400 ml-1">({ins.manufacturing_year})</span>
+                      {ins.registration_number && ins.registration_number !== 'N/A' && (
+                        <div className="text-[10px] text-slate-400 mt-0.5">Reg: {ins.registration_number}</div>
+                      )}
+                    </div>
+                  ) : (
+                    <div className="max-w-[200px] truncate" title={ins.message || ins.phone_number}>
+                      {ins.message && ins.message.length > 0 ? (
+                        <span className="text-slate-600">{ins.message}</span>
+                      ) : (
+                        <span className="text-slate-400 italic">Phone: {ins.phone_number}</span>
+                      )}
+                    </div>
+                  )}
                 </td>
                 <td className="px-4 py-2.5 whitespace-nowrap text-xs font-medium text-slate-500">{ins.applied_date}</td>
                 <td className="px-4 py-2.5 whitespace-nowrap">
