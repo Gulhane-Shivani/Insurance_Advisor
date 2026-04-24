@@ -1,12 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { Shield, CheckCircle, XCircle } from 'lucide-react';
-import axios from 'axios';
+import api from '../../services/api';
 
 interface InsurancePolicy {
   id: number;
-  user_name: string;
-  type: string;
-  amount: string;
+  full_name: string;
+  email: string;
+  phone_number: string;
+  insurance_type: string;
+  vehicle_make: string;
+  vehicle_model: string;
+  manufacturing_year: string;
+  registration_number: string;
   applied_date: string;
   status: 'Pending' | 'Approved' | 'Rejected';
 }
@@ -22,7 +27,7 @@ const AdminInsurance: React.FC = () => {
 
   const fetchInsurances = async () => {
     try {
-      const response = await axios.get('http://localhost:8000/admin/insurance');
+      const response = await api.get('/admin/insurance');
       const fetchedInsurances = response.data.map((ins: any) => ({
         ...ins,
         applied_date: new Date(ins.applied_date).toLocaleDateString(),
@@ -41,7 +46,7 @@ const AdminInsurance: React.FC = () => {
   const handleStatusChange = async (id: number, newStatus: 'Approved' | 'Rejected') => {
     if (window.confirm(`Mark this application as ${newStatus}?`)) {
       try {
-        await axios.put(`http://localhost:8000/admin/insurance/${id}/status`, { status: newStatus });
+        await api.put(`/admin/insurance/${id}/status`, { status: newStatus });
         setInsurances(insurances.map(ins =>
           ins.id === id ? { ...ins, status: newStatus } : ins
         ));
@@ -70,7 +75,7 @@ const AdminInsurance: React.FC = () => {
               <th className="px-4 py-2.5 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Policy ID</th>
               <th className="px-4 py-2.5 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Applicant</th>
               <th className="px-4 py-2.5 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Type</th>
-              <th className="px-4 py-2.5 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Amount</th>
+              <th className="px-4 py-2.5 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Details</th>
               <th className="px-4 py-2.5 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Date</th>
               <th className="px-4 py-2.5 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Status</th>
               <th className="px-4 py-2.5 text-right text-xs font-bold text-slate-500 uppercase tracking-wider">Actions</th>
@@ -80,9 +85,12 @@ const AdminInsurance: React.FC = () => {
             {currentInsurances.map((ins) => (
               <tr key={ins.id} className="hover:bg-slate-50 transition-colors">
                 <td className="px-4 py-2.5 whitespace-nowrap text-xs font-bold text-slate-800">#{ins.id}</td>
-                <td className="px-4 py-2.5 whitespace-nowrap text-xs font-bold text-slate-600">{ins.user_name}</td>
-                <td className="px-4 py-2.5 whitespace-nowrap text-xs font-medium text-slate-500">{ins.type}</td>
-                <td className="px-4 py-2.5 whitespace-nowrap text-xs font-bold text-slate-800">{ins.amount}</td>
+                <td className="px-4 py-2.5 whitespace-nowrap text-xs font-bold text-slate-600">{ins.full_name}</td>
+                <td className="px-4 py-2.5 whitespace-nowrap text-xs font-medium text-slate-500 capitalize">{ins.insurance_type}</td>
+                <td className="px-4 py-2.5 whitespace-nowrap text-xs font-medium text-slate-500">
+                  {ins.insurance_type === 'car' ? `${ins.vehicle_make} ${ins.vehicle_model} (${ins.manufacturing_year})` : 
+                   ins.phone_number}
+                </td>
                 <td className="px-4 py-2.5 whitespace-nowrap text-xs font-medium text-slate-500">{ins.applied_date}</td>
                 <td className="px-4 py-2.5 whitespace-nowrap">
                   <span className={`px-2 py-0.5 inline-flex text-xs font-bold rounded-md border ${

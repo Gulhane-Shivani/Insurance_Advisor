@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Mail, Search, Check, Trash2 } from 'lucide-react';
-import axios from 'axios';
+import api from '../../services/api';
 
 interface ContactMessage {
   id: number;
@@ -24,7 +24,7 @@ const AdminDashboard: React.FC = () => {
 
   const fetchContacts = async () => {
     try {
-      const response = await axios.get('http://localhost:8000/admin/contacts');
+      const response = await api.get('/admin/contacts');
       setContacts(response.data);
     } catch (error) {
       console.error('Failed to fetch contacts', error);
@@ -33,7 +33,7 @@ const AdminDashboard: React.FC = () => {
 
   const fetchStats = async () => {
     try {
-      const response = await axios.get('http://localhost:8000/admin/stats');
+      const response = await api.get('/admin/stats');
       setStats(response.data);
     } catch (error) {
       console.error('Failed to fetch stats', error);
@@ -48,7 +48,7 @@ const AdminDashboard: React.FC = () => {
   const handleDelete = async (id: number) => {
     if (window.confirm('Are you sure you want to delete this message?')) {
       try {
-        await axios.delete(`http://localhost:8000/admin/contacts/${id}`);
+        await api.delete(`/admin/contacts/${id}`);
         setContacts(contacts.filter(c => c.id !== id));
         setStats(prev => ({ ...prev, contacts: prev.contacts - 1 }));
         if (currentContacts.length === 1 && currentPage > 1) {

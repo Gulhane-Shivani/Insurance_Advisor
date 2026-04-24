@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Users, Trash2 } from 'lucide-react';
-import axios from 'axios';
+import api from '../../services/api';
 
 interface User {
   id: number;
@@ -21,7 +21,7 @@ const AdminUsers: React.FC = () => {
 
   const fetchUsers = async () => {
     try {
-      const response = await axios.get('http://localhost:8000/admin/users');
+      const response = await api.get('/admin/users');
       const fetchedUsers = response.data.map((u: any) => ({
         ...u,
         created_at: new Date(u.created_at).toLocaleDateString(),
@@ -41,7 +41,7 @@ const AdminUsers: React.FC = () => {
   const handleDelete = async (id: number) => {
     if (window.confirm('Are you sure you want to delete this user?')) {
       try {
-        await axios.delete(`http://localhost:8000/admin/users/${id}`);
+        await api.delete(`/admin/users/${id}`);
         setUsers(users.filter(u => u.id !== id));
         if (currentUsers.length === 1 && currentPage > 1) {
           setCurrentPage(currentPage - 1);
