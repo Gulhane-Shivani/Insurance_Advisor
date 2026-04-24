@@ -1,5 +1,6 @@
-/* src/hooks/useQuoteForm.ts */
-import { useState } from 'react';
+import React, { useState } from 'react';
+import api from '../services/api';
+import toast from 'react-hot-toast';
 
 export interface QuoteFormData {
   name: string;
@@ -43,24 +44,52 @@ export const useQuoteForm = () => {
     e.preventDefault();
     setIsSubmitting(true);
     
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-    
-    console.log('Form Submitted:', formData);
-    setIsSubmitting(false);
-    setIsSuccess(true);
+    try {
+      // Map frontend fields to backend schema
+      const payload = {
+        full_name: formData.name,
+        email: formData.email,
+        phone_number: formData.phone,
+        insurance_type: formData.insuranceType,
+        vehicle_make: formData.vehicleMake || 'N/A',
+        vehicle_model: formData.vehicleModel || 'N/A',
+        manufacturing_year: formData.vehicleYear || 'N/A',
+        registration_number: formData.registrationNumber || 'N/A',
+        message: formData.message,
+      };
+
+      await api.post('/insurance/apply', payload);
+      
+      setIsSuccess(true);
+      toast.success('Quote request submitted successfully!');
+      
+      // Reset form
+      setFormData({
+        name: '',
+        email: '',
+        phone: '',
+        insuranceType: 'life',
+        message: '',
+        vehicleMake: '',
+        vehicleModel: '',
+        vehicleYear: '',
+        registrationNumber: '',
+        age: '',
+        medicalConditions: '',
+      });
+
+    } catch (error: any) {
+      const errorMsg = error.response?.data?.detail || 'Failed to submit quote request';
+      toast.error(errorMsg);
+    } finally {
+      setIsSubmitting(false);
+    }
     
     // Find comparison section and scroll to it
     const comparisonSection = document.getElementById('comparison-suite-section');
     if (comparisonSection) {
       setTimeout(() => {
         comparisonSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        
-        // Highlight the comparison section temporarily to draw attention
-        comparisonSection.classList.add('ring-4', 'ring-blue-500', 'ring-offset-4', 'transition-all', 'duration-1000');
-        setTimeout(() => {
-           comparisonSection.classList.remove('ring-4', 'ring-blue-500', 'ring-offset-4');
-        }, 3000);
       }, 100);
     }
     

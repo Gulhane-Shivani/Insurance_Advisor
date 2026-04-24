@@ -1,10 +1,21 @@
-/* src/components/forms/QuoteForm.tsx */
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useQuoteForm } from '../../hooks/useQuoteForm';
+import { useAuth } from '../../context/AuthContext';
 import '../../styles/globals.css';
 
 const QuoteForm: React.FC = () => {
-  const { formData, isSubmitting, isSuccess, handleChange, handleSubmit } = useQuoteForm();
+  const { formData, isSubmitting, isSuccess, handleChange, handleSubmit, setFormData } = useQuoteForm();
+  const { user, isAuthenticated } = useAuth();
+
+  useEffect(() => {
+    if (user && setFormData) {
+      setFormData((prev: any) => ({
+        ...prev,
+        name: user.full_name || user.name || '',
+        email: user.email || ''
+      }));
+    }
+  }, [user, setFormData]);
 
   return (
     <form className="bg-white p-6 md:p-8 rounded-[32px] border border-slate-100 shadow-xl relative overflow-hidden group" onSubmit={handleSubmit}>
@@ -16,7 +27,11 @@ const QuoteForm: React.FC = () => {
             </div>
             <h3 className="text-xl font-bold">Quote Request Sent!</h3>
             <p className="text-sm text-blue-100 mb-4">Our advisor will contact you within 15 minutes.</p>
-            <button className="bg-white text-blue-600 px-6 py-2 rounded-lg font-bold hover:bg-slate-50 transition-colors text-sm">
+            <button 
+              type="button" 
+              onClick={() => window.location.reload()}
+              className="bg-white text-blue-600 px-6 py-2 rounded-lg font-bold hover:bg-slate-50 transition-colors text-sm"
+            >
               Awesome!
             </button>
           </div>
@@ -33,8 +48,9 @@ const QuoteForm: React.FC = () => {
             name="name"
             value={formData.name}
             onChange={handleChange}
-            placeholder="John Smith" 
-            className="px-5 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all placeholder:text-slate-400 text-sm"
+            placeholder={isAuthenticated ? "John Smith" : "Login to enter name"} 
+            className="px-5 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all placeholder:text-slate-400 text-sm disabled:opacity-60 disabled:cursor-not-allowed"
+            disabled={isSubmitting || !isAuthenticated}
             required
           />
         </div>
@@ -45,8 +61,9 @@ const QuoteForm: React.FC = () => {
             name="email"
             value={formData.email}
             onChange={handleChange}
-            placeholder="john@company.com" 
-            className="px-5 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all placeholder:text-slate-400 text-sm"
+            placeholder={isAuthenticated ? "john@company.com" : "Login to enter email"} 
+            className="px-5 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all placeholder:text-slate-400 text-sm disabled:opacity-60 disabled:cursor-not-allowed"
+            disabled={isSubmitting || !isAuthenticated}
             required
           />
         </div>
@@ -56,7 +73,8 @@ const QuoteForm: React.FC = () => {
             name="insuranceType"
             value={formData.insuranceType}
             onChange={handleChange}
-            className="px-5 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all text-slate-700 text-sm"
+            className="px-5 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all text-slate-700 text-sm disabled:opacity-60 disabled:cursor-not-allowed"
+            disabled={isSubmitting || !isAuthenticated}
           >
             <option value="life">Life Insurance</option>
             <option value="health">Health Insurance</option>
@@ -71,8 +89,9 @@ const QuoteForm: React.FC = () => {
             name="phone"
             value={formData.phone}
             onChange={handleChange}
-            placeholder="+1 (555) 000-0000" 
-            className="px-5 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all placeholder:text-slate-400 text-sm"
+            placeholder={isAuthenticated ? "+1 (555) 000-0000" : "Login to enter phone"} 
+            className="px-5 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all placeholder:text-slate-400 text-sm disabled:opacity-60 disabled:cursor-not-allowed"
+            disabled={isSubmitting || !isAuthenticated}
             required
           />
         </div>
@@ -89,7 +108,8 @@ const QuoteForm: React.FC = () => {
               value={formData.vehicleMake}
               onChange={handleChange}
               placeholder="e.g. Toyota" 
-              className="px-5 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all text-sm"
+              className="px-5 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all text-sm disabled:opacity-60 disabled:cursor-not-allowed"
+              disabled={isSubmitting || !isAuthenticated}
               required
             />
           </div>
@@ -101,7 +121,8 @@ const QuoteForm: React.FC = () => {
               value={formData.vehicleModel}
               onChange={handleChange}
               placeholder="e.g. Camry" 
-              className="px-5 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all text-sm"
+              className="px-5 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all text-sm disabled:opacity-60 disabled:cursor-not-allowed"
+              disabled={isSubmitting || !isAuthenticated}
               required
             />
           </div>
@@ -113,7 +134,8 @@ const QuoteForm: React.FC = () => {
               value={formData.vehicleYear}
               onChange={handleChange}
               placeholder="e.g. 2022" 
-              className="px-5 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all text-sm"
+              className="px-5 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all text-sm disabled:opacity-60 disabled:cursor-not-allowed"
+              disabled={isSubmitting || !isAuthenticated}
               required
             />
           </div>
@@ -125,7 +147,8 @@ const QuoteForm: React.FC = () => {
               value={formData.registrationNumber}
               onChange={handleChange}
               placeholder="ABC-1234" 
-              className="px-5 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all text-sm"
+              className="px-5 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all text-sm disabled:opacity-60 disabled:cursor-not-allowed"
+              disabled={isSubmitting || !isAuthenticated}
               required
             />
           </div>
@@ -143,7 +166,8 @@ const QuoteForm: React.FC = () => {
               value={formData.age}
               onChange={handleChange}
               placeholder="Years" 
-              className="px-5 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all text-sm"
+              className="px-5 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all text-sm disabled:opacity-60 disabled:cursor-not-allowed"
+              disabled={isSubmitting || !isAuthenticated}
               required
             />
           </div>
@@ -153,7 +177,8 @@ const QuoteForm: React.FC = () => {
                 name="medicalConditions"
                 value={formData.medicalConditions}
                 onChange={handleChange}
-                className="px-5 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all text-slate-700 text-sm"
+                className="px-5 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all text-slate-700 text-sm disabled:opacity-60 disabled:cursor-not-allowed"
+                disabled={isSubmitting || !isAuthenticated}
               >
                 <option value="none">None</option>
                 <option value="diabetes">Diabetes</option>
@@ -172,28 +197,39 @@ const QuoteForm: React.FC = () => {
           rows={3}
           value={formData.message}
           onChange={handleChange}
-          placeholder="I'm interested in..." 
-          className="px-5 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all placeholder:text-slate-400 resize-none text-sm"
+          placeholder={isAuthenticated ? "I'm interested in..." : "Login to enter message"} 
+          className="px-5 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all placeholder:text-slate-400 resize-none text-sm disabled:opacity-60 disabled:cursor-not-allowed"
+          disabled={isSubmitting || !isAuthenticated}
         ></textarea>
       </div>
 
-      <button 
-        type="submit"
-        disabled={isSubmitting}
-        className="w-full bg-blue-600 text-white py-3.5 rounded-xl font-bold text-base hover:bg-blue-700 shadow-lg shadow-blue-500/20 transition-all active:scale-[0.99] disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-      >
-        {isSubmitting ? (
-          <>
-            <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
-            Generating Quotes...
-          </>
-        ) : (
-          <>
-            Get My Personalized Quote
-            <span className="text-xl">→</span>
-          </>
-        )}
-      </button>
+      {isAuthenticated ? (
+        <button 
+          type="submit"
+          disabled={isSubmitting}
+          className="w-full bg-blue-600 text-white py-3.5 rounded-xl font-bold text-base hover:bg-blue-700 shadow-lg shadow-blue-500/20 transition-all active:scale-[0.99] disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+        >
+          {isSubmitting ? (
+            <>
+              <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
+              Generating Quotes...
+            </>
+          ) : (
+            <>
+              Get My Personalized Quote
+              <span className="text-xl">→</span>
+            </>
+          )}
+        </button>
+      ) : (
+        <button 
+          type="button"
+          onClick={() => window.dispatchEvent(new CustomEvent('open-auth-modal'))}
+          className="w-full bg-slate-900 text-white py-3.5 rounded-xl font-bold text-base hover:bg-slate-800 shadow-lg shadow-slate-400/20 transition-all active:scale-[0.99]"
+        >
+          Login to Get Quote
+        </button>
+      )}
 
       <p className="mt-4 text-center text-[10px] text-slate-500 font-medium">
         🔒 Your data is encrypted and secure with us.

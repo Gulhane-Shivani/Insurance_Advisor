@@ -25,19 +25,21 @@ const Home: React.FC = () => {
               {[...partners, ...partners].map((partner, idx) => (
                 <div key={`${partner.id}-${idx}`} className="bg-white p-4 px-8 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all flex items-center justify-center min-w-[160px] flex-shrink-0 group/partner">
                   <img
-                    src={`https://logo.clearbit.com/${partner.domain}`}
+                    src={`https://www.google.com/s2/favicons?domain=${partner.domain}&sz=128`}
                     alt={partner.name}
                     className="h-8 md:h-10 object-contain transition-all duration-500"
                     onError={(e) => {
                       const target = e.target as HTMLImageElement;
-                      if (target.src.includes('clearbit.com')) {
-                        target.src = `https://www.google.com/s2/favicons?domain=${partner.domain}&sz=128`;
+                      if (target.src.includes('google.com')) {
+                        // Fallback to clearbit if google fails (rare but possible)
+                        target.src = `https://logo.clearbit.com/${partner.domain}`;
                       } else {
+                        // If both fail, show text
                         target.style.display = 'none';
                         const parent = target.parentElement;
-                        if (parent) {
+                        if (parent && !parent.querySelector('.fallback-text')) {
                           const span = document.createElement('span');
-                          span.className = 'text-xs font-black text-slate-400';
+                          span.className = 'text-xs font-black text-slate-400 fallback-text';
                           span.innerText = partner.name;
                           parent.appendChild(span);
                         }

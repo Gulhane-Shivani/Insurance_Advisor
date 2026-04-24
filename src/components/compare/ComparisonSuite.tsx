@@ -44,14 +44,24 @@ const ComparisonSuite: React.FC<ComparisonSuiteProps> = ({
 
   const handleImageError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
       const target = e.target as HTMLImageElement;
-      // If the current is a google link that failed, we fallback to clearbit.
+      const parent = target.parentElement;
+      
       if (target.src.includes('google.com')) {
-          const domain = target.src.split('domain=')[1]?.split('&')[0];
+          // If google failed, try clearbit as a secondary fallback
+          const urlParams = new URLSearchParams(target.src.split('?')[1]);
+          const domain = urlParams.get('domain');
           if(domain) target.src = `https://logo.clearbit.com/${domain}`;
-      } else if (target.src.includes('clearbit.com')) {
-          // If clearbit failed, fallback to google
-          const domain = target.src.split('/').pop();
-          if(domain) target.src = `https://www.google.com/s2/favicons?domain=${domain}&sz=128`;
+          else target.style.display = 'none';
+      } else {
+          // If clearbit (or anything else) failed, hide image and show text initials/name
+          target.style.display = 'none';
+          if (parent && !parent.querySelector('.fallback-text')) {
+              const carrierName = target.alt || 'Carrier';
+              const span = document.createElement('span');
+              span.className = 'text-[10px] font-black text-slate-400 fallback-text uppercase';
+              span.innerText = carrierName.split(' ').map(n => n[0]).join('').substring(0, 2);
+              parent.appendChild(span);
+          }
       }
   };
 
