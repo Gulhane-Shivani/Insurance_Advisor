@@ -1,10 +1,11 @@
-/* src/components/forms/ContactForm.tsx */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
 import api from '../../services/api';
+import { useAuth } from '../../context/AuthContext';
 import '../../styles/globals.css';
 
 const ContactForm: React.FC = () => {
+  const { user, isAuthenticated } = useAuth();
   const [formData, setFormData] = useState({ 
     full_name: '', 
     email: '', 
@@ -13,6 +14,16 @@ const ContactForm: React.FC = () => {
   });
   const [loading, setLoading] = useState(false);
 
+  useEffect(() => {
+    if (user) {
+      setFormData(prev => ({
+        ...prev,
+        full_name: user.full_name || user.name || '',
+        email: user.email || ''
+      }));
+    }
+  }, [user]);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -20,12 +31,23 @@ const ContactForm: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (!isAuthenticated) {
+      toast.error('Please login to send a message');
+      return;
+    }
+
     setLoading(true);
     
     try {
       await api.post('/contact', formData);
       toast.success('Message sent successfully! We will get back to you soon.');
-      setFormData({ full_name: '', email: '', subject: '', message: '' });
+      setFormData({ 
+        full_name: user?.full_name || user?.name || '', 
+        email: user?.email || '', 
+        subject: '', 
+        message: '' 
+      });
     } catch (error: any) {
       const errorMsg = error.response?.data?.detail || 'Failed to send message. Please try again.';
       toast.error(errorMsg);
@@ -48,9 +70,9 @@ const ContactForm: React.FC = () => {
               name="full_name"
               value={formData.full_name}
               onChange={handleChange}
-              placeholder="John Smith" 
-              className="px-5 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all text-sm"
-              disabled={loading}
+              placeholder={isAuthenticated ? "John Smith" : "Login to enter name"} 
+              className="px-5 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all text-sm disabled:cursor-not-allowed disabled:opacity-60"
+              disabled={loading || !isAuthenticated}
               required
             />
           </div>
@@ -61,9 +83,9 @@ const ContactForm: React.FC = () => {
               name="email"
               value={formData.email}
               onChange={handleChange}
-              placeholder="john@example.com" 
-              className="px-5 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all text-sm"
-              disabled={loading}
+              placeholder={isAuthenticated ? "john@example.com" : "Login to enter email"} 
+              className="px-5 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all text-sm disabled:cursor-not-allowed disabled:opacity-60"
+              disabled={loading || !isAuthenticated}
               required
             />
           </div>
@@ -75,9 +97,9 @@ const ContactForm: React.FC = () => {
             name="subject"
             value={formData.subject}
             onChange={handleChange}
-            placeholder="How can we help?" 
-            className="px-5 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all text-sm"
-            disabled={loading}
+            placeholder={isAuthenticated ? "How can we help?" : "Login to enter subject"} 
+            className="px-5 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all text-sm disabled:cursor-not-allowed disabled:opacity-60"
+            disabled={loading || !isAuthenticated}
             required
           />
         </div>
@@ -88,24 +110,35 @@ const ContactForm: React.FC = () => {
             rows={4}
             value={formData.message}
             onChange={handleChange}
-            placeholder="Write your message here..." 
-            className="px-5 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all text-sm resize-none"
-            disabled={loading}
+            placeholder={isAuthenticated ? "Write your message here..." : "Login to enter message"} 
+            className="px-5 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all text-sm resize-none disabled:cursor-not-allowed disabled:opacity-60"
+            disabled={loading || !isAuthenticated}
             required
           ></textarea>
         </div>
-        <button 
-          type="submit"
-          disabled={loading}
-          className={`bg-slate-900 text-white py-3.5 rounded-xl font-bold text-base shadow-lg shadow-slate-400/20 transition-all mt-2 flex items-center justify-center gap-2 ${loading ? 'opacity-70 cursor-not-allowed' : 'hover:bg-slate-800'}`}
-        >
-          {loading ? (
-            <>
-              <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-              Sending...
-            </>
-          ) : 'Send Message'}
-        </button>
+        
+        {isAuthenticated ? (
+          <button 
+            type="submit"
+            disabled={loading}
+            className={`bg-slate-900 text-white py-3.5 rounded-xl font-bold text-base shadow-lg shadow-slate-400/20 transition-all mt-2 flex items-center justify-center gap-2 ${loading ? 'opacity-70 cursor-not-allowed' : 'hover:bg-slate-800'}`}
+          >
+            {loading ? (
+              <>
+                <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                Sending...
+              </>
+            ) : 'Send Message'}
+          </button>
+        ) : (
+          <button 
+            type="button"
+            onClick={() => window.dispatchEvent(new CustomEvent('open-auth-modal'))}
+            className="bg-blue-600 text-white py-3.5 rounded-xl font-bold text-base shadow-lg shadow-blue-500/20 hover:bg-blue-700 transition-all mt-2 active:scale-95"
+          >
+            Login to Send Message
+          </button>
+        )}
       </form>
     </div>
   );

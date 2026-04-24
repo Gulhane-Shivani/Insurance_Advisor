@@ -18,8 +18,14 @@ const Navbar: React.FC = () => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
     };
+    const handleOpenAuth = () => setIsAuthOpen(true);
+
     window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener('open-auth-modal', handleOpenAuth);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('open-auth-modal', handleOpenAuth);
+    };
   }, []);
 
   const navLinks = [
