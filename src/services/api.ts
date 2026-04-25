@@ -1,7 +1,7 @@
 /* src/services/api.ts */
 import axios from 'axios';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+const API_URL = 'https://insurance-advisor-backend-8k0e.onrender.com';
 
 const api = axios.create({
   baseURL: API_URL,
