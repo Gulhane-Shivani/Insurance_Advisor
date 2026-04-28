@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate, Link } from 'react-router-dom';
 import { 
   LayoutDashboard, 
   Shield, 
@@ -87,12 +87,12 @@ const DashboardPage: React.FC = () => {
           {/* Logo Section */}
           <div className="h-20 flex items-center px-6 border-b border-slate-50">
             <div className="flex items-center gap-3 cursor-pointer group" onClick={() => navigate('/')}>
-               <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center shadow-lg shadow-blue-600/20">
-                  <span className="text-white text-sm font-black">IA</span>
-               </div>
-               <span className="text-lg font-black tracking-tight text-slate-900">Insurance<span className="text-blue-600">Advisor</span></span>
+              <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center shadow-lg shadow-blue-600/20">
+                <span className="text-white text-sm font-black">IA</span>
+              </div>
+              <span className="text-lg font-black tracking-tight text-slate-900">Insurance<span className="text-blue-600">Advisor</span></span>
             </div>
-            <button 
+            <button
               onClick={() => setIsSidebarOpen(false)}
               className="ml-auto p-2 text-slate-400 hover:text-slate-900 lg:hidden"
             >
@@ -100,8 +100,8 @@ const DashboardPage: React.FC = () => {
             </button>
           </div>
 
-          {/* Navigation Menu */}
-          <nav className="flex-1 overflow-y-auto py-6 px-4 space-y-1">
+          {/* Navigation Menu with scrollbar-hide */}
+          <nav className="flex-1 overflow-y-auto py-6 px-4 space-y-1 scrollbar-hide">
             <p className="px-4 text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Main Menu</p>
             {menuItems.map((item) => (
               <button
@@ -112,8 +112,8 @@ const DashboardPage: React.FC = () => {
                 }}
                 className={`
                   w-full flex items-center gap-3.5 px-4 py-3 rounded-xl transition-all duration-200 group
-                  ${activeSection === item.id 
-                    ? 'bg-blue-600 text-white shadow-lg shadow-blue-200' 
+                  ${activeSection === item.id
+                    ? 'bg-blue-600 text-white shadow-lg shadow-blue-200'
                     : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900'}
                 `}
               >
@@ -124,27 +124,16 @@ const DashboardPage: React.FC = () => {
             ))}
           </nav>
 
-          {/* Sidebar Footer */}
+          {/* Sidebar Footer - Simplified */}
           <div className="p-4 border-t border-slate-50">
-            <div className="bg-slate-50 rounded-2xl p-4 mb-4">
-               <div className="flex items-center gap-3 mb-3">
-                  <div className="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-xs font-black">
-                     {user?.full_name?.charAt(0) || user?.name?.charAt(0) || 'U'}
-                  </div>
-                  <div className="overflow-hidden">
-                     <p className="text-xs font-bold text-slate-900 truncate">{user?.full_name || user?.name || 'User'}</p>
-                     <p className="text-[10px] font-medium text-slate-400 truncate">{user?.email}</p>
-                  </div>
-               </div>
-               <button 
-                onClick={handleLogout}
-                className="w-full flex items-center justify-center gap-2 py-2.5 bg-white border border-slate-200 rounded-xl text-[11px] font-bold text-red-500 hover:bg-red-50 transition-colors"
-               >
-                 <LogOut className="w-3.5 h-3.5" />
-                 Sign Out
-               </button>
-            </div>
-            <p className="text-[9px] text-center text-slate-400 font-bold uppercase tracking-widest">v1.2.0 Stable</p>
+            <button
+              onClick={handleLogout}
+              className="w-full flex items-center justify-center gap-2 py-3 bg-white border border-slate-200 rounded-xl text-[12px] font-black uppercase tracking-widest text-red-500 hover:bg-red-50 transition-all active:scale-95 shadow-sm"
+            >
+              <LogOut className="w-4 h-4" />
+              Sign Out
+            </button>
+            <p className="text-[9px] text-center text-slate-400 font-bold uppercase tracking-widest mt-4">v1.2.0 Stable</p>
           </div>
         </div>
       </aside>
@@ -156,49 +145,49 @@ const DashboardPage: React.FC = () => {
           scrolled ? 'bg-white/80 backdrop-blur-md border-b border-slate-100 shadow-sm' : 'bg-transparent'
         }`}>
           <div className="flex items-center gap-4">
-             <button 
-               onClick={() => setIsSidebarOpen(true)}
-               className="p-2.5 bg-white border border-slate-200 rounded-xl lg:hidden shadow-sm text-slate-600"
-             >
-                <Menu className="w-5 h-5" />
-             </button>
-             <div className="hidden lg:flex items-center gap-2 px-4 py-2 bg-slate-100/50 border border-slate-200/50 rounded-xl w-72 focus-within:bg-white focus-within:shadow-md focus-within:border-blue-200 transition-all">
-                <Search className="w-4 h-4 text-slate-400" />
-                <input type="text" placeholder="Search anything..." className="bg-transparent border-none outline-none text-[12px] font-medium w-full placeholder:text-slate-400" />
-             </div>
+            <button
+              onClick={() => setIsSidebarOpen(true)}
+              className="p-2.5 bg-white border border-slate-200 rounded-xl lg:hidden shadow-sm text-slate-600"
+            >
+              <Menu className="w-5 h-5" />
+            </button>
+            <div className="hidden lg:flex items-center gap-2 px-4 py-2 bg-slate-100/50 border border-slate-200/50 rounded-xl w-72 focus-within:bg-white focus-within:shadow-md focus-within:border-blue-200 transition-all">
+              <Search className="w-4 h-4 text-slate-400" />
+              <input type="text" placeholder="Search anything..." className="bg-transparent border-none outline-none text-[12px] font-medium w-full placeholder:text-slate-400" />
+            </div>
           </div>
 
           <div className="flex items-center gap-3">
-             <button className="relative p-2.5 bg-white border border-slate-200/50 rounded-xl text-slate-400 hover:text-blue-600 hover:bg-blue-50 transition-all shadow-sm">
-                <Bell className="w-5 h-5" />
-                <span className="absolute top-2.5 right-2.5 w-2 h-2 bg-blue-600 rounded-full ring-2 ring-white animate-pulse"></span>
-             </button>
-             
-             <div className="h-8 w-px bg-slate-200 mx-1 hidden sm:block"></div>
-             
-             <div className="hidden sm:flex items-center gap-3 px-1.5 py-1.5 bg-white border border-slate-200/50 rounded-2xl shadow-sm">
-                <div className="w-8 h-8 bg-slate-900 rounded-xl flex items-center justify-center text-white text-xs font-black">
-                   {user?.full_name?.charAt(0) || user?.name?.charAt(0) || 'U'}
-                </div>
-                <div className="text-right pr-2">
-                   <p className="text-[12px] font-black text-slate-900 leading-tight">{(user?.full_name || user?.name || 'User').split(' ')[0]}</p>
-                   <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest leading-none">Customer</p>
-                </div>
-             </div>
+            <button className="relative p-2.5 bg-white border border-slate-200/50 rounded-xl text-slate-400 hover:text-blue-600 hover:bg-blue-50 transition-all shadow-sm">
+              <Bell className="w-5 h-5" />
+              <span className="absolute top-2.5 right-2.5 w-2 h-2 bg-blue-600 rounded-full ring-2 ring-white animate-pulse"></span>
+            </button>
+
+            <div className="h-8 w-px bg-slate-200 mx-1 hidden sm:block"></div>
+
+            <div className="hidden sm:flex items-center gap-3 px-1.5 py-1.5 bg-white border border-slate-200/50 rounded-2xl shadow-sm">
+              <div className="w-8 h-8 bg-slate-900 rounded-xl flex items-center justify-center text-white text-xs font-black">
+                {user?.full_name?.charAt(0) || user?.name?.charAt(0) || 'U'}
+              </div>
+              <div className="text-right pr-2">
+                <p className="text-[12px] font-black text-slate-900 leading-tight">{(user?.full_name || user?.name || 'User').split(' ')[0]}</p>
+                <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest leading-none">Customer</p>
+              </div>
+            </div>
           </div>
         </header>
 
         {/* Content Container */}
         <div className="p-6 lg:p-10 pb-20">
-           <div className="max-w-[1400px] mx-auto">
-              {renderSection()}
-           </div>
+          <div className="max-w-[1400px] mx-auto">
+            {renderSection()}
+          </div>
         </div>
       </main>
 
       {/* Overlay for mobile sidebar */}
       {isSidebarOpen && (
-        <div 
+        <div
           className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-40 lg:hidden"
           onClick={() => setIsSidebarOpen(false)}
         />
