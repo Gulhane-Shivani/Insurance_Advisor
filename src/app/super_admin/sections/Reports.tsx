@@ -1,19 +1,12 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { 
-  FileStack, 
   Download, 
-  BarChart, 
-  FileText, 
-  History, 
   Wallet, 
-  ArrowRight, 
-  Calendar, 
-  Filter, 
   CheckCircle2, 
   Clock, 
-  ChevronRight,
   TrendingUp,
-  FileSpreadsheet
+  FileSpreadsheet,
+  Filter
 } from 'lucide-react';
 
 const Reports: React.FC = () => {

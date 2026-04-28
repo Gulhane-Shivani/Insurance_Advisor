@@ -10,9 +10,6 @@ import {
   Globe, 
   ShieldCheck, 
   ChevronRight,
-  Database,
-  Layout,
-  Smartphone,
   Save,
   Plus
 } from 'lucide-react';

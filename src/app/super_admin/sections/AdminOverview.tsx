@@ -1,6 +1,5 @@
 import React from 'react';
 import { 
-  TrendingUp, 
   Users, 
   ShieldCheck, 
   Wallet, 
@@ -10,7 +9,6 @@ import {
   ArrowUpRight,
   ArrowDownRight,
   Activity,
-  Layers,
   ArrowRight
 } from 'lucide-react';
 

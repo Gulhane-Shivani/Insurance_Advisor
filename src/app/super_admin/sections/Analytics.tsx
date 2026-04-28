@@ -1,17 +1,8 @@
 import React from 'react';
 import { 
-  BarChart3, 
-  TrendingUp, 
-  Target, 
   MapPin, 
-  ArrowUpRight, 
-  PieChart, 
   Activity, 
-  Users, 
-  ChevronRight,
-  Zap,
-  Globe,
-  Monitor
+  ChevronRight
 } from 'lucide-react';
 
 const Analytics: React.FC = () => {

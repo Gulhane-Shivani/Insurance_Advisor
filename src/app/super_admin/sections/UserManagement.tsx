@@ -6,15 +6,10 @@ import {
   MoreHorizontal, 
   Search, 
   Filter, 
-  Mail, 
-  CheckCircle2, 
-  XCircle, 
   Trash2, 
   Edit3,
   Lock,
-  ChevronRight,
-  UserCheck,
-  UserCog
+  UserCheck
 } from 'lucide-react';
 
 const UserManagement: React.FC = () => {
