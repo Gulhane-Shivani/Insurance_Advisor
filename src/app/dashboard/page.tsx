@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
-import { Navigate, useNavigate, Link } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import {
   LayoutDashboard,
   Shield,
@@ -14,10 +14,8 @@ import {
   Bell,
   Menu,
   X,
-  ShieldCheck,
   ChevronRight,
-  Search,
-  Settings
+  Search
 } from 'lucide-react';
 
 // Section Imports

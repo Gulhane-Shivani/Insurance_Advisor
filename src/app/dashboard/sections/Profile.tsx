@@ -1,5 +1,5 @@
 import React from 'react';
-import { User, Mail, Phone, MapPin, Calendar, Camera, Shield, Banknote, Bell, Lock, ShieldCheck, Edit3, Globe, Zap } from 'lucide-react';
+import { User, Mail, Phone, Calendar, Camera, Shield, Bell, Lock, ShieldCheck, Edit3, Globe, Zap } from 'lucide-react';
 
 interface ProfileProps {
   user: any;

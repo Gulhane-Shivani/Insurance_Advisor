@@ -1,5 +1,5 @@
 import React from 'react';
-import { FileText, Plus, Search, Filter, Clock, CheckCircle2, XCircle, AlertCircle, ChevronRight, Upload, Shield, Activity } from 'lucide-react';
+import { FileText, Plus, CheckCircle2, ChevronRight, Upload, Activity } from 'lucide-react';
 
 const Claims: React.FC = () => {
   const claims = [

@@ -1,5 +1,5 @@
 import React from 'react';
-import { CreditCard, History, Clock, CheckCircle2, AlertCircle, Download, ChevronRight, ArrowUpRight, Wallet, Banknote } from 'lucide-react';
+import { CreditCard, History, Clock, Download, ChevronRight, ArrowUpRight, Wallet } from 'lucide-react';
 
 const Payments: React.FC = () => {
   const upcomingPayments = [

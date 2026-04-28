@@ -1,5 +1,5 @@
 import React from 'react';
-import { Shield, Clock, AlertCircle, Plus, CreditCard, Download, FileText, Phone, ArrowUpRight, ChevronRight, Activity, Zap } from 'lucide-react';
+import { Shield, Clock, AlertCircle, CreditCard, Download, FileText, Phone, ChevronRight, Activity, Zap } from 'lucide-react';
 
 interface OverviewProps {
   user: any;
