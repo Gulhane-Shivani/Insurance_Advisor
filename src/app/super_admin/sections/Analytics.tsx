@@ -16,143 +16,117 @@ import {
 
 const Analytics: React.FC = () => {
   const branchPerformance = [
-    { city: 'Mumbai', revenue: '₹1.2Cr', growth: '+12%', agents: 42, efficiency: '94%' },
-    { city: 'Delhi', revenue: '₹95L', growth: '+8%', agents: 38, efficiency: '88%' },
-    { city: 'Bangalore', revenue: '₹88L', growth: '+15%', agents: 31, efficiency: '91%' },
-    { city: 'Pune', revenue: '₹52L', growth: '+22%', agents: 18, efficiency: '96%' },
+    { city: 'Mumbai', revenue: '₹1.2Cr', growth: '+12%', efficiency: '94%' },
+    { city: 'Delhi', revenue: '₹95L', growth: '+8%', efficiency: '88%' },
+    { city: 'Bangalore', revenue: '₹88L', growth: '+15%', efficiency: '91%' },
+    { city: 'Pune', revenue: '₹52L', growth: '+22%', efficiency: '96%' },
   ];
 
   return (
-    <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-700">
-      {/* Header */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
-        <div>
-           <p className="text-[10px] font-black text-indigo-600 uppercase tracking-[0.3em] mb-2">Institutional Analytics</p>
-           <h1 className="text-4xl font-black text-slate-900 tracking-tight">Business Intelligence</h1>
-           <p className="text-slate-500 font-medium mt-2">Deeper insights into policy issuance trends, regional performance, and agent productivity metrics.</p>
-        </div>
-        <div className="flex bg-slate-100 p-1.5 rounded-2xl">
+    <div className="space-y-6 animate-in fade-in duration-500">
+      {/* Top Controls - Standard Row */}
+      <div className="flex flex-col sm:flex-row justify-between items-center gap-4 bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+         <div>
+            <h2 className="text-xl font-bold text-slate-900">Business Intelligence</h2>
+            <p className="text-sm text-slate-500">Performance metrics across all regions</p>
+         </div>
+         <div className="flex bg-slate-100 p-1 rounded-xl">
            {['Global', 'Regional', 'Local'].map(t => (
-             <button key={t} className={`px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${t === 'Global' ? 'bg-white text-indigo-600 shadow-sm' : 'text-slate-500 hover:text-slate-900'}`}>{t}</button>
+             <button key={t} className={`px-5 py-2 rounded-lg text-xs font-bold transition-all ${t === 'Global' ? 'bg-white text-indigo-600 shadow-sm' : 'text-slate-500 hover:text-slate-900'}`}>{t}</button>
            ))}
-        </div>
+         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-         {/* Main Chart */}
-         <div className="lg:col-span-8 bg-white rounded-[40px] border border-slate-200/60 p-10 shadow-sm relative overflow-hidden group">
-            <div className="flex justify-between items-start mb-10 relative z-10">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+         {/* Chart Section */}
+         <div className="lg:col-span-8 bg-white rounded-2xl border border-slate-200 p-8 shadow-sm">
+            <div className="flex justify-between items-start mb-8">
                <div>
-                  <h3 className="text-xl font-black text-slate-900 tracking-tight">Issuance Velocity</h3>
-                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-1">Daily trend comparison</p>
+                  <h3 className="text-base font-bold text-slate-900">Issuance Velocity</h3>
+                  <p className="text-xs text-slate-500">Daily policy issuance trend</p>
                </div>
-               <div className="flex items-center gap-6">
+               <div className="flex items-center gap-4">
                   <div className="flex items-center gap-2">
-                     <div className="w-2.5 h-2.5 rounded-full bg-indigo-600"></div>
-                     <span className="text-[10px] font-black text-slate-900 uppercase tracking-widest">Current Period</span>
+                     <div className="w-2 h-2 rounded-full bg-indigo-600"></div>
+                     <span className="text-[10px] font-bold text-slate-600 uppercase tracking-wider">Current</span>
                   </div>
                   <div className="flex items-center gap-2">
-                     <div className="w-2.5 h-2.5 rounded-full bg-slate-200"></div>
-                     <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Target</span>
+                     <div className="w-2 h-2 rounded-full bg-slate-200"></div>
+                     <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Target</span>
                   </div>
                </div>
             </div>
 
-            {/* Mock Graph Visual */}
-            <div className="h-64 w-full relative flex items-end gap-2 pt-12 z-10">
-               {Array.from({ length: 31 }).map((_, i) => {
-                 const height = Math.floor(Math.random() * 60) + 30;
+            <div className="h-64 w-full flex items-end gap-1.5 border-b border-slate-100 pb-2">
+               {Array.from({ length: 24 }).map((_, i) => {
+                 const height = Math.floor(Math.random() * 70) + 20;
                  return (
-                   <div key={i} className="flex-1 h-full flex flex-col justify-end gap-1 group/bar cursor-pointer">
-                      <div className="w-full bg-indigo-50 rounded-t-sm transition-all group-hover/bar:bg-indigo-100" style={{ height: `${height + 10}%` }}></div>
-                      <div className="w-full bg-indigo-600 rounded-t-sm transition-all group-hover/bar:bg-indigo-400" style={{ height: `${height}%` }}></div>
-                   </div>
+                   <div key={i} className="flex-1 bg-indigo-600 rounded-t-sm transition-all hover:bg-indigo-400" style={{ height: `${height}%` }}></div>
                  );
                })}
-               <div className="absolute top-0 left-0 w-full h-full border-b border-slate-100 pointer-events-none"></div>
             </div>
-            <div className="flex justify-between mt-6 relative z-10">
-               <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Day 01</span>
-               <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Day 15</span>
-               <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Day 31</span>
+            <div className="flex justify-between mt-3">
+               <span className="text-[10px] font-bold text-slate-400">Day 01</span>
+               <span className="text-[10px] font-bold text-slate-400">Day 30</span>
             </div>
          </div>
 
-         {/* Side Metrics */}
-         <div className="lg:col-span-4 flex flex-col gap-8">
-            <div className="bg-indigo-600 rounded-[40px] p-10 text-white shadow-2xl relative overflow-hidden flex-1 group">
-               <h3 className="text-xl font-black mb-8 flex items-center gap-3 relative z-10">
-                  <Zap className="w-6 h-6 text-indigo-300" /> Retention Hub
-               </h3>
-               
-               <div className="relative h-48 flex items-center justify-center z-10">
-                  <svg className="w-full h-full -rotate-90 transform" viewBox="0 0 100 100">
-                     <circle cx="50" cy="50" r="45" fill="none" stroke="rgba(255,255,255,0.1)" strokeWidth="10" />
-                     <circle cx="50" cy="50" r="45" fill="none" stroke="white" strokeWidth="10" strokeDasharray="282.7" strokeDashoffset="42.4" strokeLinecap="round" className="transition-all duration-[1.5s] ease-out" />
+         {/* Retention Card - Simplified */}
+         <div className="lg:col-span-4 bg-indigo-600 rounded-2xl p-8 text-white shadow-xl flex flex-col justify-between">
+            <div className="flex justify-between items-start">
+               <h3 className="text-base font-bold">Retention Hub</h3>
+               <Zap className="w-5 h-5 text-indigo-200" />
+            </div>
+            
+            <div className="py-6 flex flex-col items-center">
+               <div className="relative w-32 h-32 flex items-center justify-center">
+                  <svg className="w-full h-full -rotate-90" viewBox="0 0 100 100">
+                     <circle cx="50" cy="50" r="45" fill="none" stroke="rgba(255,255,255,0.1)" strokeWidth="8" />
+                     <circle cx="50" cy="50" r="45" fill="none" stroke="white" strokeWidth="8" strokeDasharray="282.7" strokeDashoffset="42.4" strokeLinecap="round" />
                   </svg>
-                  <div className="absolute text-center">
-                     <p className="text-4xl font-black">85%</p>
-                     <p className="text-[10px] font-black text-indigo-200 uppercase tracking-widest mt-1">Efficiency</p>
-                  </div>
+                  <span className="absolute text-2xl font-bold">85%</span>
                </div>
+               <p className="text-xs font-bold text-indigo-100 uppercase tracking-widest mt-4">System Efficiency</p>
+            </div>
 
-               <div className="mt-10 grid grid-cols-2 gap-6 pt-10 border-t border-white/10 relative z-10">
-                  <div>
-                     <p className="text-[10px] font-black text-indigo-200 uppercase tracking-widest mb-1">Renewals</p>
-                     <p className="text-2xl font-black">12,482</p>
-                  </div>
-                  <div className="text-right">
-                     <p className="text-[10px] font-black text-indigo-200 uppercase tracking-widest mb-1">Churn</p>
-                     <p className="text-2xl font-black">1.2%</p>
-                  </div>
+            <div className="grid grid-cols-2 gap-4 border-t border-white/10 pt-6">
+               <div>
+                  <p className="text-[10px] font-bold text-indigo-200 uppercase tracking-wider">Renewals</p>
+                  <p className="text-lg font-bold">12,482</p>
+               </div>
+               <div className="text-right">
+                  <p className="text-[10px] font-bold text-indigo-200 uppercase tracking-wider">Churn</p>
+                  <p className="text-lg font-bold">1.2%</p>
                </div>
             </div>
          </div>
       </div>
 
-      {/* Cluster Performance */}
-      <div className="bg-white rounded-[40px] border border-slate-200/60 shadow-sm p-10 overflow-hidden">
-         <div className="flex justify-between items-center mb-10">
-            <div>
-               <h3 className="text-xl font-black text-slate-900 tracking-tight">Regional Branch Performance</h3>
-               <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-1">Audit of key operational hubs</p>
-            </div>
-            <button className="text-[11px] font-black text-indigo-600 uppercase tracking-widest hover:underline">Full Regional Audit</button>
-         </div>
-
-         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {branchPerformance.map((branch, i) => (
-              <div key={i} className="p-8 rounded-[32px] bg-slate-50 border border-slate-100 group hover:bg-white hover:border-indigo-100 transition-all duration-500 relative overflow-hidden">
-                 <div className="flex items-center gap-3 mb-8">
-                    <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center text-slate-400 group-hover:bg-indigo-600 group-hover:text-white group-hover:shadow-lg transition-all">
-                       <MapPin className="w-5 h-5" />
-                    </div>
-                    <h4 className="text-base font-black text-slate-900 tracking-tight">{branch.city}</h4>
+      {/* Regional Grid - Simplified Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+         {branchPerformance.map((branch, i) => (
+           <div key={i} className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm group hover:border-indigo-200 transition-all">
+              <div className="flex items-center gap-3 mb-6">
+                 <div className="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center text-slate-400 group-hover:bg-indigo-600 group-hover:text-white transition-all">
+                    <MapPin className="w-4 h-4" />
                  </div>
-                 
-                 <div className="space-y-6">
-                    <div className="flex justify-between items-end">
-                       <div>
-                          <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Revenue</p>
-                          <p className="text-lg font-black text-slate-900">{branch.revenue}</p>
-                       </div>
-                       <span className="text-[10px] font-black text-emerald-600 bg-emerald-50 px-2 py-1 rounded-lg border border-emerald-100">{branch.growth}</span>
+                 <h4 className="text-sm font-bold text-slate-900">{branch.city}</h4>
+              </div>
+              <div className="space-y-4">
+                 <div className="flex justify-between items-end">
+                    <div>
+                       <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Revenue</p>
+                       <p className="text-base font-bold text-slate-900">{branch.revenue}</p>
                     </div>
-                    
-                    <div className="pt-6 border-t border-slate-200/50 flex justify-between items-center">
-                       <div className="flex items-center gap-2">
-                          <Users className="w-4 h-4 text-slate-300 group-hover:text-slate-500 transition-colors" />
-                          <span className="text-[11px] font-bold text-slate-500">{branch.agents}</span>
-                       </div>
-                       <div className="flex items-center gap-2">
-                          <Activity className="w-4 h-4 text-slate-300 group-hover:text-indigo-600 transition-colors" />
-                          <span className="text-[11px] font-bold text-slate-500">{branch.efficiency} Eff.</span>
-                       </div>
-                    </div>
+                    <span className="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-lg border border-emerald-100">{branch.growth}</span>
+                 </div>
+                 <div className="pt-4 border-t border-slate-50 flex justify-between items-center text-[10px] font-bold text-slate-500">
+                    <div className="flex items-center gap-1.5"><Activity className="w-3 h-3" /> {branch.efficiency} Eff.</div>
+                    <ChevronRight className="w-3 h-3 text-slate-300" />
                  </div>
               </div>
-            ))}
-         </div>
+           </div>
+         ))}
       </div>
     </div>
   );

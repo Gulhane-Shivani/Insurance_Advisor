@@ -9,7 +9,6 @@ import {
   HandCoins,
   ArrowUpRight,
   ArrowDownRight,
-  BarChart,
   Activity,
   Layers,
   ArrowRight
@@ -27,120 +26,120 @@ const AdminOverview: React.FC = () => {
   ];
 
   return (
-    <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-700">
-      {/* KPI Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-         {kpis.map((kpi, i) => (
-           <div key={i} className="bg-white rounded-[32px] p-8 border border-slate-200/60 shadow-sm hover:shadow-xl hover:border-indigo-100 transition-all group overflow-hidden relative">
-              <div className={`absolute -right-4 -top-4 w-24 h-24 bg-gradient-to-br opacity-[0.03] group-hover:opacity-[0.08] transition-opacity rounded-full ${
-                kpi.color === 'blue' ? 'from-blue-600' : 
-                kpi.color === 'indigo' ? 'from-indigo-600' : 
-                kpi.color === 'emerald' ? 'from-emerald-600' : 
-                kpi.color === 'red' ? 'from-red-600' : 'from-slate-600'
-              }`}></div>
-              
+    <div className="space-y-10 animate-in fade-in duration-500">
+      {/* Simple Welcome Header */}
+      <div className="mb-8">
+         <h1 className="text-3xl font-black text-slate-900 tracking-tight">Welcome to Super Admin</h1>
+         <p className="text-slate-500 font-medium mt-1">Global ecosystem overview and monitoring</p>
+      </div>
+
+      {/* KPI Grid - Simplified standard cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+         {kpis.slice(0, 4).map((kpi, i) => (
+           <div key={i} className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:border-indigo-200 transition-all group">
               <div className="flex justify-between items-start mb-6">
-                 <div className={`w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform ${
+                 <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
                    kpi.color === 'blue' ? 'bg-blue-50 text-blue-600' : 
                    kpi.color === 'indigo' ? 'bg-indigo-50 text-indigo-600' : 
-                   kpi.color === 'emerald' ? 'bg-emerald-50 text-emerald-600' : 
-                   kpi.color === 'red' ? 'bg-red-50 text-red-600' : 'bg-slate-50 text-slate-600'
+                   kpi.color === 'emerald' ? 'bg-emerald-50 text-emerald-600' : 'bg-purple-50 text-purple-600'
                  }`}>
-                    <kpi.icon className="w-6 h-6" />
+                    <kpi.icon className="w-5 h-5" />
                  </div>
-                 <div className={`flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-black ${
+                 <div className={`flex items-center gap-1 px-2 py-0.5 rounded-lg text-[10px] font-bold ${
                    kpi.isUp ? 'bg-emerald-50 text-emerald-600' : 'bg-red-50 text-red-600'
                  }`}>
                     {kpi.isUp ? <ArrowUpRight className="w-3 h-3" /> : <ArrowDownRight className="w-3 h-3" />}
                     {kpi.trend}
                  </div>
               </div>
-              
-              <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">{kpi.label}</p>
-              <h3 className="text-2xl font-black text-slate-900 tracking-tight">{kpi.value}</h3>
+              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">{kpi.label}</p>
+              <h3 className="text-2xl font-bold text-slate-900 tracking-tight">{kpi.value}</h3>
            </div>
          ))}
       </div>
 
-      {/* Analytics Highlights */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-         {/* Performance Matrix */}
-         <div className="lg:col-span-2 bg-white rounded-[40px] border border-slate-200/60 p-10 shadow-sm overflow-hidden relative">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+         <div className="lg:col-span-2 bg-white rounded-2xl border border-slate-200 p-8 shadow-sm relative overflow-hidden group">
             <div className="flex justify-between items-start mb-10">
                <div>
-                  <h3 className="text-xl font-black text-slate-900 tracking-tight">Revenue Trajectory</h3>
-                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-1">Global performance metrics</p>
+                  <h3 className="text-base font-bold text-slate-900">Revenue Trajectory</h3>
+                  <p className="text-xs text-slate-500">Flow analysis of global premium collections</p>
                </div>
-               <div className="flex gap-2">
-                  {['Weekly', 'Monthly', 'Quarterly'].map(t => (
-                    <button key={t} className={`px-4 py-1.5 rounded-xl text-[10px] font-black transition-all ${t === 'Monthly' ? 'bg-slate-900 text-white' : 'bg-slate-50 text-slate-400 hover:bg-slate-100'}`}>{t}</button>
+               <div className="flex gap-2 bg-slate-50 p-1 rounded-lg">
+                  {['Weekly', 'Monthly'].map(t => (
+                    <button key={t} className={`px-4 py-1.5 rounded-md text-[10px] font-bold transition-all ${t === 'Monthly' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-400'}`}>{t}</button>
                   ))}
                </div>
             </div>
             
-            {/* Mock Chart Visual */}
-            <div className="h-64 w-full flex items-end gap-3 px-4">
-               {[40, 70, 45, 90, 65, 85, 100, 75, 95, 60, 80, 110].map((h, i) => (
-                 <div key={i} className="flex-1 group relative">
-                    <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-[10px] font-black px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">₹{h}L</div>
-                    <div 
-                      className={`w-full rounded-t-lg transition-all duration-1000 ease-out delay-[${i*50}ms] ${i === 11 ? 'bg-indigo-600 shadow-[0_0_20px_rgba(79,70,229,0.4)]' : 'bg-slate-100 group-hover:bg-indigo-200'}`} 
-                      style={{ height: `${h}%` }}
-                    ></div>
-                 </div>
-               ))}
+            {/* New Area Chart Format (SVG) */}
+            <div className="h-64 w-full relative">
+               <svg className="w-full h-full" viewBox="0 0 1000 300" preserveAspectRatio="none">
+                  <defs>
+                     <linearGradient id="gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" stopColor="#4F46E5" stopOpacity="0.2" />
+                        <stop offset="100%" stopColor="#4F46E5" stopOpacity="0" />
+                     </linearGradient>
+                  </defs>
+                  {/* Area Fill */}
+                  <path 
+                    d="M 0 300 L 0 250 C 100 240, 200 280, 300 240 C 400 200, 500 220, 600 150 C 700 80, 800 120, 900 50 L 1000 30 L 1000 300 Z" 
+                    fill="url(#gradient)" 
+                  />
+                  {/* Trend Line */}
+                  <path 
+                    d="M 0 250 C 100 240, 200 280, 300 240 C 400 200, 500 220, 600 150 C 700 80, 800 120, 900 50 L 1000 30" 
+                    fill="none" 
+                    stroke="#4F46E5" 
+                    strokeWidth="4" 
+                    strokeLinecap="round" 
+                    className="animate-pulse"
+                  />
+                  {/* Milestone Points */}
+                  <circle cx="300" cy="240" r="6" fill="#4F46E5" stroke="white" strokeWidth="2" />
+                  <circle cx="600" cy="150" r="6" fill="#4F46E5" stroke="white" strokeWidth="2" />
+                  <circle cx="900" cy="50" r="6" fill="#4F46E5" stroke="white" strokeWidth="2" />
+               </svg>
+
+               {/* Background Grid Lines */}
+               <div className="absolute inset-0 flex flex-col justify-between pointer-events-none">
+                  {[1, 2, 3, 4].map(i => (
+                    <div key={i} className="w-full border-t border-slate-50"></div>
+                  ))}
+               </div>
             </div>
-            <div className="flex justify-between mt-6 px-4">
-               {['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'].map(m => (
-                 <span key={m} className="text-[9px] font-black text-slate-400 uppercase tracking-widest">{m}</span>
-               ))}
+
+            <div className="flex justify-between mt-6 px-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+               <span>Q1 Forecast</span>
+               <span>Mid-Quarter</span>
+               <span>Current Active</span>
             </div>
          </div>
 
-         {/* Distribution & Ratios */}
-         <div className="bg-slate-900 rounded-[40px] p-10 text-white shadow-2xl relative overflow-hidden">
-            <h3 className="text-xl font-black tracking-tight mb-8">Business Health</h3>
-            
-            <div className="space-y-8">
-               <div className="space-y-3">
-                  <div className="flex justify-between items-center">
-                     <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Loss Ratio</p>
-                     <span className="text-emerald-400 text-xs font-black">42.5% Optimal</span>
-                  </div>
-                  <div className="h-2 w-full bg-white/5 rounded-full overflow-hidden">
-                     <div className="h-full bg-emerald-500 rounded-full" style={{ width: '42.5%' }}></div>
-                  </div>
-               </div>
-
-               <div className="space-y-3">
-                  <div className="flex justify-between items-center">
-                     <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Retention Rate</p>
-                     <span className="text-indigo-400 text-xs font-black">94.2% High</span>
-                  </div>
-                  <div className="h-2 w-full bg-white/5 rounded-full overflow-hidden">
-                     <div className="h-full bg-indigo-500 rounded-full" style={{ width: '94.2%' }}></div>
-                  </div>
-               </div>
-
-               <div className="space-y-3">
-                  <div className="flex justify-between items-center">
-                     <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Agency Performance</p>
-                     <span className="text-blue-400 text-xs font-black">88% Target</span>
-                  </div>
-                  <div className="h-2 w-full bg-white/5 rounded-full overflow-hidden">
-                     <div className="h-full bg-blue-500 rounded-full" style={{ width: '88%' }}></div>
-                  </div>
-               </div>
+         {/* Health Ratios */}
+         <div className="bg-slate-900 rounded-2xl p-8 text-white shadow-xl flex flex-col justify-between">
+            <h3 className="text-base font-bold mb-6">System Ratios</h3>
+            <div className="space-y-6">
+               {[
+                 { label: 'Loss Ratio', val: '42.5%', color: 'emerald' },
+                 { label: 'Retention', val: '94.2%', color: 'indigo' },
+                 { label: 'Growth', val: '12.8%', color: 'blue' }
+               ].map((r, i) => (
+                 <div key={i} className="space-y-2">
+                    <div className="flex justify-between text-[10px] font-bold uppercase tracking-wider">
+                       <span className="text-slate-500">{r.label}</span>
+                       <span className="text-white">{r.val}</span>
+                    </div>
+                    <div className="h-1.5 w-full bg-white/10 rounded-full overflow-hidden">
+                       <div className={`h-full bg-${r.color}-500`} style={{ width: r.val }}></div>
+                    </div>
+                 </div>
+               ))}
             </div>
-
-            <div className="mt-12 p-6 bg-white/5 rounded-3xl border border-white/10">
-               <div className="flex items-center gap-3 mb-4">
-                  <Layers className="w-4 h-4 text-indigo-400" />
-                  <p className="text-xs font-black uppercase tracking-widest">Master Audit</p>
-               </div>
-               <p className="text-[10px] text-slate-400 font-medium leading-relaxed">System security level is currently set to <span className="text-white font-black underline">MAXIMUM</span>. All transactions are being logged and verified.</p>
-               <button className="w-full mt-4 flex items-center justify-center gap-2 py-3 bg-white text-slate-900 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-indigo-50 transition-all">
-                  Security Log <ArrowRight className="w-3.5 h-3.5" />
+            
+            <div className="mt-8 pt-6 border-t border-white/5">
+               <button className="w-full flex items-center justify-center gap-2 py-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all">
+                  Run Full Audit <ArrowRight className="w-3.5 h-3.5" />
                </button>
             </div>
          </div>
