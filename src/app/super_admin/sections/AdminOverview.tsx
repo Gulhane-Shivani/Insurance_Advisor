@@ -72,33 +72,32 @@ const AdminOverview: React.FC = () => {
                </div>
             </div>
             
-            {/* New Area Chart Format (SVG) */}
+            {/* Updated Area Chart Format (SVG) - Color: Sunset Amber */}
             <div className="h-64 w-full relative">
                <svg className="w-full h-full" viewBox="0 0 1000 300" preserveAspectRatio="none">
                   <defs>
-                     <linearGradient id="gradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                        <stop offset="0%" stopColor="#4F46E5" stopOpacity="0.2" />
-                        <stop offset="100%" stopColor="#4F46E5" stopOpacity="0" />
+                     <linearGradient id="gradient-sunset" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" stopColor="#F59E0B" stopOpacity="0.2" />
+                        <stop offset="100%" stopColor="#F59E0B" stopOpacity="0" />
                      </linearGradient>
                   </defs>
                   {/* Area Fill */}
                   <path 
                     d="M 0 300 L 0 250 C 100 240, 200 280, 300 240 C 400 200, 500 220, 600 150 C 700 80, 800 120, 900 50 L 1000 30 L 1000 300 Z" 
-                    fill="url(#gradient)" 
+                    fill="url(#gradient-sunset)" 
                   />
                   {/* Trend Line */}
                   <path 
                     d="M 0 250 C 100 240, 200 280, 300 240 C 400 200, 500 220, 600 150 C 700 80, 800 120, 900 50 L 1000 30" 
                     fill="none" 
-                    stroke="#4F46E5" 
+                    stroke="#F59E0B" 
                     strokeWidth="4" 
                     strokeLinecap="round" 
-                    className="animate-pulse"
                   />
                   {/* Milestone Points */}
-                  <circle cx="300" cy="240" r="6" fill="#4F46E5" stroke="white" strokeWidth="2" />
-                  <circle cx="600" cy="150" r="6" fill="#4F46E5" stroke="white" strokeWidth="2" />
-                  <circle cx="900" cy="50" r="6" fill="#4F46E5" stroke="white" strokeWidth="2" />
+                  <circle cx="300" cy="240" r="6" fill="#F59E0B" stroke="white" strokeWidth="2" />
+                  <circle cx="600" cy="150" r="6" fill="#F59E0B" stroke="white" strokeWidth="2" />
+                  <circle cx="900" cy="50" r="6" fill="#F59E0B" stroke="white" strokeWidth="2" />
                </svg>
 
                {/* Background Grid Lines */}

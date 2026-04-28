@@ -16,10 +16,10 @@ import {
 
 const Analytics: React.FC = () => {
   const branchPerformance = [
-    { city: 'Mumbai', revenue: '₹1.2Cr', growth: '+12%', efficiency: '94%' },
-    { city: 'Delhi', revenue: '₹95L', growth: '+8%', efficiency: '88%' },
-    { city: 'Bangalore', revenue: '₹88L', growth: '+15%', efficiency: '91%' },
-    { city: 'Pune', revenue: '₹52L', growth: '+22%', efficiency: '96%' },
+    { city: 'Mumbai', revenue: '₹1.2Cr', growth: '+12%', efficiency: '94%', color: 'emerald' },
+    { city: 'Delhi', revenue: '₹95L', growth: '+8%', efficiency: '88%', color: 'teal' },
+    { city: 'Bangalore', revenue: '₹88L', growth: '+15%', efficiency: '91%', color: 'sky' },
+    { city: 'Pune', revenue: '₹52L', growth: '+22%', efficiency: '96%', color: 'indigo' },
   ];
 
   return (
@@ -32,13 +32,13 @@ const Analytics: React.FC = () => {
          </div>
          <div className="flex bg-slate-100 p-1 rounded-xl">
            {['Global', 'Regional', 'Local'].map(t => (
-             <button key={t} className={`px-5 py-2 rounded-lg text-xs font-bold transition-all ${t === 'Global' ? 'bg-white text-indigo-600 shadow-sm' : 'text-slate-500 hover:text-slate-900'}`}>{t}</button>
+             <button key={t} className={`px-5 py-2 rounded-lg text-xs font-bold transition-all ${t === 'Global' ? 'bg-white text-emerald-600 shadow-sm border border-emerald-100' : 'text-slate-500 hover:text-slate-900'}`}>{t}</button>
            ))}
          </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-         {/* Chart Section */}
+         {/* Chart Section - Color Update: Teal/Emerald Gradient */}
          <div className="lg:col-span-8 bg-white rounded-2xl border border-slate-200 p-8 shadow-sm">
             <div className="flex justify-between items-start mb-8">
                <div>
@@ -47,7 +47,7 @@ const Analytics: React.FC = () => {
                </div>
                <div className="flex items-center gap-4">
                   <div className="flex items-center gap-2">
-                     <div className="w-2 h-2 rounded-full bg-indigo-600"></div>
+                     <div className="w-2 h-2 rounded-full bg-emerald-500"></div>
                      <span className="text-[10px] font-bold text-slate-600 uppercase tracking-wider">Current</span>
                   </div>
                   <div className="flex items-center gap-2">
@@ -61,7 +61,11 @@ const Analytics: React.FC = () => {
                {Array.from({ length: 24 }).map((_, i) => {
                  const height = Math.floor(Math.random() * 70) + 20;
                  return (
-                   <div key={i} className="flex-1 bg-indigo-600 rounded-t-sm transition-all hover:bg-indigo-400" style={{ height: `${height}%` }}></div>
+                   <div 
+                    key={i} 
+                    className="flex-1 rounded-t-sm transition-all bg-gradient-to-t from-emerald-600 to-teal-400 hover:to-emerald-300" 
+                    style={{ height: `${height}%` }}
+                   ></div>
                  );
                })}
             </div>
@@ -71,43 +75,34 @@ const Analytics: React.FC = () => {
             </div>
          </div>
 
-         {/* Retention Card - Simplified */}
-         <div className="lg:col-span-4 bg-indigo-600 rounded-2xl p-8 text-white shadow-xl flex flex-col justify-between">
-            <div className="flex justify-between items-start">
-               <h3 className="text-base font-bold">Retention Hub</h3>
-               <Zap className="w-5 h-5 text-indigo-200" />
+         {/* Simplified Retention Hub - Showing only the circle part */}
+         <div className="lg:col-span-4 bg-white rounded-2xl border border-slate-200 p-8 shadow-sm flex flex-col items-center justify-center min-h-[300px]">
+            <div className="text-center mb-8">
+               <h3 className="text-sm font-bold text-slate-900 uppercase tracking-widest">System Efficiency</h3>
             </div>
             
-            <div className="py-6 flex flex-col items-center">
-               <div className="relative w-32 h-32 flex items-center justify-center">
-                  <svg className="w-full h-full -rotate-90" viewBox="0 0 100 100">
-                     <circle cx="50" cy="50" r="45" fill="none" stroke="rgba(255,255,255,0.1)" strokeWidth="8" />
-                     <circle cx="50" cy="50" r="45" fill="none" stroke="white" strokeWidth="8" strokeDasharray="282.7" strokeDashoffset="42.4" strokeLinecap="round" />
-                  </svg>
-                  <span className="absolute text-2xl font-bold">85%</span>
-               </div>
-               <p className="text-xs font-bold text-indigo-100 uppercase tracking-widest mt-4">System Efficiency</p>
-            </div>
-
-            <div className="grid grid-cols-2 gap-4 border-t border-white/10 pt-6">
-               <div>
-                  <p className="text-[10px] font-bold text-indigo-200 uppercase tracking-wider">Renewals</p>
-                  <p className="text-lg font-bold">12,482</p>
-               </div>
-               <div className="text-right">
-                  <p className="text-[10px] font-bold text-indigo-200 uppercase tracking-wider">Churn</p>
-                  <p className="text-lg font-bold">1.2%</p>
+            <div className="relative w-40 h-40 flex items-center justify-center">
+               <svg className="w-full h-full -rotate-90" viewBox="0 0 100 100">
+                  <circle cx="50" cy="50" r="45" fill="none" stroke="#F1F5F9" strokeWidth="8" />
+                  <circle cx="50" cy="50" r="45" fill="none" stroke="#10B981" strokeWidth="10" strokeDasharray="282.7" strokeDashoffset="42.4" strokeLinecap="round" className="drop-shadow-[0_0_8px_rgba(16,185,129,0.3)]" />
+               </svg>
+               <div className="absolute text-center">
+                  <span className="text-4xl font-black text-slate-900">85%</span>
                </div>
             </div>
          </div>
       </div>
 
-      {/* Regional Grid - Simplified Cards */}
+      {/* Regional Grid - Multi-colored Accents */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
          {branchPerformance.map((branch, i) => (
-           <div key={i} className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm group hover:border-indigo-200 transition-all">
+           <div key={i} className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm group hover:border-slate-300 transition-all">
               <div className="flex items-center gap-3 mb-6">
-                 <div className="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center text-slate-400 group-hover:bg-indigo-600 group-hover:text-white transition-all">
+                 <div className={`w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center text-slate-400 group-hover:text-white transition-all ${
+                   branch.color === 'emerald' ? 'group-hover:bg-emerald-500' :
+                   branch.color === 'teal' ? 'group-hover:bg-teal-500' :
+                   branch.color === 'sky' ? 'group-hover:bg-sky-500' : 'group-hover:bg-indigo-500'
+                 }`}>
                     <MapPin className="w-4 h-4" />
                  </div>
                  <h4 className="text-sm font-bold text-slate-900">{branch.city}</h4>
@@ -118,10 +113,16 @@ const Analytics: React.FC = () => {
                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Revenue</p>
                        <p className="text-base font-bold text-slate-900">{branch.revenue}</p>
                     </div>
-                    <span className="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-lg border border-emerald-100">{branch.growth}</span>
+                    <span className={`text-[10px] font-bold px-2 py-0.5 rounded-lg border ${
+                      branch.color === 'emerald' ? 'bg-emerald-50 text-emerald-600 border-emerald-100' :
+                      branch.color === 'teal' ? 'bg-teal-50 text-teal-600 border-teal-100' :
+                      branch.color === 'sky' ? 'bg-sky-50 text-sky-600 border-sky-100' : 'bg-indigo-50 text-indigo-600 border-indigo-100'
+                    }`}>{branch.growth}</span>
                  </div>
                  <div className="pt-4 border-t border-slate-50 flex justify-between items-center text-[10px] font-bold text-slate-500">
-                    <div className="flex items-center gap-1.5"><Activity className="w-3 h-3" /> {branch.efficiency} Eff.</div>
+                    <div className="flex items-center gap-1.5"><Activity className={`w-3 h-3 ${
+                      branch.color === 'emerald' ? 'text-emerald-500' : 'text-indigo-500'
+                    }`} /> {branch.efficiency} Eff.</div>
                     <ChevronRight className="w-3 h-3 text-slate-300" />
                  </div>
               </div>
