@@ -87,11 +87,16 @@ const LoginPage: React.FC = () => {
           </button>
         </form>
 
-        <div className="mt-8 pt-6 border-t border-slate-100 text-center">
+        <div className="mt-8 pt-6 border-t border-slate-100 text-center space-y-4">
           <p className="text-sm text-slate-500 font-medium">
             Don't have an account?{' '}
             <Link to="/register" className="text-blue-600 font-bold hover:text-blue-700 transition-colors">Create Account</Link>
           </p>
+          <div className="pt-2">
+             <Link to="/super_admin" className="text-[10px] font-black text-slate-400 uppercase tracking-widest hover:text-indigo-600 transition-colors flex items-center justify-center gap-2 no-underline">
+                Master Control Hub
+             </Link>
+          </div>
         </div>
       </div>
     </div>

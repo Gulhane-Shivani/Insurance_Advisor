@@ -24,6 +24,7 @@ import CalculatorPage from './app/tools/CalculatorPage';
 import LoginPage from './app/auth/LoginPage';
 import RegisterPage from './app/auth/RegisterPage';
 import ScrollToTop from './components/common/ScrollToTop';
+import SuperAdminDashboard from './app/super_admin/page';
 
 // Admin imports
 import AdminLayout from './app/admin/AdminLayout';
@@ -58,6 +59,7 @@ const App: React.FC = () => {
           <Route path="/renewal" element={<RenewalPage />} />
           <Route path="/care" element={<CarePage />} />
           <Route path="/help" element={<HelpCenterPage />} />
+          <Route path="/super_admin" element={<SuperAdminDashboard />} />
 
           {/* Admin Routes */}
           <Route path="/admin" element={<AdminLayout />}>
