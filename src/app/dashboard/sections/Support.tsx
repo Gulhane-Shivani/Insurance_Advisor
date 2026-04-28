@@ -1,5 +1,5 @@
 import React from 'react';
-import { LifeBuoy, MessageSquare, Phone, Mail, FileQuestion, ChevronRight, Send, Search, Sparkles, ExternalLink } from 'lucide-react';
+import { LifeBuoy, MessageSquare, Phone, FileQuestion, ChevronRight, Send, Sparkles, ExternalLink } from 'lucide-react';
 
 const Support: React.FC = () => {
   const faqs = [

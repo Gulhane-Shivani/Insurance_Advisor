@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useAuth } from '../../context/AuthContext';
-import { Navigate, useNavigate, Link, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { 
   LayoutDashboard, 
   Users, 
@@ -10,12 +10,8 @@ import {
   Globe, 
   ShieldAlert, 
   LogOut, 
-  Bell, 
   Menu, 
   X,
-  Search,
-  ChevronRight,
-  Shield,
   ExternalLink,
   ChevronDown,
   User as UserIcon,
@@ -32,9 +28,8 @@ import Reports from './sections/Reports';
 import SystemConfig from './sections/SystemConfig';
 
 const SuperAdminDashboard: React.FC = () => {
-  const { user, logout } = useAuth();
+  const { logout } = useAuth();
   const navigate = useNavigate();
-  const location = useLocation();
   const [activeSection, setActiveSection] = useState('overview');
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);

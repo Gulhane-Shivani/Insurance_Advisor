@@ -7,7 +7,6 @@ import {
   Percent, 
   Mail, 
   Calculator, 
-  Globe, 
   ShieldCheck, 
   ChevronRight,
   Save,

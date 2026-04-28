@@ -1,5 +1,5 @@
 import React from 'react';
-import { ClipboardList, Plus, Search, CheckCircle2, Clock, MessageSquare, ChevronRight } from 'lucide-react';
+import { ClipboardList, Plus, CheckCircle2, Clock, MessageSquare } from 'lucide-react';
 
 const ServiceRequests: React.FC = () => {
   const requests = [
