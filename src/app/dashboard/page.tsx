@@ -1,18 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { Navigate, useNavigate, Link } from 'react-router-dom';
-import { 
-  LayoutDashboard, 
-  Shield, 
-  CreditCard, 
-  FileText, 
-  ClipboardList, 
-  User as UserIcon, 
-  Banknote, 
-  LifeBuoy, 
-  LogOut, 
-  Bell, 
-  Menu, 
+import {
+  LayoutDashboard,
+  Shield,
+  CreditCard,
+  FileText,
+  ClipboardList,
+  User as UserIcon,
+  Banknote,
+  LifeBuoy,
+  LogOut,
+  Bell,
+  Menu,
   X,
   ShieldCheck,
   ChevronRight,
@@ -141,9 +141,8 @@ const DashboardPage: React.FC = () => {
       {/* Main Content Area */}
       <main className={`transition-all duration-300 min-h-screen lg:ml-64`}>
         {/* Top Header */}
-        <header className={`sticky top-0 z-40 h-20 flex items-center justify-between px-6 lg:px-10 transition-all ${
-          scrolled ? 'bg-white/80 backdrop-blur-md border-b border-slate-100 shadow-sm' : 'bg-transparent'
-        }`}>
+        <header className={`sticky top-0 z-40 h-20 flex items-center justify-between px-6 lg:px-10 transition-all ${scrolled ? 'bg-white/80 backdrop-blur-md border-b border-slate-100 shadow-sm' : 'bg-transparent'
+          }`}>
           <div className="flex items-center gap-4">
             <button
               onClick={() => setIsSidebarOpen(true)}
