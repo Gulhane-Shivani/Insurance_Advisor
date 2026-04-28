@@ -52,7 +52,7 @@ const DashboardPage: React.FC = () => {
     { id: 'claims', label: 'Claims Center', icon: FileText },
     { id: 'requests', label: 'Services', icon: ClipboardList },
     { id: 'loan', label: 'Policy Loan', icon: Banknote },
-    { id: 'profile', label: 'Settings', icon: Settings },
+    { id: 'profile', label: 'My Profile', icon: UserIcon },
     { id: 'support', label: 'Help & Support', icon: LifeBuoy },
   ];
 
