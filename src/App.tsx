@@ -32,6 +32,7 @@ import AdminDashboard from './app/admin/AdminDashboard';
 import AdminUsers from './app/admin/AdminUsers';
 import AdminInsurance from './app/admin/AdminInsurance';
 import AgentDashboard from './app/agent_dashboard/page';
+import CSRDashboard from './app/csr_dashboard/page';
 
 const App: React.FC = () => {
   return (
@@ -62,6 +63,7 @@ const App: React.FC = () => {
           <Route path="/help" element={<HelpCenterPage />} />
           <Route path="/super_admin" element={<SuperAdminDashboard />} />
           <Route path="/agent_dashboard" element={<AgentDashboard />} />
+          <Route path="/csr_dashboard" element={<CSRDashboard />} />
 
           {/* Admin Routes */}
           <Route path="/admin" element={<AdminLayout />}>
