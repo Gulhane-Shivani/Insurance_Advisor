@@ -1,12 +1,12 @@
 /* src/app/agent_dashboard/sections/ActivityLog.tsx */
-import React, { useState } from 'react';
+import React from 'react';
 import { 
-  Phone, Mail, Users, FileText, CheckCircle2
+  Phone, Mail, Users, FileText, CheckCircle2,
+  Zap, Search, Filter, ArrowRight
 } from 'lucide-react';
-import { Card } from '../../../components/agent/UI';
+import { Card, Button } from '../../../components/agent/UI';
 
 const ActivityLog: React.FC = () => {
-
   const activities = [
     { type: 'Call', customer: 'Rajesh Kumar', description: 'Discussed Term Life renewal and premium adjustment.', time: '10:30 AM', date: 'Today', duration: '12m' },
     { type: 'Email', customer: 'Anjali Sharma', description: 'Sent personalized quote for Silver Shield Plus plan.', time: '09:15 AM', date: 'Today', duration: 'N/A' },
