@@ -33,7 +33,7 @@ import AdminDashboard from './app/admin/AdminDashboard';
 import AdminUsers from './app/admin/AdminUsers';
 import AdminInsurance from './app/admin/AdminInsurance';
 import AgentDashboard from './app/agent_dashboard/page';
-import CSRDashboard from './app/csr_dashboard/page.tsx';
+import CSRDashboard from './app/csr_dashboard/page';
 
 const App: React.FC = () => {
   return (
