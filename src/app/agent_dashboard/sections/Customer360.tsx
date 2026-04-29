@@ -2,9 +2,7 @@
 import React, { useState } from 'react';
 import { 
   User, Shield, Info, Phone, Mail, MapPin, 
-  FileText, History, Download, ExternalLink, 
-  PieChart, Activity, Briefcase, Zap, AlertCircle,
-  TrendingUp
+  FileText, History, Zap
 } from 'lucide-react';
 import { Card, Button } from '../../../components/agent/UI';
 

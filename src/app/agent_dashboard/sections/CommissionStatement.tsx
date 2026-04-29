@@ -2,8 +2,7 @@
 import React, { useState } from 'react';
 import { 
   Wallet, TrendingUp, DollarSign, Download, 
-  Calendar, Filter, Search, ChevronRight,
-  ArrowUpRight, ArrowDownRight, PieChart, BarChart3
+  Calendar, ChevronRight, ArrowUpRight
 } from 'lucide-react';
 import { Card, Button } from '../../../components/agent/UI';
 

@@ -2,8 +2,7 @@
 import React, { useState } from 'react';
 import { 
   UserPlus, Edit2, Trash2, Phone, Mail, 
-  Search as SearchIcon, Filter, 
-  Clock, AlertCircle, TrendingUp
+  Search as SearchIcon
 } from 'lucide-react';
 import { Card, Button } from '../../../components/agent/UI';
 import toast from 'react-hot-toast';
