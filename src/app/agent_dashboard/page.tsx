@@ -29,14 +29,6 @@ const AgentDashboard: React.FC = () => {
   // Mock user for testing without login
   const user = authUser || { name: 'Demo Agent', role: 'Elite Producer' };
 
-  /* 
-  useEffect(() => {
-    if (!isAuthenticated) {
-      navigate('/login');
-    }
-  }, [isAuthenticated, navigate]);
-  */
-
   const navItems = [
     { id: 'Overview', icon: LayoutDashboard, label: 'Dashboard' },
     { id: 'Leads', icon: UserPlus, label: 'My Leads' },
@@ -69,6 +61,7 @@ const AgentDashboard: React.FC = () => {
       {/* Sidebar */}
       <aside className={`fixed inset-y-0 left-0 z-50 w-72 bg-slate-900 text-white transition-transform duration-300 transform ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:relative lg:translate-x-0 shadow-2xl`}>
         <div className="flex flex-col h-full">
+          {/* Logo Section */}
           <div className="p-8">
             <div className="flex items-center gap-2 mb-10 px-2">
               <div className="w-9 h-9 bg-indigo-600 rounded-xl flex items-center justify-center text-white font-black text-xl shadow-lg shadow-indigo-500/20">
@@ -84,7 +77,7 @@ const AgentDashboard: React.FC = () => {
                 <button
                   key={item.id}
                   onClick={() => setActiveSection(item.id)}
-                  className={`w-full flex items-center gap-3 px-5 py-4 rounded-2xl text-sm font-black transition-all group ${
+                  className={`w-full flex items-center gap-3 px-5 py-4 rounded-2xl text-sm font-semibold transition-all group ${
                     activeSection === item.id 
                     ? 'bg-indigo-600 text-white shadow-xl shadow-indigo-600/20' 
                     : 'text-slate-400 hover:bg-white/5 hover:text-white'
@@ -97,7 +90,9 @@ const AgentDashboard: React.FC = () => {
             </nav>
           </div>
 
-          <div className="mt-auto p-8 border-t border-white/5">
+          {/* Sidebar Footer */}
+          <div className="mt-auto p-8 border-t border-white/5 space-y-6">
+            {/* User Profile Card */}
             <div className="flex items-center gap-4 p-4 bg-white/5 rounded-3xl border border-white/5">
               <div className="w-10 h-10 rounded-full bg-indigo-500 flex items-center justify-center font-black text-white text-xs uppercase shadow-lg shadow-indigo-500/20">
                 {user?.name?.substring(0, 2) || 'AG'}
@@ -107,28 +102,31 @@ const AgentDashboard: React.FC = () => {
                 <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">{user?.role || 'Elite Producer'}</p>
               </div>
             </div>
-          <div className="mt-auto p-8 space-y-4">
-            <button 
-              className="w-full flex items-center justify-between gap-3 px-5 py-4 bg-indigo-600 text-white rounded-2xl text-sm font-black shadow-xl shadow-indigo-600/20 group hover:bg-indigo-500 transition-all"
-            >
-              <div className="flex items-center gap-3">
-                <div className="w-6 h-6 rounded-full border-2 border-white/30 flex items-center justify-center">
-                  <span className="text-[10px]">?</span>
+
+            {/* Support & Actions */}
+            <div className="space-y-3">
+              <button 
+                className="w-full flex items-center justify-between gap-3 px-5 py-4 bg-indigo-600 text-white rounded-2xl text-sm font-semibold shadow-xl shadow-indigo-600/20 group hover:bg-indigo-500 transition-all"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-6 h-6 rounded-full border-2 border-white/30 flex items-center justify-center">
+                    <span className="text-[10px]">?</span>
+                  </div>
+                  Help & Support
                 </div>
-                Help & Support
-              </div>
-              <ChevronRight size={16} className="text-white/50 group-hover:translate-x-1 transition-transform" />
-            </button>
+                <ChevronRight size={16} className="text-white/50 group-hover:translate-x-1 transition-transform" />
+              </button>
 
-            <button 
-              onClick={() => { logout(); navigate('/login'); }}
-              className="w-full flex items-center justify-center gap-2 px-5 py-3 border-2 border-white/10 text-white/50 hover:text-red-400 hover:border-red-400/30 text-xs font-black rounded-2xl transition-all uppercase tracking-widest"
-            >
-              <LogOut size={16} />
-              Sign Out
-            </button>
+              <button 
+                onClick={() => { logout(); navigate('/login'); }}
+                className="w-full flex items-center justify-center gap-2 px-5 py-3 border-2 border-white/10 text-white/50 hover:text-red-400 hover:border-red-400/30 text-xs font-semibold rounded-2xl transition-all uppercase tracking-widest"
+              >
+                <LogOut size={16} />
+                Sign Out
+              </button>
+            </div>
 
-            <div className="pt-4 flex justify-center">
+            <div className="flex justify-center">
                <p className="text-[9px] text-slate-600 font-bold tracking-[0.2em]">V1.2.0 STABLE</p>
             </div>
           </div>
