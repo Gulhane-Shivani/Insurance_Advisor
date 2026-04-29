@@ -1,6 +1,7 @@
 /* src/App.tsx */
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Toaster } from 'react-hot-toast';
 import { AuthProvider } from './context/AuthContext';
 import Home from './app/Home';
 import AboutPage from './app/about/page';
@@ -37,6 +38,14 @@ import CSRDashboard from './app/csr_dashboard/page';
 const App: React.FC = () => {
   return (
     <AuthProvider>
+      <Toaster
+        position="top-right"
+        toastOptions={{
+          duration: 3000,
+          style: { fontFamily: 'inherit', fontSize: '13px', fontWeight: 700 },
+          success: { iconTheme: { primary: '#7c3aed', secondary: '#fff' } },
+        }}
+      />
       <Router>
         <ScrollToTop />
         <Routes>

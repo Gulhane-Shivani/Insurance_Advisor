@@ -1,11 +1,9 @@
 /* src/app/csr_dashboard/page.tsx */
-'use client';
 import React, { useState } from 'react';
 import { 
-  LayoutDashboard, Search, Users, ShieldCheck, 
+  LayoutDashboard, Search, ShieldCheck, 
   RefreshCw, Ticket, MessageSquare, Settings, 
-  LogOut, Menu, X, Bell, User, ChevronRight, 
-  Phone, Mail, FileText
+  LogOut, Menu, X, Bell, ChevronRight
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
@@ -21,15 +19,13 @@ import PolicyServicing from './sections/PolicyServicing';
 import CSRCommunications from './sections/CSRCommunications';
 
 const CSRDashboard: React.FC = () => {
-  const { user: authUser, logout } = useAuth();
+  const { logout } = useAuth();
   const navigate = useNavigate();
   const [activeSection, setActiveSection] = useState('Overview');
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
-  const user = authUser || { name: 'Support Exec', role: 'Senior CSR' };
-
   const navItems = [
-    { id: 'Overview', icon: LayoutDashboard, label: 'Today\'s Tasks' },
+    { id: 'Overview', icon: LayoutDashboard, label: "Today's Tasks" },
     { id: 'Search', icon: Search, label: 'Customer 360°' },
     { id: 'Claims', icon: ShieldCheck, label: 'Claims Support' },
     { id: 'Renewals', icon: RefreshCw, label: 'Renewal Desk' },
@@ -37,6 +33,16 @@ const CSRDashboard: React.FC = () => {
     { id: 'Servicing', icon: Settings, label: 'Policy Servicing' },
     { id: 'Comms', icon: MessageSquare, label: 'Communications' },
   ];
+
+  const sectionTitles: Record<string, string> = {
+    Overview: "Today's Tasks",
+    Search: 'Customer 360°',
+    Claims: 'Claims Support',
+    Renewals: 'Renewal Desk',
+    Tickets: 'Tickets & Queries',
+    Servicing: 'Policy Servicing',
+    Comms: 'Communications',
+  };
 
   const renderSection = () => {
     switch (activeSection) {
@@ -114,7 +120,7 @@ const CSRDashboard: React.FC = () => {
               {isSidebarOpen ? <X size={20} /> : <Menu size={20} />}
             </button>
             <div>
-              <h2 className="text-2xl font-black text-slate-800 tracking-tight">{activeSection}</h2>
+              <h2 className="text-2xl font-black text-slate-800 tracking-tight">{sectionTitles[activeSection]}</h2>
               <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-0.5">Customer Service Dashboard • Live</p>
             </div>
           </div>
