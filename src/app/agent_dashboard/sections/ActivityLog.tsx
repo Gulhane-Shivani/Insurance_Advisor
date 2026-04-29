@@ -2,8 +2,7 @@
 import React, { useState } from 'react';
 import { 
   Phone, Mail, Users, FileText, CheckCircle2, 
-  Clock, Calendar, Search, Filter, ArrowRight,
-  MessageSquare, UserPlus, Zap
+  Search, Filter, ArrowRight, Zap
 } from 'lucide-react';
 import { Card, Button } from '../../../components/agent/UI';
 

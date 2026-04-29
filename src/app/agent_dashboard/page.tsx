@@ -1,8 +1,7 @@
-/* src/app/agent_dashboard/page.tsx */
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { 
   LayoutDashboard, UserPlus, Users, Zap, Calendar, 
-  DollarSign, Activity, Settings, LogOut, Menu, X, Bell, Search, Shield, User, ChevronRight
+  DollarSign, Activity, Settings, LogOut, Menu, X, Bell, Search, User, ChevronRight
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
@@ -21,7 +20,7 @@ import Customer360 from './sections/Customer360';
 import AgentProfile from './sections/AgentProfile';
 
 const AgentDashboard: React.FC = () => {
-  const { user: authUser, logout, isAuthenticated } = useAuth();
+  const { user: authUser, logout } = useAuth();
   const navigate = useNavigate();
   const [activeSection, setActiveSection] = useState('Overview');
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);

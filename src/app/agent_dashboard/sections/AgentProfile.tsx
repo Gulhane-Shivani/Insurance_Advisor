@@ -2,9 +2,9 @@
 import React, { useState } from 'react';
 import { 
   User, Mail, Phone, MapPin, Award, 
-  Shield, CreditCard, Lock, Bell, Camera,
+  Shield, CreditCard, Lock, Camera,
   CheckCircle2, Briefcase, Calendar, Star,
-  Settings, ExternalLink, Save, FileText, ChevronRight
+  ExternalLink, Save, FileText, ChevronRight
 } from 'lucide-react';
 import { Card, Button } from '../../../components/agent/UI';
 import toast from 'react-hot-toast';
