@@ -9,13 +9,14 @@ const RegisterPage: React.FC = () => {
     full_name: '', 
     email: '', 
     password: '',
-    confirm_password: ''
+    confirm_password: '',
+    role: 'user'
   });
   const [loading, setLoading] = useState(false);
   const { register } = useAuth();
   const navigate = useNavigate();
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
@@ -102,6 +103,23 @@ const RegisterPage: React.FC = () => {
               disabled={loading}
               required
             />
+          </div>
+
+          <div className="space-y-1.5">
+            <label className="text-sm font-bold text-slate-700">Account Type</label>
+            <select
+              name="role"
+              value={formData.role}
+              onChange={handleChange}
+              className="w-full px-5 py-3 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all text-sm font-medium"
+              disabled={loading}
+            >
+              <option value="user">Standard User</option>
+              <option value="agent">Insurance Agent</option>
+              <option value="csr">Customer Support (CSR)</option>
+              <option value="admin">Administrator</option>
+              <option value="super_admin">Super Admin</option>
+            </select>
           </div>
 
           <button

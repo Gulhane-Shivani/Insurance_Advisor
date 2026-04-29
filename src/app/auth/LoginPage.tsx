@@ -20,10 +20,18 @@ const LoginPage: React.FC = () => {
     try {
       const userData = await login(formData);
       toast.success('Logged in successfully!');
-      if (userData && userData.role === 'admin') {
-        navigate('/admin/dashboard');
-      } else {
-        navigate('/dashboard');
+      if (userData) {
+        if (userData.role === 'super_admin') {
+          navigate('/super_admin');
+        } else if (userData.role === 'admin') {
+          navigate('/admin/dashboard');
+        } else if (userData.role === 'agent') {
+          navigate('/agent_dashboard');
+        } else if (userData.role === 'csr') {
+          navigate('/csr_dashboard');
+        } else {
+          navigate('/dashboard');
+        }
       }
     } catch (error: any) {
       const errorMsg = error.response?.data?.detail || 'Invalid email or password';
