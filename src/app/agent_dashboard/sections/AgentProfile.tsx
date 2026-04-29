@@ -1,10 +1,10 @@
 /* src/app/agent_dashboard/sections/AgentProfile.tsx */
 import React, { useState } from 'react';
 import { 
-  User, Mail, Phone, MapPin, Award, 
-  Shield, CreditCard, Lock, Camera,
-  CheckCircle2, Briefcase, Calendar, Star,
-  ExternalLink, Save, FileText, ChevronRight
+  User, Phone, MapPin, Award, 
+  CreditCard, Lock, Camera,
+  CheckCircle2, Briefcase, Calendar,
+  Save, FileText, ChevronRight
 } from 'lucide-react';
 import { Card, Button } from '../../../components/agent/UI';
 import toast from 'react-hot-toast';

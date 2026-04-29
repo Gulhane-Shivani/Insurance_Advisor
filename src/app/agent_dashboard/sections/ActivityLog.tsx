@@ -1,13 +1,11 @@
 /* src/app/agent_dashboard/sections/ActivityLog.tsx */
 import React, { useState } from 'react';
 import { 
-  Phone, Mail, Users, FileText, CheckCircle2, 
-  Search, Filter, ArrowRight, Zap
+  Phone, Mail, Users, FileText, CheckCircle2
 } from 'lucide-react';
-import { Card, Button } from '../../../components/agent/UI';
+import { Card } from '../../../components/agent/UI';
 
 const ActivityLog: React.FC = () => {
-  const [activeTab, setActiveTab] = useState('All');
 
   const activities = [
     { type: 'Call', customer: 'Rajesh Kumar', description: 'Discussed Term Life renewal and premium adjustment.', time: '10:30 AM', date: 'Today', duration: '12m' },

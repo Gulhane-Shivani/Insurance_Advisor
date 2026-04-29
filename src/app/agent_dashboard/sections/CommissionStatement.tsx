@@ -1,7 +1,7 @@
 /* src/app/agent_dashboard/sections/CommissionStatement.tsx */
 import React, { useState } from 'react';
 import { 
-  Wallet, TrendingUp, DollarSign, Download, 
+  Wallet, Download, 
   Calendar, ChevronRight, ArrowUpRight
 } from 'lucide-react';
 import { Card, Button } from '../../../components/agent/UI';
