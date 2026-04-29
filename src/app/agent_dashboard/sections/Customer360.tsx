@@ -1,0 +1,247 @@
+/* src/app/agent_dashboard/sections/Customer360.tsx */
+import React, { useState } from 'react';
+import { 
+  User, Shield, Info, Phone, Mail, MapPin, 
+  FileText, History, Download, ExternalLink, 
+  PieChart, Activity, Briefcase, Zap, AlertCircle,
+  TrendingUp, Calendar, ArrowRight
+} from 'lucide-react';
+import { Card, Button } from '../../../components/agent/UI';
+
+const Customer360: React.FC = () => {
+  const [activeTab, setActiveTab] = useState('Overview');
+
+  const customer = {
+    name: 'Amitabh Bachchan',
+    id: 'CUST-8800',
+    role: 'Primary Insured',
+    status: 'VIP Client',
+    since: 'Oct 2022',
+    lastContact: 'Today, 10:30 AM',
+    nextRenewal: 'May 15, 2026',
+    totalPolicies: 4,
+    totalPremium: '₹2,45,000/yr',
+    claimsRatio: '0%',
+    details: {
+      occupation: 'Senior Executive / Consultant',
+      annualIncome: '₹50 LPA+',
+      residence: 'Juhu, Mumbai, MH',
+      age: 81,
+      healthStatus: 'Excellent'
+    },
+    activePolicies: [
+      { id: '1', type: 'Term Life', plan: 'HDFC Click 2 Protect', premium: '₹45,000', status: 'Active' },
+      { id: '2', type: 'Health', plan: 'Star Health Optima', premium: '₹22,000', status: 'Active' },
+    ],
+    recentActivities: [
+      { id: '1', type: 'Call', text: 'Renewal discussion for Term Life', date: 'Today' },
+      { id: '2', type: 'Email', text: 'Sent updated portfolio summary', date: 'Yesterday' },
+    ]
+  };
+
+  const tabs = [
+    { id: 'Overview', icon: User },
+    { id: 'Policies', icon: Shield },
+    { id: 'Activity', icon: History },
+    { id: 'Documents', icon: FileText }
+  ];
+
+  return (
+    <div className="space-y-8 pb-10 animate-fade-in">
+      {/* Profile Header */}
+      <Card className="p-10 bg-slate-900 text-white border-none shadow-2xl relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-1/2 h-full opacity-10 bg-gradient-to-l from-indigo-500 to-transparent"></div>
+        <div className="relative z-10 flex flex-col lg:flex-row gap-10 items-center">
+          <div className="relative">
+             <div className="w-40 h-40 rounded-[48px] bg-white/10 flex items-center justify-center border-4 border-white/20 backdrop-blur-xl shadow-2xl group transition-all duration-500 hover:rotate-3">
+                <User size={80} className="text-white/20 group-hover:text-white/40 transition-colors" />
+             </div>
+             <div className="absolute -bottom-2 -right-2 px-4 py-1.5 bg-indigo-600 rounded-xl text-[10px] font-black uppercase tracking-widest shadow-xl border-2 border-slate-900">
+                {customer.status}
+             </div>
+          </div>
+          
+          <div className="flex-1 text-center lg:text-left space-y-4">
+             <div>
+                <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 mb-2">
+                   <h2 className="text-4xl font-black tracking-tight">{customer.name}</h2>
+                   <span className="px-3 py-1 bg-white/10 rounded-lg text-[10px] font-bold text-slate-400 uppercase tracking-widest border border-white/5">{customer.id}</span>
+                </div>
+                <div className="flex flex-wrap items-center justify-center lg:justify-start gap-6 text-sm font-bold text-slate-400">
+                   <p className="flex items-center gap-2"><Phone size={16} className="text-indigo-400" /> +91 98XXX XXX11</p>
+                   <p className="flex items-center gap-2"><Mail size={16} className="text-indigo-400" /> amitabh@example.com</p>
+                   <p className="flex items-center gap-2"><MapPin size={16} className="text-indigo-400" /> Mumbai, India</p>
+                </div>
+             </div>
+
+             <div className="flex flex-wrap items-center justify-center lg:justify-start gap-3">
+                <Button size="sm" variant="secondary" className="bg-white text-slate-900 hover:bg-slate-50 border-none shadow-lg">Edit Profile</Button>
+                <Button size="sm" variant="outline" className="border-white/20 text-white hover:bg-white/5">Send Message</Button>
+                <button className="p-2.5 bg-white/5 border border-white/10 rounded-xl text-white hover:bg-indigo-600 transition-all shadow-lg"><Zap size={20} /></button>
+             </div>
+          </div>
+
+          <div className="lg:w-72 grid grid-cols-2 gap-4 border-l border-white/10 pl-10">
+             <div className="space-y-1">
+                <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Client Since</p>
+                <p className="text-base font-black text-white">{customer.since}</p>
+             </div>
+             <div className="space-y-1">
+                <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Total Policies</p>
+                <p className="text-base font-black text-white">{customer.totalPolicies}</p>
+             </div>
+             <div className="space-y-1">
+                <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Annual Prem.</p>
+                <p className="text-base font-black text-emerald-400">{customer.totalPremium}</p>
+             </div>
+             <div className="space-y-1">
+                <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Claims Ratio</p>
+                <p className="text-base font-black text-indigo-400">{customer.claimsRatio}</p>
+             </div>
+          </div>
+        </div>
+      </Card>
+      
+      {/* Tabs */}
+      <div className="flex flex-wrap gap-2 p-2 bg-slate-100 rounded-[24px] w-fit shadow-inner">
+        {tabs.map(tab => (
+          <button 
+            key={tab.id} 
+            onClick={() => setActiveTab(tab.id)} 
+            className={`flex items-center gap-2 px-8 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all duration-300 ${activeTab === tab.id ? 'bg-white text-indigo-600 shadow-xl scale-105' : 'text-slate-500 hover:text-slate-800'}`}
+          >
+            <tab.icon size={14} />
+            {tab.id}
+          </button>
+        ))}
+      </div>
+      
+      {/* Tab Content */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+         <div className="lg:col-span-8 space-y-8">
+            {activeTab === 'Overview' && (
+              <>
+                <Card className="p-8 border-none shadow-xl shadow-slate-200/50">
+                  <h3 className="text-lg font-black text-slate-800 mb-8 flex items-center gap-2"><Info size={20} className="text-indigo-600" /> Essential Details</h3>
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-10">
+                     <div className="space-y-1">
+                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Occupation</p>
+                        <p className="text-sm font-bold text-slate-800">{customer.details.occupation}</p>
+                     </div>
+                     <div className="space-y-1">
+                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Annual Income</p>
+                        <p className="text-sm font-bold text-slate-800">{customer.details.annualIncome}</p>
+                     </div>
+                     <div className="space-y-1">
+                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Age</p>
+                        <p className="text-sm font-bold text-slate-800">{customer.details.age} Years</p>
+                     </div>
+                     <div className="space-y-1">
+                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Health Status</p>
+                        <p className="text-sm font-bold text-emerald-600 uppercase italic">{customer.details.healthStatus}</p>
+                     </div>
+                     <div className="space-y-1 col-span-2">
+                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Residence</p>
+                        <p className="text-sm font-bold text-slate-800">{customer.details.residence}</p>
+                     </div>
+                  </div>
+                </Card>
+
+                <Card className="p-8 border-none shadow-xl shadow-slate-200/50">
+                  <h3 className="text-lg font-black text-slate-800 mb-8 flex items-center gap-2"><Briefcase size={20} className="text-indigo-600" /> Active Coverage</h3>
+                  <div className="space-y-4">
+                     {customer.activePolicies.map(pol => (
+                       <div key={pol.id} className="flex items-center justify-between p-5 bg-slate-50 rounded-2xl border border-slate-100 hover:border-indigo-100 transition-colors">
+                          <div className="flex items-center gap-4">
+                             <div className="w-10 h-10 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-indigo-600">
+                                <Shield size={18} />
+                             </div>
+                             <div>
+                                <p className="text-sm font-black text-slate-800">{pol.plan}</p>
+                                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{pol.type}</p>
+                             </div>
+                          </div>
+                          <div className="text-right">
+                             <p className="text-sm font-black text-slate-800">{pol.premium}</p>
+                             <span className="text-[9px] font-black text-emerald-600 uppercase bg-emerald-50 px-2 py-0.5 rounded tracking-tighter">Active</span>
+                          </div>
+                       </div>
+                     ))}
+                  </div>
+                </Card>
+              </>
+            )}
+
+            {activeTab === 'Activity' && (
+              <Card className="p-8 border-none shadow-xl shadow-slate-200/50">
+                 <h3 className="text-lg font-black text-slate-800 mb-8 flex items-center gap-2"><History size={20} className="text-indigo-600" /> Interaction History</h3>
+                 <div className="space-y-8 relative before:absolute before:left-[19px] before:top-2 before:bottom-2 before:w-0.5 before:bg-slate-100">
+                    {customer.recentActivities.map((act, i) => (
+                      <div key={i} className="flex gap-6 relative z-10">
+                         <div className="w-10 h-10 rounded-xl bg-white border-2 border-slate-100 flex items-center justify-center text-slate-400 group-hover:text-indigo-600 transition-colors">
+                            {act.type === 'Call' ? <Phone size={16} /> : <Mail size={16} />}
+                         </div>
+                         <div className="flex-1 pb-6 border-b border-slate-50 last:border-0">
+                            <div className="flex justify-between mb-1">
+                               <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{act.date}</p>
+                               <span className="text-[10px] font-black text-indigo-500 uppercase">{act.type}</span>
+                            </div>
+                            <p className="text-sm font-bold text-slate-700 leading-relaxed">{act.text}</p>
+                         </div>
+                      </div>
+                    ))}
+                 </div>
+              </Card>
+            )}
+
+            {activeTab === 'Documents' && (
+               <Card className="p-8 border-none shadow-xl shadow-slate-200/50">
+                  <h3 className="text-lg font-black text-slate-800 mb-8 flex items-center gap-2"><FileText size={20} className="text-indigo-600" /> Customer Documents</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                     {['KYC_Aadhar.pdf', 'Policy_Contract_HL88.pdf', 'Income_Proof_FY23.pdf', 'Renewal_Notice_2026.pdf'].map((doc, i) => (
+                       <div key={i} className="p-4 bg-slate-50 border border-slate-100 rounded-2xl flex items-center justify-between group hover:border-indigo-100 transition-all">
+                          <div className="flex items-center gap-3">
+                             <FileText className="text-slate-300 group-hover:text-indigo-400" size={20} />
+                             <span className="text-xs font-bold text-slate-600">{doc}</span>
+                          </div>
+                          <button className="text-slate-400 hover:text-indigo-600 transition-colors"><Download size={16} /></button>
+                       </div>
+                     ))}
+                  </div>
+               </Card>
+            )}
+         </div>
+
+         <div className="lg:col-span-4 space-y-8">
+            <Card className="p-8 border-none shadow-xl shadow-slate-200/50 bg-indigo-50/30">
+               <h4 className="text-sm font-black text-slate-800 uppercase tracking-widest mb-6 flex items-center gap-2">
+                  <TrendingUp size={18} className="text-indigo-600" /> Cross-Sell Analysis
+               </h4>
+               <p className="text-xs font-medium text-slate-500 leading-relaxed mb-6">
+                  Based on income and family status, this client is a high-potential candidate for **Critical Illness Rider** or **Retirement Planning**.
+               </p>
+               <Button variant="primary" size="sm" className="w-full" icon={<Zap size={14} />}>Generate Proposal</Button>
+            </Card>
+
+            <Card className="p-8 border-none shadow-xl shadow-slate-200/50">
+               <h4 className="text-sm font-black text-slate-800 uppercase tracking-widest mb-6 flex items-center gap-2">
+                  <AlertCircle size={18} className="text-amber-500" /> Alerts
+               </h4>
+               <div className="space-y-4">
+                  <div className="p-4 bg-amber-50 border border-amber-100 rounded-2xl">
+                     <p className="text-xs font-bold text-amber-900 leading-relaxed">
+                        Policy HL-77889922 renewal is pending. Grace period starts in 15 days.
+                     </p>
+                     <button className="text-[10px] font-black text-amber-600 mt-2 uppercase tracking-widest flex items-center gap-1">
+                        Send Reminder <ArrowRight size={12} />
+                     </button>
+                  </div>
+               </div>
+            </Card>
+         </div>
+      </div>
+    </div>
+  );
+};
+
+export default Customer360;
