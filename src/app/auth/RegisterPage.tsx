@@ -117,8 +117,6 @@ const RegisterPage: React.FC = () => {
               <option value="user">Standard User</option>
               <option value="agent">Insurance Agent</option>
               <option value="csr">Customer Support (CSR)</option>
-              <option value="admin">Administrator</option>
-              <option value="super_admin">Super Admin</option>
             </select>
           </div>
 
