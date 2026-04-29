@@ -1,8 +1,8 @@
 /* src/app/agent_dashboard/sections/CustomerPolicies.tsx */
 import React, { useState } from 'react';
 import { 
-  ShieldCheck, AlertCircle, FileText, Download, ChevronDown, ChevronUp, 
-  User, Mail, Phone, MapPin, ExternalLink, Calendar, Plus, Filter, Search
+  ShieldCheck, AlertCircle, Download, ChevronDown, 
+  User, Mail, Phone, ExternalLink, Calendar, Plus, Filter, Search
 } from 'lucide-react';
 import { Card, Button } from '../../../components/agent/UI';
 import toast from 'react-hot-toast';

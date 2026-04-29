@@ -2,7 +2,7 @@
 import React from 'react';
 import { 
   FileCheck, RefreshCw, DollarSign, Target, ArrowUpRight, 
-  ArrowDownRight, Phone, Mail, Users, Plus, Zap, UserPlus, Shield
+  ArrowDownRight, Phone, Mail, Users, Zap, UserPlus
 } from 'lucide-react';
 import { 
   AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,

@@ -4,7 +4,7 @@ import {
   User, Shield, Info, Phone, Mail, MapPin, 
   FileText, History, Download, ExternalLink, 
   PieChart, Activity, Briefcase, Zap, AlertCircle,
-  TrendingUp, Calendar, ArrowRight
+  TrendingUp
 } from 'lucide-react';
 import { Card, Button } from '../../../components/agent/UI';
 

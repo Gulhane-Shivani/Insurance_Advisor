@@ -1,8 +1,8 @@
 /* src/app/agent_dashboard/sections/QuoteProposalTool.tsx */
 import React, { useState } from 'react';
 import { 
-  Zap, Save, Shield, Clock, Search, Filter, 
-  ArrowRight, CheckCircle2, Info, ChevronRight, 
+  Zap, Shield, Clock, Search, Filter, 
+  CheckCircle2, Info, ChevronRight, 
   Briefcase, Heart, Car, Umbrella
 } from 'lucide-react';
 import { Card, Button } from '../../../components/agent/UI';
