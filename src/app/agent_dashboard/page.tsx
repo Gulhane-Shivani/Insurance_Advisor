@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { 
   LayoutDashboard, UserPlus, Users, Zap, Calendar, 
-  DollarSign, Activity, Settings, LogOut, Menu, X, Bell, Search, Shield
+  DollarSign, Activity, Settings, LogOut, Menu, X, Bell, Search, Shield, User, ChevronRight
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
@@ -18,6 +18,7 @@ import TasksCalendar from './sections/TasksCalendar';
 import CommissionStatement from './sections/CommissionStatement';
 import ActivityLog from './sections/ActivityLog';
 import Customer360 from './sections/Customer360';
+import AgentProfile from './sections/AgentProfile';
 
 const AgentDashboard: React.FC = () => {
   const { user: authUser, logout, isAuthenticated } = useAuth();
@@ -44,6 +45,7 @@ const AgentDashboard: React.FC = () => {
     { id: 'Tasks', icon: Calendar, label: 'Tasks & Calendar' },
     { id: 'Commission', icon: DollarSign, label: 'Commission' },
     { id: 'Activity', icon: Activity, label: 'Activity Log' },
+    { id: 'Profile', icon: User, label: 'My Profile' },
   ];
 
   const renderSection = () => {
@@ -56,6 +58,7 @@ const AgentDashboard: React.FC = () => {
       case 'Activity': return <ActivityLog />;
       case 'Performance': return <PerformanceKPIs />;
       case '360': return <Customer360 />;
+      case 'Profile': return <AgentProfile />;
       case 'Overview':
       default: return <DashboardOverview setSection={setActiveSection} />;
     }
@@ -67,14 +70,13 @@ const AgentDashboard: React.FC = () => {
       <aside className={`fixed inset-y-0 left-0 z-50 w-72 bg-slate-900 text-white transition-transform duration-300 transform ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:relative lg:translate-x-0 shadow-2xl`}>
         <div className="flex flex-col h-full">
           <div className="p-8">
-            <div className="flex items-center gap-3 mb-10">
-              <div className="w-10 h-10 bg-indigo-600 rounded-2xl flex items-center justify-center shadow-lg shadow-indigo-500/20">
-                <Shield size={24} className="text-white" />
+            <div className="flex items-center gap-2 mb-10 px-2">
+              <div className="w-9 h-9 bg-indigo-600 rounded-xl flex items-center justify-center text-white font-black text-xl shadow-lg shadow-indigo-500/20">
+                IA
               </div>
-              <div>
-                <h1 className="text-xl font-black tracking-tighter uppercase italic">Antigravity</h1>
-                <p className="text-[10px] text-indigo-400 font-bold uppercase tracking-[0.3em]">Insurance Pro</p>
-              </div>
+              <h1 className="text-xl font-bold tracking-tighter text-white">
+                Insurance<span className="text-indigo-400">Advisor</span>
+              </h1>
             </div>
 
             <nav className="space-y-1.5">
@@ -105,13 +107,30 @@ const AgentDashboard: React.FC = () => {
                 <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">{user?.role || 'Elite Producer'}</p>
               </div>
             </div>
+          <div className="mt-auto p-8 space-y-4">
+            <button 
+              className="w-full flex items-center justify-between gap-3 px-5 py-4 bg-indigo-600 text-white rounded-2xl text-sm font-black shadow-xl shadow-indigo-600/20 group hover:bg-indigo-500 transition-all"
+            >
+              <div className="flex items-center gap-3">
+                <div className="w-6 h-6 rounded-full border-2 border-white/30 flex items-center justify-center">
+                  <span className="text-[10px]">?</span>
+                </div>
+                Help & Support
+              </div>
+              <ChevronRight size={16} className="text-white/50 group-hover:translate-x-1 transition-transform" />
+            </button>
+
             <button 
               onClick={() => { logout(); navigate('/login'); }}
-              className="w-full mt-6 flex items-center gap-2 px-5 py-3 text-slate-500 hover:text-red-400 text-xs font-bold transition-colors"
+              className="w-full flex items-center justify-center gap-2 px-5 py-3 border-2 border-white/10 text-white/50 hover:text-red-400 hover:border-red-400/30 text-xs font-black rounded-2xl transition-all uppercase tracking-widest"
             >
               <LogOut size={16} />
               Sign Out
             </button>
+
+            <div className="pt-4 flex justify-center">
+               <p className="text-[9px] text-slate-600 font-bold tracking-[0.2em]">V1.2.0 STABLE</p>
+            </div>
           </div>
         </div>
       </aside>
@@ -144,7 +163,10 @@ const AgentDashboard: React.FC = () => {
                 <Bell size={20} />
                 <span className="absolute top-2.5 right-2.5 w-2 h-2 bg-red-500 rounded-full border-2 border-white animate-pulse"></span>
               </button>
-              <button className="p-3 bg-slate-50 hover:bg-slate-100 rounded-xl text-slate-600 transition-all">
+              <button 
+                onClick={() => setActiveSection('Profile')}
+                className="p-3 bg-slate-50 hover:bg-slate-100 rounded-xl text-slate-600 transition-all"
+              >
                 <Settings size={20} />
               </button>
             </div>
