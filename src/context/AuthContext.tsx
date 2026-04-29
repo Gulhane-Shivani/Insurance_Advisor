@@ -46,7 +46,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     try {
       // credentials should be { email, password } or matching backend structure
       // If FastAPI uses OAuth2PasswordRequestForm, it expects form-data
-      const response = await api.post('/login', credentials);
+      const response = await api.post('/auth/login', credentials);
       const { access_token, user: userData } = response.data;
       
       localStorage.setItem('token', access_token);
@@ -60,7 +60,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   const register = async (userData: any) => {
     try {
-      await api.post('/register', userData);
+      await api.post('/auth/register', userData);
       // After registration, redirect to login is handled by the component
     } catch (error) {
       throw error;

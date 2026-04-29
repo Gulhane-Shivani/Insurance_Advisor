@@ -5,12 +5,12 @@ import toast from 'react-hot-toast';
 import { useAuth } from '../../context/AuthContext';
 
 const RegisterPage: React.FC = () => {
-  const [formData, setFormData] = useState({ 
-    full_name: '', 
-    email: '', 
+  const [formData, setFormData] = useState({
+    full_name: '',
+    email: '',
     password: '',
     confirm_password: '',
-    role: 'user'
+    role: 'USER'
   });
   const [loading, setLoading] = useState(false);
   const { register } = useAuth();
@@ -33,7 +33,17 @@ const RegisterPage: React.FC = () => {
       toast.success('Registration successful! Please log in.');
       navigate('/login');
     } catch (error: any) {
-      const errorMsg = error.response?.data?.detail || 'Registration failed. Try again.';
+      console.error('Registration Error:', error);
+      let errorMsg = 'Registration failed. Try again.';
+      
+      const detail = error.response?.data?.detail;
+      if (typeof detail === 'string') {
+        errorMsg = detail;
+      } else if (Array.isArray(detail)) {
+        // Handle FastAPI validation error list
+        errorMsg = detail.map((err: any) => `${err.loc.join('.')}: ${err.msg}`).join('\n');
+      }
+      
       toast.error(errorMsg);
     } finally {
       setLoading(false);
@@ -114,9 +124,7 @@ const RegisterPage: React.FC = () => {
               className="w-full px-5 py-3 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all text-sm font-medium"
               disabled={loading}
             >
-              <option value="user">Standard User</option>
-              <option value="agent">Insurance Agent</option>
-              <option value="csr">Customer Support (CSR)</option>
+              <option value="USER">User</option>
             </select>
           </div>
 
