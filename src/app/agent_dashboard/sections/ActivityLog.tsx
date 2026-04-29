@@ -11,11 +11,11 @@ const ActivityLog: React.FC = () => {
   const [activeTab, setActiveTab] = useState('All');
 
   const activities = [
-    { type: 'Call', customer: 'Amitabh Bachchan', description: 'Discussed Term Life renewal and premium adjustment.', time: '10:30 AM', date: 'Today', duration: '12m' },
-    { type: 'Email', customer: 'Arjun Mehta', description: 'Sent personalized quote for Silver Shield Plus plan.', time: '09:15 AM', date: 'Today', duration: 'N/A' },
-    { type: 'Meeting', customer: 'Sachin Tendulkar', description: 'Physical meeting at residence for car collection survey.', time: '04:30 PM', date: 'Yesterday', duration: '1h 15m' },
+    { type: 'Call', customer: 'Rajesh Kumar', description: 'Discussed Term Life renewal and premium adjustment.', time: '10:30 AM', date: 'Today', duration: '12m' },
+    { type: 'Email', customer: 'Anjali Sharma', description: 'Sent personalized quote for Silver Shield Plus plan.', time: '09:15 AM', date: 'Today', duration: 'N/A' },
+    { type: 'Meeting', customer: 'Sunil Gupta', description: 'Physical meeting at residence for car collection survey.', time: '04:30 PM', date: 'Yesterday', duration: '1h 15m' },
     { type: 'Quote', customer: 'Priya Sharma', description: 'Generated comparison quotes for Car Insurance.', time: '11:00 AM', date: 'Yesterday', duration: 'N/A' },
-    { type: 'Task', customer: 'Vikram Singh', description: 'Followed up on KYC document pending status.', time: '02:45 PM', date: '2 days ago', duration: '5m' },
+    { type: 'Task', customer: 'Suresh Gupta', description: 'Followed up on KYC document pending status.', time: '02:45 PM', date: '2 days ago', duration: '5m' },
   ];
 
   const getIcon = (type: string) => {
@@ -103,20 +103,6 @@ const ActivityLog: React.FC = () => {
             </div>
           ))}
         </div>
-      </div>
-
-      {/* Manual Entry Quick Action */}
-      <div className="py-10 flex justify-center">
-         <Card className="p-6 border-2 border-dashed border-slate-200 bg-white/50 flex flex-col md:flex-row items-center gap-6 max-w-2xl w-full">
-            <div className="w-16 h-16 rounded-[24px] bg-indigo-600 flex items-center justify-center text-white shadow-xl shadow-indigo-600/20">
-               <MessageSquare size={32} />
-            </div>
-            <div className="flex-1 text-center md:text-left">
-               <h4 className="text-lg font-black text-slate-800">Missed logging an interaction?</h4>
-               <p className="text-xs font-medium text-slate-500 mt-1">Keep your activity log updated to ensure better conversion tracking and commission accuracy.</p>
-            </div>
-            <Button variant="primary" size="sm">Log Interaction</Button>
-         </Card>
       </div>
     </div>
   );

@@ -28,9 +28,9 @@ const DashboardOverview: React.FC<{ setSection: (s: string) => void }> = ({ setS
   ];
 
   const recentLeads = [
-    { name: 'Arjun Mehta', type: 'Life', status: 'Hot', time: '2h ago' },
-    { name: 'Ananya Iyer', type: 'Business', status: 'Hot', time: '5h ago' },
-    { name: 'Rahul Verma', type: 'Health', status: 'Warm', time: '1d ago' },
+    { name: 'Rajesh Kumar', type: 'Life', status: 'Hot', time: '2h ago' },
+    { name: 'Anjali Sharma', type: 'Business', status: 'Hot', time: '5h ago' },
+    { name: 'Suresh Gupta', type: 'Health', status: 'Warm', time: '1d ago' },
   ];
 
   return (
@@ -175,9 +175,9 @@ const DashboardOverview: React.FC<{ setSection: (s: string) => void }> = ({ setS
           <h3 className="text-lg font-black text-slate-800 mb-6 flex items-center gap-2">Recent Activity</h3>
           <div className="space-y-6 relative before:absolute before:left-5 before:top-2 before:bottom-2 before:w-0.5 before:bg-slate-100">
             {[
-              { type: 'Call', text: 'Amitabh Bachchan', icon: Phone, color: 'text-blue-600', bg: 'bg-blue-50' },
-              { type: 'Email', text: 'Arjun Mehta', icon: Mail, color: 'text-amber-600', bg: 'bg-amber-50' },
-              { type: 'Meeting', text: 'Sachin Tendulkar', icon: Users, color: 'text-indigo-600', bg: 'bg-indigo-50' },
+              { type: 'Call', text: 'Rajesh Kumar', icon: Phone, color: 'text-blue-600', bg: 'bg-blue-50' },
+              { type: 'Email', text: 'Anjali Sharma', icon: Mail, color: 'text-amber-600', bg: 'bg-amber-50' },
+              { type: 'Meeting', text: 'Sunil Gupta', icon: Users, color: 'text-indigo-600', bg: 'bg-indigo-50' },
             ].map((item, idx) => (
               <div key={idx} className="flex gap-4 relative">
                 <div className={`w-10 h-10 rounded-xl ${item.bg} ${item.color} flex items-center justify-center z-10 border-4 border-white shadow-sm`}>
@@ -198,8 +198,8 @@ const DashboardOverview: React.FC<{ setSection: (s: string) => void }> = ({ setS
           <h3 className="text-lg font-black mb-6">Upcoming Reminders</h3>
           <div className="space-y-6">
             {[
-              { title: 'Renewal: Amitabh B.', date: 'May 15', sub: 'Policy HL-7788' },
-              { title: 'Meeting: Sachin T.', date: 'May 20', sub: 'Juhu Residence' },
+              { title: 'Renewal: Rajesh K.', date: 'May 15', sub: 'Policy HL-7788' },
+              { title: 'Meeting: Sunil G.', date: 'May 20', sub: 'Juhu Residence' },
             ].map((rem, i) => (
               <div key={i} className="p-4 bg-white/10 rounded-2xl border border-white/5 hover:bg-white/20 transition-all cursor-pointer">
                 <div className="flex justify-between items-start">

@@ -12,7 +12,7 @@ const Customer360: React.FC = () => {
   const [activeTab, setActiveTab] = useState('Overview');
 
   const customer = {
-    name: 'Amitabh Bachchan',
+    name: 'Rajesh Kumar',
     id: 'CUST-8800',
     role: 'Primary Insured',
     status: 'VIP Client',
@@ -25,8 +25,8 @@ const Customer360: React.FC = () => {
     details: {
       occupation: 'Senior Executive / Consultant',
       annualIncome: '₹50 LPA+',
-      residence: 'Juhu, Mumbai, MH',
-      age: 81,
+      residence: 'Dwarka, Delhi',
+      age: 45,
       healthStatus: 'Excellent'
     },
     activePolicies: [
@@ -69,8 +69,8 @@ const Customer360: React.FC = () => {
                 </div>
                 <div className="flex flex-wrap items-center justify-center lg:justify-start gap-6 text-sm font-bold text-slate-400">
                    <p className="flex items-center gap-2"><Phone size={16} className="text-indigo-400" /> +91 98XXX XXX11</p>
-                   <p className="flex items-center gap-2"><Mail size={16} className="text-indigo-400" /> amitabh@example.com</p>
-                   <p className="flex items-center gap-2"><MapPin size={16} className="text-indigo-400" /> Mumbai, India</p>
+                   <p className="flex items-center gap-2"><Mail size={16} className="text-indigo-400" /> rajesh.k@example.com</p>
+                   <p className="flex items-center gap-2"><MapPin size={16} className="text-indigo-400" /> Delhi, India</p>
                 </div>
              </div>
 
@@ -146,98 +146,8 @@ const Customer360: React.FC = () => {
                      </div>
                   </div>
                 </Card>
-
-                <Card className="p-8 border-none shadow-xl shadow-slate-200/50">
-                  <h3 className="text-lg font-black text-slate-800 mb-8 flex items-center gap-2"><Briefcase size={20} className="text-indigo-600" /> Active Coverage</h3>
-                  <div className="space-y-4">
-                     {customer.activePolicies.map(pol => (
-                       <div key={pol.id} className="flex items-center justify-between p-5 bg-slate-50 rounded-2xl border border-slate-100 hover:border-indigo-100 transition-colors">
-                          <div className="flex items-center gap-4">
-                             <div className="w-10 h-10 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-indigo-600">
-                                <Shield size={18} />
-                             </div>
-                             <div>
-                                <p className="text-sm font-black text-slate-800">{pol.plan}</p>
-                                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{pol.type}</p>
-                             </div>
-                          </div>
-                          <div className="text-right">
-                             <p className="text-sm font-black text-slate-800">{pol.premium}</p>
-                             <span className="text-[9px] font-black text-emerald-600 uppercase bg-emerald-50 px-2 py-0.5 rounded tracking-tighter">Active</span>
-                          </div>
-                       </div>
-                     ))}
-                  </div>
-                </Card>
               </>
             )}
-
-            {activeTab === 'Activity' && (
-              <Card className="p-8 border-none shadow-xl shadow-slate-200/50">
-                 <h3 className="text-lg font-black text-slate-800 mb-8 flex items-center gap-2"><History size={20} className="text-indigo-600" /> Interaction History</h3>
-                 <div className="space-y-8 relative before:absolute before:left-[19px] before:top-2 before:bottom-2 before:w-0.5 before:bg-slate-100">
-                    {customer.recentActivities.map((act, i) => (
-                      <div key={i} className="flex gap-6 relative z-10">
-                         <div className="w-10 h-10 rounded-xl bg-white border-2 border-slate-100 flex items-center justify-center text-slate-400 group-hover:text-indigo-600 transition-colors">
-                            {act.type === 'Call' ? <Phone size={16} /> : <Mail size={16} />}
-                         </div>
-                         <div className="flex-1 pb-6 border-b border-slate-50 last:border-0">
-                            <div className="flex justify-between mb-1">
-                               <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{act.date}</p>
-                               <span className="text-[10px] font-black text-indigo-500 uppercase">{act.type}</span>
-                            </div>
-                            <p className="text-sm font-bold text-slate-700 leading-relaxed">{act.text}</p>
-                         </div>
-                      </div>
-                    ))}
-                 </div>
-              </Card>
-            )}
-
-            {activeTab === 'Documents' && (
-               <Card className="p-8 border-none shadow-xl shadow-slate-200/50">
-                  <h3 className="text-lg font-black text-slate-800 mb-8 flex items-center gap-2"><FileText size={20} className="text-indigo-600" /> Customer Documents</h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                     {['KYC_Aadhar.pdf', 'Policy_Contract_HL88.pdf', 'Income_Proof_FY23.pdf', 'Renewal_Notice_2026.pdf'].map((doc, i) => (
-                       <div key={i} className="p-4 bg-slate-50 border border-slate-100 rounded-2xl flex items-center justify-between group hover:border-indigo-100 transition-all">
-                          <div className="flex items-center gap-3">
-                             <FileText className="text-slate-300 group-hover:text-indigo-400" size={20} />
-                             <span className="text-xs font-bold text-slate-600">{doc}</span>
-                          </div>
-                          <button className="text-slate-400 hover:text-indigo-600 transition-colors"><Download size={16} /></button>
-                       </div>
-                     ))}
-                  </div>
-               </Card>
-            )}
-         </div>
-
-         <div className="lg:col-span-4 space-y-8">
-            <Card className="p-8 border-none shadow-xl shadow-slate-200/50 bg-indigo-50/30">
-               <h4 className="text-sm font-black text-slate-800 uppercase tracking-widest mb-6 flex items-center gap-2">
-                  <TrendingUp size={18} className="text-indigo-600" /> Cross-Sell Analysis
-               </h4>
-               <p className="text-xs font-medium text-slate-500 leading-relaxed mb-6">
-                  Based on income and family status, this client is a high-potential candidate for **Critical Illness Rider** or **Retirement Planning**.
-               </p>
-               <Button variant="primary" size="sm" className="w-full" icon={<Zap size={14} />}>Generate Proposal</Button>
-            </Card>
-
-            <Card className="p-8 border-none shadow-xl shadow-slate-200/50">
-               <h4 className="text-sm font-black text-slate-800 uppercase tracking-widest mb-6 flex items-center gap-2">
-                  <AlertCircle size={18} className="text-amber-500" /> Alerts
-               </h4>
-               <div className="space-y-4">
-                  <div className="p-4 bg-amber-50 border border-amber-100 rounded-2xl">
-                     <p className="text-xs font-bold text-amber-900 leading-relaxed">
-                        Policy HL-77889922 renewal is pending. Grace period starts in 15 days.
-                     </p>
-                     <button className="text-[10px] font-black text-amber-600 mt-2 uppercase tracking-widest flex items-center gap-1">
-                        Send Reminder <ArrowRight size={12} />
-                     </button>
-                  </div>
-               </div>
-            </Card>
          </div>
       </div>
     </div>

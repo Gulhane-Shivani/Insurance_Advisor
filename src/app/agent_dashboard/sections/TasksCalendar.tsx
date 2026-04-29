@@ -11,10 +11,10 @@ import { Card, Button, Modal } from '../../../components/agent/UI';
 import toast from 'react-hot-toast';
 
 const initialTasks = [
-  { id: '1', title: 'Renewal Call: Amitabh Bachchan', time: '10:30 AM', category: 'Renewal', priority: 'High', completed: false, description: 'Policy HL-77889922 is expiring in 15 days.' },
-  { id: '2', title: 'Home Visit: Sachin Tendulkar', time: '02:00 PM', category: 'Meeting', priority: 'High', completed: false, description: 'Discussing high-value car collection insurance.' },
+  { id: '1', title: 'Renewal Call: Rajesh Kumar', time: '10:30 AM', category: 'Renewal', priority: 'High', completed: false, description: 'Policy HL-77889922 is expiring in 15 days.' },
+  { id: '2', title: 'Home Visit: Sunil Gupta', time: '02:00 PM', category: 'Meeting', priority: 'High', completed: false, description: 'Discussing high-value car collection insurance.' },
   { id: '3', title: 'Email Quote to Priya Sharma', time: '04:30 PM', category: 'Service', priority: 'Medium', completed: true, description: 'Follow up on the Car Insurance quote sent yesterday.' },
-  { id: '4', title: 'KYC Document Collection: Arjun', time: '11:15 AM', category: 'Admin', priority: 'Low', completed: false, description: 'Collect Aadhar and PAN copies.' },
+  { id: '4', title: 'KYC Document Collection: Rajesh K.', time: '11:15 AM', category: 'Admin', priority: 'Low', completed: false, description: 'Collect Aadhar and PAN copies.' },
 ];
 
 const TasksCalendar: React.FC = () => {

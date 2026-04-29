@@ -10,7 +10,7 @@ import toast from 'react-hot-toast';
 const initialPolicies = [
   { 
     id: '1', 
-    customer: 'Amitabh Bachchan', 
+    customer: 'Rajesh Kumar', 
     type: 'Term Life Insurance', 
     premium: '₹45,000/yr', 
     renewal: '2026-05-15', 
@@ -19,11 +19,11 @@ const initialPolicies = [
     sumAssured: '₹2.5 Crore',
     policyNo: 'HL-77889922',
     phone: '+91 98000 11111',
-    email: 'amitabh@bollywood.com'
+    email: 'rajesh.k@email.com'
   },
   { 
     id: '2', 
-    customer: 'Sachin Tendulkar', 
+    customer: 'Sunil Gupta', 
     type: 'Car - Comprehensive', 
     premium: '₹18,500/yr', 
     renewal: '2026-05-20', 
@@ -32,11 +32,11 @@ const initialPolicies = [
     sumAssured: '₹15 Lakh (IDV)',
     policyNo: 'IL-99003344',
     phone: '+91 98000 22222',
-    email: 'sachin@cricket.com'
+    email: 'sunil.g@email.com'
   },
   { 
     id: '3', 
-    customer: 'Deepika Padukone', 
+    customer: 'Anjali Sharma', 
     type: 'Family Floater Health', 
     premium: '₹22,000/yr', 
     renewal: '2026-06-10', 
@@ -45,7 +45,7 @@ const initialPolicies = [
     sumAssured: '₹10 Lakh',
     policyNo: 'SH-44556677',
     phone: '+91 98000 33333',
-    email: 'deepika@film.com'
+    email: 'anjali.s@email.com'
   },
 ];
 
@@ -193,8 +193,8 @@ const CustomerPolicies: React.FC = () => {
                 </div>
 
                 <div className="flex flex-col justify-end gap-3">
-                   <Button variant="primary" size="sm" icon={<Download size={14} />} onClick={() => handleDownload(item.policyNo)}>Download Policy PDF</Button>
-                   <Button variant="outline" size="sm" icon={<ExternalLink size={14} />}>View 360° Profile</Button>
+                   <Button variant="primary" size="sm" icon={<Download size={14} />} onClick={() => handleDownload(item.policyNo)}>Download PDF</Button>
+                   <Button variant="outline" size="sm" icon={<ExternalLink size={14} />}>View Profile</Button>
                 </div>
               </div>
             )}

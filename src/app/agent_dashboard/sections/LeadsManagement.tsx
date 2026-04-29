@@ -9,10 +9,10 @@ import { Card, Button, Modal } from '../../../components/agent/UI';
 import toast from 'react-hot-toast';
 
 const initialLeads = [
-  { id: '1', name: 'Arjun Mehta', type: 'Life Insurance', status: 'Hot', phone: '+91 98765 43210', email: 'arjun.mehta@email.com', lastContact: '2 hours ago', nextFollowUp: '2026-04-30', score: 85 },
-  { id: '2', name: 'Priya Sharma', type: 'Car Insurance', status: 'Warm', phone: '+91 98765 43211', email: 'priya.s@email.com', lastContact: '1 day ago', nextFollowUp: '2026-05-02', score: 62 },
-  { id: '3', name: 'Vikram Singh', type: 'Health Insurance', status: 'Cold', phone: '+91 98765 43212', email: 'v.singh@email.com', lastContact: '3 days ago', nextFollowUp: '2026-05-05', score: 24 },
-  { id: '4', name: 'Ananya Iyer', type: 'Business Insurance', status: 'Hot', phone: '+91 98765 43213', email: 'ananya.i@email.com', lastContact: '1 hour ago', nextFollowUp: '2026-04-29', score: 92 },
+  { id: '1', name: 'Rajesh Kumar', type: 'Life Insurance', status: 'Hot', phone: '+91 98765 43210', email: 'rajesh.k@email.com', lastContact: '2 hours ago', nextFollowUp: '2026-04-30', score: 85 },
+  { id: '2', name: 'Anjali Sharma', type: 'Car Insurance', status: 'Warm', phone: '+91 98765 43211', email: 'anjali.s@email.com', lastContact: '1 day ago', nextFollowUp: '2026-05-02', score: 62 },
+  { id: '3', name: 'Sunil Gupta', type: 'Health Insurance', status: 'Cold', phone: '+91 98765 43212', email: 'sunil.g@email.com', lastContact: '3 days ago', nextFollowUp: '2026-05-05', score: 24 },
+  { id: '4', name: 'Suresh Gupta', type: 'Business Insurance', status: 'Hot', phone: '+91 98765 43213', email: 'suresh.g@email.com', lastContact: '1 hour ago', nextFollowUp: '2026-04-29', score: 92 },
   { id: '5', name: 'Rahul Verma', type: 'Life Insurance', status: 'Warm', phone: '+91 98765 43214', email: 'rahul.v@email.com', lastContact: '5 hours ago', nextFollowUp: '2026-05-01', score: 55 },
 ];
 
@@ -99,7 +99,7 @@ const LeadsManagement: React.FC = () => {
                 <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest">Policy Interest</th>
                 <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest text-center">Lead Score</th>
                 <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest">Status</th>
-                <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest text-right">Actions</th>
+                <th className="px-8 py-5 text-right"></th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-50">
@@ -155,34 +155,6 @@ const LeadsManagement: React.FC = () => {
           </table>
         </div>
       </Card>
-
-      <Modal isOpen={isModalOpen} onClose={() => { setIsModalOpen(false); setEditingLead(null); }} title={editingLead ? 'Modify Lead Details' : 'Capture New Lead'}>
-        <form onSubmit={handleSave} className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-             <div className="space-y-1.5">
-               <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Full Name</label>
-               <input required className="w-full p-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-sm font-bold outline-none focus:border-indigo-500 focus:bg-white transition-all" defaultValue={editingLead?.name} placeholder="e.g. Rahul Gupta" />
-             </div>
-             <div className="space-y-1.5">
-               <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Insurance Interest</label>
-               <select className="w-full p-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-sm font-bold outline-none focus:border-indigo-500 focus:bg-white transition-all">
-                  <option>Life Insurance</option>
-                  <option>Health Insurance</option>
-                  <option>Car Insurance</option>
-                  <option>Business Insurance</option>
-               </select>
-             </div>
-          </div>
-          <div className="space-y-1.5">
-            <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Contact Information</label>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-               <input className="w-full p-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-sm font-bold outline-none focus:border-indigo-500 focus:bg-white transition-all" defaultValue={editingLead?.phone} placeholder="Phone Number" />
-               <input className="w-full p-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-sm font-bold outline-none focus:border-indigo-500 focus:bg-white transition-all" defaultValue={editingLead?.email} placeholder="Email Address" />
-            </div>
-          </div>
-          <Button type="submit" className="w-full py-4 text-sm shadow-xl shadow-indigo-600/20">Save Lead to Pipeline</Button>
-        </form>
-      </Modal>
     </div>
   );
 };
