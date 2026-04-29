@@ -1,6 +1,6 @@
 /* src/App.tsx */
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import { AuthProvider } from './context/AuthContext';
 import Home from './app/Home';
@@ -32,6 +32,16 @@ import AdminLayout from './app/admin/AdminLayout';
 import AdminDashboard from './app/admin/AdminDashboard';
 import AdminUsers from './app/admin/AdminUsers';
 import AdminInsurance from './app/admin/AdminInsurance';
+import BusinessOverview from './app/admin/sections/BusinessOverview';
+import LeadManagement from './app/admin/sections/LeadManagement';
+import PolicyManagement from './app/admin/sections/PolicyManagement';
+import TeamPerformance from './app/admin/sections/TeamPerformance';
+import Customer360 from './app/admin/sections/Customer360';
+import ApprovalsTasks from './app/admin/sections/ApprovalsTasks';
+import CommissionFinance from './app/admin/sections/CommissionFinance';
+import OperationsReports from './app/admin/sections/OperationsReports';
+import ContentCommunication from './app/admin/sections/ContentCommunication';
+
 import AgentDashboard from './app/agent_dashboard/page';
 import CSRDashboard from './app/csr_dashboard/CSRDashboard';
 
@@ -76,8 +86,18 @@ const App: React.FC = () => {
 
           {/* Admin Routes */}
           <Route path="/admin" element={<AdminLayout />}>
-            <Route path="dashboard" element={<AdminDashboard />} />
+            <Route index element={<Navigate to="/admin/overview" replace />} />
+            <Route path="overview" element={<BusinessOverview />} />
+            <Route path="leads" element={<LeadManagement />} />
+            <Route path="policies" element={<PolicyManagement />} />
+            <Route path="team" element={<TeamPerformance />} />
+            <Route path="customer-360" element={<Customer360 />} />
+            <Route path="approvals" element={<ApprovalsTasks />} />
+            <Route path="finance" element={<CommissionFinance />} />
+            <Route path="reports" element={<OperationsReports />} />
+            <Route path="communication" element={<ContentCommunication />} />
             <Route path="users" element={<AdminUsers />} />
+            <Route path="dashboard" element={<AdminDashboard />} />
             <Route path="insurance" element={<AdminInsurance />} />
           </Route>
         </Routes>
