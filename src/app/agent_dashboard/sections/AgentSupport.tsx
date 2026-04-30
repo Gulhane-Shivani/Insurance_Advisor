@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { HelpCircle, FileText, MessageCircle, Phone, ArrowRight, Search, Mail, ExternalLink, ChevronDown, CheckCircle2 } from 'lucide-react';
-import { Card, Button } from '../../../components/agent/UI';
+import { HelpCircle, FileText, MessageCircle, Phone, ArrowRight, Search, Mail, ExternalLink, ChevronDown } from 'lucide-react';
+import { Card } from '../../../components/agent/UI';
 import toast from 'react-hot-toast';
 
 const AgentSupport: React.FC = () => {

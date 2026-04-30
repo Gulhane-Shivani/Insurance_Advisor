@@ -43,7 +43,7 @@ import OperationsReports from './app/admin/sections/OperationsReports';
 import ContentCommunication from './app/admin/sections/ContentCommunication';
 
 import AgentDashboard from './app/agent_dashboard/page';
-import CSRDashboard from './app/CSR_dashboard';
+import CSRDashboard from './app/customer_service_dashboard';
 
 const App: React.FC = () => {
   return (
