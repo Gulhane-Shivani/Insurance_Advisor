@@ -5,7 +5,6 @@ import {
   BarChart3, 
   PieChart, 
   Calendar, 
-  Filter, 
   ArrowRight,
   TrendingUp,
   ShieldCheck,

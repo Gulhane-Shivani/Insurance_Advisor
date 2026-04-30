@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, Shield, Lock, Users, UserCheck } from 'lucide-react';
+import { X } from 'lucide-react';
 import toast from 'react-hot-toast';
 import api from '../../../services/api';
 

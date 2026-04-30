@@ -1,13 +1,10 @@
 import React, { useState } from 'react';
 import { 
-  Users, 
   Search, 
-  Filter, 
   Plus, 
   MoreVertical,
   Mail,
   Phone,
-  ArrowRight,
   TrendingUp,
   Clock,
   X

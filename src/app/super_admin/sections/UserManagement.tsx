@@ -5,7 +5,6 @@ import {
   Shield, 
   MoreHorizontal, 
   Search, 
-  Filter, 
   Trash2, 
   Edit3,
   Lock,
