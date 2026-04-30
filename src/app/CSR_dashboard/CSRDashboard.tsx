@@ -7,6 +7,7 @@ import {
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
 import '../agent_dashboard/agent_dashboard.css';
 
 // Section Imports
@@ -23,6 +24,15 @@ const CSRDashboard: React.FC = () => {
   const navigate = useNavigate();
   const [activeSection, setActiveSection] = useState('Overview');
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [isSupportModalOpen, setIsSupportModalOpen] = useState(false);
+  const [supportRequest, setSupportRequest] = useState({ subject: '', priority: 'Normal', description: '' });
+
+  const handleSupportSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSupportModalOpen(false);
+    toast.success('Support request submitted successfully. Ticket ID: IT-' + Math.floor(1000 + Math.random() * 9000));
+    setSupportRequest({ subject: '', priority: 'Normal', description: '' });
+  };
 
   const navItems = [
     { id: 'Overview', icon: LayoutDashboard, label: "Today's Tasks" },
@@ -91,7 +101,10 @@ const CSRDashboard: React.FC = () => {
           </div>
 
           <div className="mt-auto p-8 space-y-4">
-            <button className="w-full flex items-center justify-between gap-3 px-5 py-4 bg-violet-600 text-white rounded-2xl text-sm font-semibold shadow-xl shadow-violet-600/20 group hover:bg-violet-500 transition-all">
+            <button 
+              onClick={() => setIsSupportModalOpen(true)}
+              className="w-full flex items-center justify-between gap-3 px-5 py-4 bg-violet-600 text-white rounded-2xl text-sm font-semibold shadow-xl shadow-violet-600/20 group hover:bg-violet-500 transition-all"
+            >
               <div className="flex items-center gap-3">
                 <div className="w-6 h-6 rounded-full border-2 border-white/30 flex items-center justify-center">
                   <span className="text-[10px]">?</span>
@@ -145,6 +158,43 @@ const CSRDashboard: React.FC = () => {
           </div>
         </div>
       </main>
+
+      {/* Support Desk Modal */}
+      {isSupportModalOpen && (
+        <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
+          <div className="bg-white rounded-[32px] w-full max-w-md shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200">
+            <div className="p-6 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
+              <h3 className="text-xl font-black text-slate-800 tracking-tight">Internal Support Desk</h3>
+              <button onClick={() => setIsSupportModalOpen(false)} className="p-2 text-slate-400 hover:text-slate-600 bg-white rounded-xl shadow-sm"><X size={20} /></button>
+            </div>
+            <form onSubmit={handleSupportSubmit} className="p-6 space-y-5">
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Subject</label>
+                  <input required type="text" className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold focus:border-violet-500 outline-none" value={supportRequest.subject} onChange={e => setSupportRequest({...supportRequest, subject: e.target.value})} placeholder="e.g. System Access Issue" />
+                </div>
+                <div>
+                  <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Priority</label>
+                  <select className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold focus:border-violet-500 outline-none" value={supportRequest.priority} onChange={e => setSupportRequest({...supportRequest, priority: e.target.value})}>
+                    <option>Low</option>
+                    <option>Normal</option>
+                    <option>High</option>
+                    <option>Urgent</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Description</label>
+                  <textarea required rows={4} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium focus:border-violet-500 outline-none resize-none" value={supportRequest.description} onChange={e => setSupportRequest({...supportRequest, description: e.target.value})} placeholder="Please describe the issue in detail..."></textarea>
+                </div>
+              </div>
+              <div className="pt-4 flex gap-3 border-t border-slate-100">
+                <button type="button" onClick={() => setIsSupportModalOpen(false)} className="flex-1 py-3.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-sm font-bold transition-all">Cancel</button>
+                <button type="submit" className="flex-1 py-3.5 bg-violet-600 hover:bg-violet-700 text-white rounded-xl text-sm font-bold transition-all shadow-lg shadow-violet-200">Submit Request</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
