@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { 
   LayoutDashboard, UserPlus, Users, Zap, Calendar, 
-  DollarSign, Activity, Settings, LogOut, Menu, X, Bell, Search, User, ChevronRight
+  DollarSign, Activity, Settings, LogOut, Menu, X, Bell, Search, User, ChevronRight, ChevronDown
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
 import './agent_dashboard.css';
 
 // Section Imports
@@ -24,6 +25,18 @@ const AgentDashboard: React.FC = () => {
   const navigate = useNavigate();
   const [activeSection, setActiveSection] = useState('Overview');
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const dropdownRef = React.useRef<HTMLDivElement>(null);
+
+  React.useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setDropdownOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   // Mock user for testing without login
   const user = authUser || { name: 'Demo Agent', role: 'Elite Producer' };
@@ -61,8 +74,8 @@ const AgentDashboard: React.FC = () => {
       <aside className={`fixed inset-y-0 left-0 z-50 w-72 bg-slate-900 text-white transition-transform duration-300 transform ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:relative lg:translate-x-0 shadow-2xl`}>
         <div className="flex flex-col h-full">
           {/* Logo Section */}
-          <div className="p-8">
-            <div className="flex items-center gap-2 mb-10 px-2">
+          <div className="p-8 pb-4 flex-shrink-0">
+            <div className="flex items-center gap-2 mb-8 px-2">
               <div className="w-9 h-9 bg-indigo-600 rounded-xl flex items-center justify-center text-white font-black text-xl shadow-lg shadow-indigo-500/20">
                 IA
               </div>
@@ -70,33 +83,33 @@ const AgentDashboard: React.FC = () => {
                 Insurance<span className="text-indigo-400">Advisor</span>
               </h1>
             </div>
-
-            <nav className="space-y-1.5">
-              {navItems.map((item) => (
-                <button
-                  key={item.id}
-                  onClick={() => setActiveSection(item.id)}
-                  className={`w-full flex items-center gap-3 px-5 py-4 rounded-2xl text-sm font-semibold transition-all group ${
-                    activeSection === item.id 
-                    ? 'bg-indigo-600 text-white shadow-xl shadow-indigo-600/20' 
-                    : 'text-slate-400 hover:bg-white/5 hover:text-white'
-                  }`}
-                >
-                  <item.icon size={20} className={activeSection === item.id ? 'text-white' : 'text-slate-500 group-hover:text-indigo-400'} />
-                  {item.label}
-                </button>
-              ))}
-            </nav>
           </div>
 
+          <nav className="flex-1 px-6 space-y-1 pb-4">
+            {navItems.map((item) => (
+              <button
+                key={item.id}
+                onClick={() => setActiveSection(item.id)}
+                className={`w-full flex items-center gap-3 px-5 py-4 rounded-2xl text-sm font-semibold transition-all group ${
+                  activeSection === item.id 
+                  ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/20' 
+                  : 'text-slate-400 hover:bg-white/5 hover:text-white'
+                }`}
+              >
+                <item.icon size={20} className={activeSection === item.id ? 'text-white' : 'text-slate-500 group-hover:text-indigo-400'} />
+                {item.label}
+              </button>
+            ))}
+          </nav>
+
           {/* Sidebar Footer */}
-          <div className="mt-auto p-8 border-t border-white/5 space-y-6">
+          <div className="p-6 border-t border-white/5 space-y-4 flex-shrink-0 bg-slate-900">
             {/* User Profile Card */}
-            <div className="flex items-center gap-4 p-4 bg-white/5 rounded-3xl border border-white/5">
-              <div className="w-10 h-10 rounded-full bg-indigo-500 flex items-center justify-center font-black text-white text-xs uppercase shadow-lg shadow-indigo-500/20">
+            <div className="flex items-center gap-3 p-3 bg-white/5 rounded-2xl border border-white/5 group">
+              <div className="w-8 h-8 rounded-full bg-indigo-500 flex items-center justify-center font-black text-white text-[10px] uppercase shadow-lg shadow-indigo-500/20 flex-shrink-0">
                 {user?.name?.substring(0, 2) || 'AG'}
               </div>
-              <div className="overflow-hidden">
+              <div className="overflow-hidden flex-1">
                 <p className="text-xs font-black truncate">{user?.name || 'Agent Pro'}</p>
                 <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">{user?.role || 'Elite Producer'}</p>
               </div>
@@ -105,7 +118,8 @@ const AgentDashboard: React.FC = () => {
             {/* Support & Actions */}
             <div className="space-y-3">
               <button 
-                className="w-full flex items-center justify-between gap-3 px-5 py-4 bg-indigo-600 text-white rounded-2xl text-sm font-semibold shadow-xl shadow-indigo-600/20 group hover:bg-indigo-500 transition-all"
+                onClick={() => toast.success('Help & Support center opened')}
+                className="w-full flex items-center justify-between gap-3 px-5 py-4 bg-indigo-600 text-white rounded-2xl text-sm font-semibold shadow-md shadow-indigo-600/20 group hover:bg-indigo-500 transition-all"
               >
                 <div className="flex items-center gap-3">
                   <div className="w-6 h-6 rounded-full border-2 border-white/30 flex items-center justify-center">
@@ -114,14 +128,6 @@ const AgentDashboard: React.FC = () => {
                   Help & Support
                 </div>
                 <ChevronRight size={16} className="text-white/50 group-hover:translate-x-1 transition-transform" />
-              </button>
-
-              <button 
-                onClick={() => { logout(); navigate('/login'); }}
-                className="w-full flex items-center justify-center gap-2 px-5 py-3 border-2 border-white/10 text-white/50 hover:text-red-400 hover:border-red-400/30 text-xs font-semibold rounded-2xl transition-all uppercase tracking-widest"
-              >
-                <LogOut size={16} />
-                Sign Out
               </button>
             </div>
 
@@ -166,6 +172,48 @@ const AgentDashboard: React.FC = () => {
               >
                 <Settings size={20} />
               </button>
+              <div className="w-px h-6 bg-slate-200 mx-1"></div>
+              
+              {/* Profile Dropdown */}
+              <div className="relative" ref={dropdownRef}>
+                <button
+                  onClick={() => setDropdownOpen(!dropdownOpen)}
+                  className="flex items-center gap-2 hover:bg-slate-50 p-1 pr-3 rounded-full border border-transparent hover:border-slate-200 transition-all focus:outline-none"
+                >
+                  <div className="w-8 h-8 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center font-black text-xs shadow-inner">
+                    {user?.name?.substring(0, 2) || 'AG'}
+                  </div>
+                  <span className="text-sm font-bold text-slate-700 hidden sm:block">{user?.name || 'Agent Pro'}</span>
+                  <ChevronDown size={14} className={`text-slate-400 transition-transform ${dropdownOpen ? 'rotate-180' : ''}`} />
+                </button>
+
+                {dropdownOpen && (
+                  <div className="absolute right-0 mt-2 w-52 bg-white rounded-xl shadow-xl border border-slate-100 py-1.5 z-50 animate-in fade-in slide-in-from-top-2">
+                    <div className="px-4 py-3 border-b border-slate-100 mb-1">
+                      <p className="text-xs font-black text-slate-800">{user?.name || 'Agent Pro'}</p>
+                      <p className="text-[10px] text-slate-500 truncate">{user?.role || 'Elite Producer'}</p>
+                    </div>
+
+                    <button 
+                      onClick={() => { setActiveSection('Profile'); setDropdownOpen(false); }}
+                      className="w-full text-left px-4 py-2 text-[11px] font-bold text-slate-700 hover:bg-slate-50 flex items-center"
+                    >
+                      <User className="w-3.5 h-3.5 mr-2.5 text-slate-400" />
+                      My Profile
+                    </button>
+
+                    <div className="h-px bg-slate-100 my-1"></div>
+
+                    <button
+                      onClick={() => { logout(); navigate('/login'); }}
+                      className="w-full text-left px-4 py-2 text-[11px] font-bold text-red-600 hover:bg-red-50 flex items-center"
+                    >
+                      <LogOut className="w-3.5 h-3.5 mr-2.5" />
+                      Sign Out
+                    </button>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </header>

@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { 
   ShieldCheck, AlertCircle, Download, ChevronDown, 
-  User, Mail, Phone, ExternalLink, Calendar, Plus, Filter, Search
+  User, Mail, Phone, ExternalLink, Calendar, Plus, Filter, Search, X
 } from 'lucide-react';
 import { Card, Button } from '../../../components/agent/UI';
 import toast from 'react-hot-toast';
@@ -50,10 +50,16 @@ const initialPolicies = [
 ];
 
 const CustomerPolicies: React.FC = () => {
+  const [policies, setPolicies] = useState(initialPolicies);
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
+  
+  const [isIssueModalOpen, setIsIssueModalOpen] = useState(false);
+  const [newPolicy, setNewPolicy] = useState({
+    customer: '', type: 'Term Life Insurance', premium: '', insurer: '', sumAssured: '', phone: '', email: ''
+  });
 
-  const filteredPolicies = initialPolicies.filter(p => 
+  const filteredPolicies = policies.filter(p => 
     p.customer.toLowerCase().includes(searchTerm.toLowerCase()) || 
     p.policyNo.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -63,6 +69,21 @@ const CustomerPolicies: React.FC = () => {
     setTimeout(() => {
       toast.success(`Policy ${policyNo} downloaded successfully!`);
     }, 1500);
+  };
+
+  const handleIssuePolicy = (e: React.FormEvent) => {
+    e.preventDefault();
+    const policy = {
+      ...newPolicy,
+      id: Date.now().toString(),
+      policyNo: `NEW-${Math.floor(10000000 + Math.random() * 90000000)}`,
+      renewal: '2027-05-01',
+      status: 'Active'
+    };
+    setPolicies([policy, ...policies]);
+    setIsIssueModalOpen(false);
+    toast.success('Policy issued successfully');
+    setNewPolicy({ customer: '', type: 'Term Life Insurance', premium: '', insurer: '', sumAssured: '', phone: '', email: '' });
   };
 
   return (
@@ -97,7 +118,7 @@ const CustomerPolicies: React.FC = () => {
                 <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Total Assets Under Management</p>
                 <h4 className="text-3xl font-black">₹4.2 Crore</h4>
               </div>
-              <Button variant="primary" size="sm" icon={<Plus size={16} />}>Issue Policy</Button>
+              <Button variant="primary" size="sm" icon={<Plus size={16} />} onClick={() => setIsIssueModalOpen(true)}>Issue Policy</Button>
            </div>
         </Card>
       </div>
@@ -201,6 +222,66 @@ const CustomerPolicies: React.FC = () => {
           </Card>
         ))}
       </div>
+
+      {/* Issue Policy Modal */}
+      {isIssueModalOpen && (
+        <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
+          <div className="bg-white rounded-[32px] w-full max-w-2xl shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200">
+            <div className="p-6 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
+              <h3 className="text-xl font-black text-slate-800 tracking-tight">Issue New Policy</h3>
+              <button onClick={() => setIsIssueModalOpen(false)} className="p-2 text-slate-400 hover:text-slate-600 bg-white rounded-xl shadow-sm"><X size={20} /></button>
+            </div>
+            <form onSubmit={handleIssuePolicy} className="p-6 space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Customer Name</label>
+                    <input required type="text" className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold focus:border-indigo-500 outline-none" value={newPolicy.customer} onChange={e => setNewPolicy({...newPolicy, customer: e.target.value})} placeholder="e.g. John Doe" />
+                  </div>
+                  <div>
+                    <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Phone</label>
+                    <input required type="tel" className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold focus:border-indigo-500 outline-none" value={newPolicy.phone} onChange={e => setNewPolicy({...newPolicy, phone: e.target.value})} placeholder="+91..." />
+                  </div>
+                  <div>
+                    <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Email</label>
+                    <input required type="email" className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold focus:border-indigo-500 outline-none" value={newPolicy.email} onChange={e => setNewPolicy({...newPolicy, email: e.target.value})} placeholder="john@email.com" />
+                  </div>
+                </div>
+
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Policy Type</label>
+                    <select className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold focus:border-indigo-500 outline-none" value={newPolicy.type} onChange={e => setNewPolicy({...newPolicy, type: e.target.value})}>
+                      <option>Term Life Insurance</option>
+                      <option>Family Floater Health</option>
+                      <option>Car - Comprehensive</option>
+                      <option>Business Liability</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Insurer</label>
+                    <input required type="text" className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold focus:border-indigo-500 outline-none" value={newPolicy.insurer} onChange={e => setNewPolicy({...newPolicy, insurer: e.target.value})} placeholder="e.g. HDFC Life" />
+                  </div>
+                  <div className="grid grid-cols-2 gap-4">
+                     <div>
+                       <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Premium</label>
+                       <input required type="text" className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold focus:border-indigo-500 outline-none" value={newPolicy.premium} onChange={e => setNewPolicy({...newPolicy, premium: e.target.value})} placeholder="e.g. ₹25,000/yr" />
+                     </div>
+                     <div>
+                       <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Sum Assured</label>
+                       <input required type="text" className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold focus:border-indigo-500 outline-none" value={newPolicy.sumAssured} onChange={e => setNewPolicy({...newPolicy, sumAssured: e.target.value})} placeholder="e.g. ₹1 Crore" />
+                     </div>
+                  </div>
+                </div>
+              </div>
+              <div className="pt-4 flex gap-3 border-t border-slate-100">
+                <button type="button" onClick={() => setIsIssueModalOpen(false)} className="flex-1 py-3.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-sm font-bold transition-all">Cancel</button>
+                <button type="submit" className="flex-1 py-3.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-sm font-bold transition-all shadow-lg shadow-indigo-200">Issue Policy Document</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
