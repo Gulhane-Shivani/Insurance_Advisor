@@ -136,11 +136,11 @@ const Navbar: React.FC = () => {
                             <p className="text-xs text-slate-500 truncate">{user.email || ''}</p>
                           </div>
                           <Link
-                            to={user?.role === 'admin' ? '/admin/dashboard' : '/dashboard'}
+                            to={user?.role === 'SUPER_ADMIN' ? '/super_admin' : user?.role === 'ADMIN' ? '/admin/dashboard' : user?.role === 'AGENT' ? '/agent_dashboard' : user?.role === 'CSR' ? '/csr_dashboard' : '/dashboard'}
                             className="px-4 py-2.5 text-sm font-bold text-slate-700 hover:text-blue-600 hover:bg-blue-50 rounded-xl transition-colors text-left flex items-center gap-2 no-underline"
                             onClick={() => setIsUserDropdownOpen(false)}
                           >
-                            {user?.role === 'admin' ? 'Admin Dashboard' : 'Dashboard'}
+                            {user?.role === 'SUPER_ADMIN' || user?.role === 'ADMIN' ? 'Admin Dashboard' : 'Dashboard'}
                           </Link>
                           <button
                             onClick={() => {
@@ -192,8 +192,8 @@ const Navbar: React.FC = () => {
             <div className="h-[1px] bg-slate-100 w-full my-2"></div>
             {user ? (
               <div className="flex flex-col gap-2">
-                <Link to={user?.role === 'admin' ? '/admin/dashboard' : '/dashboard'} className="text-slate-900 font-bold text-base px-4 py-2 hover:bg-blue-50 rounded-xl transition-colors no-underline" onClick={() => setIsMenuOpen(false)}>
-                  {user?.role === 'admin' ? 'Admin Dashboard' : 'My Dashboard'}
+                <Link to={user?.role === 'SUPER_ADMIN' ? '/super_admin' : user?.role === 'ADMIN' ? '/admin/dashboard' : user?.role === 'AGENT' ? '/agent_dashboard' : user?.role === 'CSR' ? '/csr_dashboard' : '/dashboard'} className="text-slate-900 font-bold text-base px-4 py-2 hover:bg-blue-50 rounded-xl transition-colors no-underline" onClick={() => setIsMenuOpen(false)}>
+                  {user?.role === 'SUPER_ADMIN' || user?.role === 'ADMIN' ? 'Admin Dashboard' : 'My Dashboard'}
                 </Link>
                 <button
                   onClick={() => { logout(); setIsMenuOpen(false); }}
