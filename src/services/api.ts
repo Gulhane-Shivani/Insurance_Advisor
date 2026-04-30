@@ -1,7 +1,7 @@
 /* src/services/api.ts */
 import axios from 'axios';
 
-const API_URL = 'https://insurance-advisor-backend-8k0e.onrender.com';
+const API_URL = 'https://insurance-advisor-backend-8k0e.onrender.com/';
 // const API_URL = 'http://127.0.0.1:8000';
 
 const api = axios.create({
