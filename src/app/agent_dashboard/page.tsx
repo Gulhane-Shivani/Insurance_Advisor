@@ -19,6 +19,7 @@ import CommissionStatement from './sections/CommissionStatement';
 import ActivityLog from './sections/ActivityLog';
 import Customer360 from './sections/Customer360';
 import AgentProfile from './sections/AgentProfile';
+import AgentSupport from './sections/AgentSupport';
 
 const AgentDashboard: React.FC = () => {
   const { user: authUser, logout } = useAuth();
@@ -63,15 +64,24 @@ const AgentDashboard: React.FC = () => {
       case 'Performance': return <PerformanceKPIs />;
       case '360': return <Customer360 />;
       case 'Profile': return <AgentProfile />;
+      case 'Support': return <AgentSupport />;
       case 'Overview':
       default: return <DashboardOverview setSection={setActiveSection} />;
     }
   };
 
   return (
-    <div className="flex h-screen bg-slate-50 overflow-hidden font-sans">
+    <div className="flex h-screen bg-[#F8FAFC] overflow-hidden font-sans relative">
+      {/* Mobile Sidebar Backdrop */}
+      {isSidebarOpen && (
+        <div 
+          className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-40 lg:hidden"
+          onClick={() => setIsSidebarOpen(false)}
+        />
+      )}
+
       {/* Sidebar */}
-      <aside className={`fixed inset-y-0 left-0 z-50 w-72 bg-slate-900 text-white transition-transform duration-300 transform ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:relative lg:translate-x-0 shadow-2xl`}>
+      <aside className={`fixed inset-y-0 left-0 z-50 w-72 bg-slate-900 text-white transition-transform duration-300 transform ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:relative lg:translate-x-0 shadow-2xl flex flex-col`}>
         <div className="flex flex-col h-full">
           {/* Logo Section */}
           <div className="p-8 pb-4 flex-shrink-0">
@@ -118,16 +128,20 @@ const AgentDashboard: React.FC = () => {
             {/* Support & Actions */}
             <div className="space-y-3">
               <button 
-                onClick={() => toast.success('Help & Support center opened')}
-                className="w-full flex items-center justify-between gap-3 px-5 py-4 bg-indigo-600 text-white rounded-2xl text-sm font-semibold shadow-md shadow-indigo-600/20 group hover:bg-indigo-500 transition-all"
+                onClick={() => setActiveSection('Support')}
+                className={`w-full flex items-center justify-between gap-3 px-5 py-4 rounded-2xl text-sm font-semibold transition-all group ${
+                  activeSection === 'Support'
+                  ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/20'
+                  : 'bg-indigo-600/10 text-indigo-100 hover:bg-indigo-500 hover:text-white'
+                }`}
               >
                 <div className="flex items-center gap-3">
-                  <div className="w-6 h-6 rounded-full border-2 border-white/30 flex items-center justify-center">
+                  <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors ${activeSection === 'Support' ? 'border-white/30' : 'border-indigo-400/30'}`}>
                     <span className="text-[10px]">?</span>
                   </div>
                   Help & Support
                 </div>
-                <ChevronRight size={16} className="text-white/50 group-hover:translate-x-1 transition-transform" />
+                <ChevronRight size={16} className={`transition-transform ${activeSection === 'Support' ? 'text-white/50 translate-x-1' : 'text-indigo-300 group-hover:translate-x-1'}`} />
               </button>
             </div>
 
