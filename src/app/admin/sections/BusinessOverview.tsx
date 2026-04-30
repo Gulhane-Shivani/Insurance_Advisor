@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { 
   Users, 
   ShieldCheck, 
@@ -8,10 +8,36 @@ import {
   ArrowUpRight,
   ArrowDownRight,
   Filter,
-  Calendar
+  Calendar,
+  ChevronDown
 } from 'lucide-react';
+import toast from 'react-hot-toast';
 
 const BusinessOverview: React.FC = () => {
+  const [chartPeriod, setChartPeriod] = useState('Monthly');
+  
+  // Filter States
+  const [dateRange, setDateRange] = useState('Last 30 Days');
+  const [isDateOpen, setIsDateOpen] = useState(false);
+  
+  const [branch, setBranch] = useState('All Branches');
+  const [isBranchOpen, setIsBranchOpen] = useState(false);
+
+  // Close dropdowns on outside click
+  const dateRef = useRef<HTMLDivElement>(null);
+  const branchRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dateRef.current && !dateRef.current.contains(event.target as Node)) setIsDateOpen(false);
+      if (branchRef.current && !branchRef.current.contains(event.target as Node)) setIsBranchOpen(false);
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const dateOptions = ['Today', 'Last 7 Days', 'Last 30 Days', 'This Quarter', 'This Year'];
+  const branchOptions = ['All Branches', 'North Region (Delhi)', 'South Region (Bangalore)', 'West Region (Mumbai)', 'East Region (Kolkata)'];
   const kpis = [
     { label: 'Total Policies', value: '12,842', trend: '+12.5%', isUp: true, icon: ShieldCheck, color: 'blue' },
     { label: 'Total Revenue', value: '₹4.2Cr', trend: '+8.2%', isUp: true, icon: Wallet, color: 'indigo' },
@@ -28,14 +54,57 @@ const BusinessOverview: React.FC = () => {
            <p className="text-[11px] text-slate-500 font-medium uppercase tracking-wider">Real-time business monitoring</p>
         </div>
         
-        <div className="flex items-center gap-2">
-           <div className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-[10px] font-bold text-slate-600">
-              <Calendar className="w-3.5 h-3.5" />
-              <span>Last 30 Days</span>
+        <div className="flex items-center gap-3">
+           {/* Date Filter */}
+           <div className="relative" ref={dateRef}>
+             <button 
+               onClick={() => { setIsDateOpen(!isDateOpen); setIsBranchOpen(false); }} 
+               className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-[10px] font-bold text-slate-600 hover:bg-slate-100 transition-colors"
+             >
+                <Calendar className="w-3.5 h-3.5" />
+                <span>{dateRange}</span>
+                <ChevronDown className={`w-3 h-3 ml-1 transition-transform ${isDateOpen ? 'rotate-180' : ''}`} />
+             </button>
+             
+             {isDateOpen && (
+               <div className="absolute right-0 mt-2 w-40 bg-white rounded-xl shadow-xl border border-slate-100 py-1.5 z-50 animate-in fade-in slide-in-from-top-2">
+                 {dateOptions.map(opt => (
+                   <button 
+                     key={opt}
+                     onClick={() => { setDateRange(opt); setIsDateOpen(false); }}
+                     className={`w-full text-left px-4 py-2 text-[11px] font-bold hover:bg-slate-50 transition-colors ${dateRange === opt ? 'text-indigo-600 bg-indigo-50/50' : 'text-slate-700'}`}
+                   >
+                     {opt}
+                   </button>
+                 ))}
+               </div>
+             )}
            </div>
-           <div className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-[10px] font-bold text-slate-600">
-              <Filter className="w-3.5 h-3.5" />
-              <span>All Branches</span>
+
+           {/* Branch Filter */}
+           <div className="relative" ref={branchRef}>
+             <button 
+               onClick={() => { setIsBranchOpen(!isBranchOpen); setIsDateOpen(false); }} 
+               className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-[10px] font-bold text-slate-600 hover:bg-slate-100 transition-colors"
+             >
+                <Filter className="w-3.5 h-3.5" />
+                <span>{branch}</span>
+                <ChevronDown className={`w-3 h-3 ml-1 transition-transform ${isBranchOpen ? 'rotate-180' : ''}`} />
+             </button>
+
+             {isBranchOpen && (
+               <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-xl border border-slate-100 py-1.5 z-50 animate-in fade-in slide-in-from-top-2">
+                 {branchOptions.map(opt => (
+                   <button 
+                     key={opt}
+                     onClick={() => { setBranch(opt); setIsBranchOpen(false); }}
+                     className={`w-full text-left px-4 py-2 text-[11px] font-bold hover:bg-slate-50 transition-colors ${branch === opt ? 'text-indigo-600 bg-indigo-50/50' : 'text-slate-700'}`}
+                   >
+                     {opt}
+                   </button>
+                 ))}
+               </div>
+             )}
            </div>
         </div>
       </div>
@@ -75,7 +144,15 @@ const BusinessOverview: React.FC = () => {
                </div>
                <div className="flex gap-1.5 bg-slate-100 p-1 rounded-lg">
                   {['Weekly', 'Monthly'].map(t => (
-                    <button key={t} className={`px-3 py-1 rounded-md text-[9px] font-black transition-all uppercase ${t === 'Monthly' ? 'bg-white text-indigo-600 shadow-sm' : 'text-slate-400'}`}>{t}</button>
+                    <button 
+                      key={t} 
+                      onClick={() => setChartPeriod(t)}
+                      className={`px-3 py-1 rounded-md text-[9px] font-black transition-all uppercase ${
+                        chartPeriod === t ? 'bg-white text-indigo-600 shadow-sm' : 'text-slate-400 hover:text-slate-600'
+                      }`}
+                    >
+                      {t}
+                    </button>
                   ))}
                </div>
             </div>
@@ -124,7 +201,10 @@ const BusinessOverview: React.FC = () => {
                ))}
             </div>
             
-            <button className="mt-8 w-full py-2.5 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all">
+            <button 
+              onClick={() => toast.success('Generating detailed system audit report...')}
+              className="mt-8 w-full py-2.5 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all"
+            >
                Generate Detailed Audit
             </button>
          </div>

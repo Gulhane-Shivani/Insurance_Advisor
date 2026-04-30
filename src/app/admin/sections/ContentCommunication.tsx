@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { 
   Mail, 
   MessageSquare, 
@@ -7,15 +7,72 @@ import {
   Edit3, 
   Layout,
   ExternalLink,
-  Settings
+  Settings,
+  X
 } from 'lucide-react';
+import toast from 'react-hot-toast';
 
 const ContentCommunication: React.FC = () => {
-  const campaigns = [
-    { title: 'Renewal Reminder - May', type: 'Email', target: '452 Users', status: 'Draft', date: 'Next Week' },
-    { title: 'New Health Plan Launch', type: 'SMS', target: '2.5k Users', status: 'Sent', date: '2 days ago' },
-    { title: 'Feedback Survey', type: 'Email', target: '124 Users', status: 'Active', date: 'Ongoing' },
-  ];
+  const [campaigns, setCampaigns] = useState([
+    { id: 1, title: 'Renewal Reminder - May', type: 'Email', target: '452 Users', status: 'Draft', date: 'Next Week' },
+    { id: 2, title: 'New Health Plan Launch', type: 'SMS', target: '2.5k Users', status: 'Sent', date: '2 days ago' },
+    { id: 3, title: 'Feedback Survey', type: 'Email', target: '124 Users', status: 'Active', date: 'Ongoing' },
+  ]);
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingCampaignId, setEditingCampaignId] = useState<number | null>(null);
+  const [formData, setFormData] = useState({
+    title: '',
+    type: 'Email',
+    target: '',
+    status: 'Draft'
+  });
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleOpenModal = (campaign?: any) => {
+    if (campaign) {
+      setEditingCampaignId(campaign.id);
+      setFormData({
+        title: campaign.title,
+        type: campaign.type,
+        target: campaign.target.replace(' Users', ''),
+        status: campaign.status
+      });
+    } else {
+      setEditingCampaignId(null);
+      setFormData({ title: '', type: 'Email', target: '', status: 'Draft' });
+    }
+    setIsModalOpen(true);
+  };
+
+  const handleSaveCampaign = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (editingCampaignId) {
+      setCampaigns(campaigns.map(c => c.id === editingCampaignId ? {
+        ...c,
+        ...formData,
+        target: `${formData.target} Users`
+      } : c));
+      toast.success('Campaign updated successfully.');
+    } else {
+      const newCampaign = {
+        id: Date.now(),
+        ...formData,
+        target: `${formData.target} Users`,
+        date: 'Just now'
+      };
+      setCampaigns([newCampaign, ...campaigns]);
+      toast.success('New campaign created.');
+    }
+    setIsModalOpen(false);
+  };
+
+  const handlePortalAction = (action: string) => {
+    toast.success(`Opening ${action} settings...`);
+  };
 
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
@@ -27,7 +84,10 @@ const ContentCommunication: React.FC = () => {
               <h3 className="text-lg font-black text-slate-800">Communication Hub</h3>
               <p className="text-xs text-slate-500 font-medium">Manage multi-channel campaigns and notifications</p>
             </div>
-            <button className="flex items-center gap-1.5 px-4 py-2 bg-indigo-600 text-white rounded-xl text-xs font-bold hover:bg-indigo-700 transition-all shadow-md shadow-indigo-100">
+            <button 
+              onClick={() => handleOpenModal()}
+              className="flex items-center gap-1.5 px-4 py-2 bg-indigo-600 text-white rounded-xl text-xs font-bold hover:bg-indigo-700 transition-all shadow-md shadow-indigo-100"
+            >
               <Plus className="w-3.5 h-3.5" /> New Campaign
             </button>
           </div>
@@ -60,7 +120,10 @@ const ContentCommunication: React.FC = () => {
                     </span>
                     <p className="text-[9px] font-medium text-slate-400 mt-0.5">{camp.date}</p>
                   </div>
-                  <button className="p-1.5 text-slate-400 hover:text-indigo-600 transition-colors">
+                  <button 
+                    onClick={() => handleOpenModal(camp)}
+                    className="p-1.5 text-slate-400 hover:text-indigo-600 transition-colors"
+                  >
                     <Edit3 className="w-4 h-4" />
                   </button>
                 </div>
@@ -84,7 +147,7 @@ const ContentCommunication: React.FC = () => {
             </div>
             
             <div className="space-y-3.5">
-              <button className="w-full flex items-center justify-between p-3.5 bg-white/5 border border-white/10 rounded-2xl hover:bg-white/10 transition-all text-left">
+              <button onClick={() => handlePortalAction('Homepage Banners')} className="w-full flex items-center justify-between p-3.5 bg-white/5 border border-white/10 rounded-2xl hover:bg-white/10 transition-all text-left">
                 <div className="flex items-center gap-3">
                   <Layout className="w-4 h-4 text-indigo-400" />
                   <div>
@@ -95,7 +158,7 @@ const ContentCommunication: React.FC = () => {
                 <ExternalLink className="w-3.5 h-3.5 text-slate-600" />
               </button>
 
-              <button className="w-full flex items-center justify-between p-3.5 bg-white/5 border border-white/10 rounded-2xl hover:bg-white/10 transition-all text-left">
+              <button onClick={() => handlePortalAction('Blog & News')} className="w-full flex items-center justify-between p-3.5 bg-white/5 border border-white/10 rounded-2xl hover:bg-white/10 transition-all text-left">
                 <div className="flex items-center gap-3">
                   <Edit3 className="w-4 h-4 text-emerald-400" />
                   <div>
@@ -106,7 +169,7 @@ const ContentCommunication: React.FC = () => {
                 <ExternalLink className="w-3.5 h-3.5 text-slate-600" />
               </button>
 
-              <button className="w-full flex items-center justify-between p-3.5 bg-white/5 border border-white/10 rounded-2xl hover:bg-white/10 transition-all text-left">
+              <button onClick={() => handlePortalAction('Site Settings')} className="w-full flex items-center justify-between p-3.5 bg-white/5 border border-white/10 rounded-2xl hover:bg-white/10 transition-all text-left">
                 <div className="flex items-center gap-3">
                   <Settings className="w-4 h-4 text-amber-400" />
                   <div>
@@ -148,6 +211,94 @@ const ContentCommunication: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {/* Add/Edit Campaign Modal */}
+      {isModalOpen && (
+        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-in fade-in">
+          <div className="bg-white w-full max-w-md rounded-2xl shadow-xl overflow-hidden animate-in zoom-in-95">
+            <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
+              <h3 className="text-lg font-black text-slate-800">{editingCampaignId ? 'Edit Campaign' : 'New Campaign'}</h3>
+              <button onClick={() => setIsModalOpen(false)} className="text-slate-400 hover:text-slate-600">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            <form onSubmit={handleSaveCampaign} className="p-6 space-y-4">
+              <div className="space-y-1.5">
+                <label className="text-xs font-bold text-slate-700 uppercase tracking-wider">Campaign Title</label>
+                <input 
+                  type="text" 
+                  name="title" 
+                  required 
+                  value={formData.title} 
+                  onChange={handleInputChange} 
+                  className="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:border-indigo-500" 
+                  placeholder="e.g. Summer Promo"
+                />
+              </div>
+              
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-1.5">
+                  <label className="text-xs font-bold text-slate-700 uppercase tracking-wider">Type</label>
+                  <select 
+                    name="type" 
+                    value={formData.type} 
+                    onChange={handleInputChange}
+                    className="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:border-indigo-500"
+                  >
+                    <option>Email</option>
+                    <option>SMS</option>
+                  </select>
+                </div>
+                <div className="space-y-1.5">
+                  <label className="text-xs font-bold text-slate-700 uppercase tracking-wider">Status</label>
+                  <select 
+                    name="status" 
+                    value={formData.status} 
+                    onChange={handleInputChange}
+                    className="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:border-indigo-500"
+                  >
+                    <option>Draft</option>
+                    <option>Active</option>
+                    <option>Sent</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="space-y-1.5">
+                <label className="text-xs font-bold text-slate-700 uppercase tracking-wider">Target Size</label>
+                <div className="relative">
+                  <input 
+                    type="text" 
+                    name="target" 
+                    required 
+                    value={formData.target} 
+                    onChange={handleInputChange} 
+                    className="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:border-indigo-500" 
+                    placeholder="e.g. 1.2k"
+                  />
+                  <span className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 text-xs font-bold">Users</span>
+                </div>
+              </div>
+
+              <div className="pt-4 flex gap-3">
+                <button 
+                  type="button" 
+                  onClick={() => setIsModalOpen(false)}
+                  className="flex-1 py-2.5 bg-white border border-slate-200 text-slate-600 rounded-xl text-xs font-black uppercase tracking-widest hover:bg-slate-50 transition-colors"
+                >
+                  Cancel
+                </button>
+                <button 
+                  type="submit" 
+                  className="flex-1 py-2.5 bg-indigo-600 text-white rounded-xl text-xs font-black uppercase tracking-widest hover:bg-indigo-700 shadow-md shadow-indigo-100 transition-colors"
+                >
+                  {editingCampaignId ? 'Update Campaign' : 'Create Campaign'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

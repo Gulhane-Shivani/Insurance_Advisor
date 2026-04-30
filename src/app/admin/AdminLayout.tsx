@@ -88,12 +88,14 @@ const AdminLayout: React.FC = () => {
       {/* Sidebar - Higher Density */}
       <aside className="w-60 bg-slate-900 text-white flex flex-col flex-shrink-0 shadow-2xl z-20">
         <div className="h-14 flex items-center px-5 bg-slate-950 border-b border-slate-800/50">
-          <span className="text-lg font-black tracking-tighter text-white flex items-center gap-2">
-            <div className="w-7 h-7 bg-indigo-600 rounded-lg flex items-center justify-center shadow-lg shadow-indigo-900/20">
-              <Shield className="w-4 h-4 text-white" />
+          <NavLink to="/admin/overview" className="text-xl font-bold tracking-tight text-white flex items-center gap-2 no-underline group">
+            <div className="w-8 h-8 bg-blue-600 rounded-xl flex items-center justify-center text-white font-bold text-lg group-hover:scale-105 transition-transform shadow-lg shadow-blue-500/20">
+              IA
             </div>
-            OP-MANAGER
-          </span>
+            <span>
+              Insurance<span className="text-blue-500">Advisor</span>
+            </span>
+          </NavLink>
         </div>
 
         <nav className="flex-1 px-3 py-4 space-y-5 overflow-y-auto custom-scrollbar">

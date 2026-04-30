@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { 
   Users, 
   Search, 
@@ -9,16 +9,41 @@ import {
   Phone,
   ArrowRight,
   TrendingUp,
-  Clock
+  Clock,
+  X
 } from 'lucide-react';
 
 const LeadManagement: React.FC = () => {
-  const leads = [
+  const [leads, setLeads] = useState([
     { name: 'Rohan Mehta', product: 'Term Life', source: 'Web Inquiry', status: 'Hot', agent: 'Sneha K.', date: '10m ago' },
     { name: 'Vikram Singh', product: 'Comprehensive Car', source: 'Referral', status: 'Warm', agent: 'Amit D.', date: '1h ago' },
     { name: 'Anjali Gupta', product: 'Family Health', source: 'Social Media', status: 'Cold', agent: 'Unassigned', date: '3h ago' },
     { name: 'Karan Malhotra', product: 'Business Liability', source: 'Web Inquiry', status: 'Hot', agent: 'Rahul V.', date: '5h ago' },
-  ];
+  ]);
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [formData, setFormData] = useState({
+    name: '',
+    product: 'Term Life',
+    source: 'Web Inquiry',
+    status: 'Warm',
+    agent: 'Unassigned'
+  });
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleAddLead = (e: React.FormEvent) => {
+    e.preventDefault();
+    const newLead = {
+      ...formData,
+      date: 'Just now'
+    };
+    setLeads([newLead, ...leads]);
+    setIsModalOpen(false);
+    setFormData({ name: '', product: 'Term Life', source: 'Web Inquiry', status: 'Warm', agent: 'Unassigned' });
+  };
 
   return (
     <div className="space-y-5 animate-in fade-in duration-500">
@@ -58,7 +83,10 @@ const LeadManagement: React.FC = () => {
                    className="pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-[11px] font-medium w-48 outline-none focus:border-indigo-500"
                  />
               </div>
-              <button className="flex items-center gap-1.5 px-3 py-2 bg-indigo-600 text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-indigo-700 shadow-md shadow-indigo-100">
+              <button 
+                onClick={() => setIsModalOpen(true)}
+                className="flex items-center gap-1.5 px-3 py-2 bg-indigo-600 text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-indigo-700 shadow-md shadow-indigo-100"
+              >
                 <Plus className="w-3.5 h-3.5" /> Add Lead
               </button>
            </div>
@@ -125,6 +153,111 @@ const LeadManagement: React.FC = () => {
            </button>
         </div>
       </div>
+
+      {/* Add Lead Modal */}
+      {isModalOpen && (
+        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-in fade-in">
+          <div className="bg-white w-full max-w-md rounded-2xl shadow-xl overflow-hidden animate-in zoom-in-95">
+            <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
+              <h3 className="text-lg font-black text-slate-800">Add New Lead</h3>
+              <button onClick={() => setIsModalOpen(false)} className="text-slate-400 hover:text-slate-600">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            <form onSubmit={handleAddLead} className="p-6 space-y-4">
+              <div className="space-y-1.5">
+                <label className="text-xs font-bold text-slate-700 uppercase tracking-wider">Lead Name</label>
+                <input 
+                  type="text" 
+                  name="name" 
+                  required 
+                  value={formData.name} 
+                  onChange={handleInputChange} 
+                  className="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:border-indigo-500" 
+                  placeholder="John Doe"
+                />
+              </div>
+              
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-1.5">
+                  <label className="text-xs font-bold text-slate-700 uppercase tracking-wider">Product</label>
+                  <select 
+                    name="product" 
+                    value={formData.product} 
+                    onChange={handleInputChange}
+                    className="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:border-indigo-500"
+                  >
+                    <option>Term Life</option>
+                    <option>Comprehensive Car</option>
+                    <option>Family Health</option>
+                    <option>Business Liability</option>
+                  </select>
+                </div>
+                <div className="space-y-1.5">
+                  <label className="text-xs font-bold text-slate-700 uppercase tracking-wider">Source</label>
+                  <select 
+                    name="source" 
+                    value={formData.source} 
+                    onChange={handleInputChange}
+                    className="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:border-indigo-500"
+                  >
+                    <option>Web Inquiry</option>
+                    <option>Referral</option>
+                    <option>Social Media</option>
+                    <option>Cold Call</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-1.5">
+                  <label className="text-xs font-bold text-slate-700 uppercase tracking-wider">Status</label>
+                  <select 
+                    name="status" 
+                    value={formData.status} 
+                    onChange={handleInputChange}
+                    className="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:border-indigo-500"
+                  >
+                    <option>Hot</option>
+                    <option>Warm</option>
+                    <option>Cold</option>
+                  </select>
+                </div>
+                <div className="space-y-1.5">
+                  <label className="text-xs font-bold text-slate-700 uppercase tracking-wider">Assign To</label>
+                  <select 
+                    name="agent" 
+                    value={formData.agent} 
+                    onChange={handleInputChange}
+                    className="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:border-indigo-500"
+                  >
+                    <option>Unassigned</option>
+                    <option>Sneha K.</option>
+                    <option>Amit D.</option>
+                    <option>Rahul V.</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="pt-4 flex gap-3">
+                <button 
+                  type="button" 
+                  onClick={() => setIsModalOpen(false)}
+                  className="flex-1 py-2.5 bg-white border border-slate-200 text-slate-600 rounded-xl text-xs font-black uppercase tracking-widest hover:bg-slate-50 transition-colors"
+                >
+                  Cancel
+                </button>
+                <button 
+                  type="submit" 
+                  className="flex-1 py-2.5 bg-indigo-600 text-white rounded-xl text-xs font-black uppercase tracking-widest hover:bg-indigo-700 shadow-md shadow-indigo-100 transition-colors"
+                >
+                  Save Lead
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

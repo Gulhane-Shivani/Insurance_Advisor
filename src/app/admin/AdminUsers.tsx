@@ -7,6 +7,7 @@ interface User {
   full_name: string;
   email: string;
   created_at: string;
+  role: string;
   status?: 'Active' | 'Inactive';
 }
 
@@ -22,11 +23,13 @@ const AdminUsers: React.FC = () => {
   const fetchUsers = async () => {
     try {
       const response = await api.get('/admin/users');
-      const fetchedUsers = response.data.map((u: any) => ({
-        ...u,
-        created_at: new Date(u.created_at).toLocaleDateString(),
-        status: 'Active',
-      }));
+      const fetchedUsers = response.data
+        .filter((u: any) => u.role !== 'ADMIN' && u.role !== 'SUPER_ADMIN')
+        .map((u: any) => ({
+          ...u,
+          created_at: new Date(u.created_at).toLocaleDateString(),
+          status: 'Active',
+        }));
       setUsers(fetchedUsers);
     } catch (error) {
       console.error('Failed to fetch users', error);
