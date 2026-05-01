@@ -1,136 +1,216 @@
-import React from 'react';
-import { LifeBuoy, MessageSquare, Phone, FileQuestion, ChevronRight, Send, Sparkles, ExternalLink } from 'lucide-react';
+import React, { useState } from 'react';
+import { HelpCircle, Search, Phone, MessageSquare, Book, ChevronRight, ExternalLink, MessageCircle, Heart, ArrowRight, ChevronDown, FileText, CheckCircle2 } from 'lucide-react';
+import toast from 'react-hot-toast';
 
 const Support: React.FC = () => {
+  const [searchQuery, setSearchQuery] = useState('');
+  const [showFeedbackForm, setShowFeedbackForm] = useState(false);
+  const [expandedFaq, setExpandedFaq] = useState<number | null>(null);
+  const [showGuides, setShowGuides] = useState(false);
+
+  const handleSearchKB = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!searchQuery) return;
+    toast.success(`Found 3 results for "${searchQuery}"`);
+  };
+
+  const handleFeedbackSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    toast.loading('Submitting review...', { duration: 1500 });
+    setTimeout(() => {
+      toast.success('Thank you for your feedback!');
+      setShowFeedbackForm(false);
+    }, 1500);
+  };
+
   const faqs = [
-    { q: 'How do I download my policy document?', a: 'Navigate to "My Policies" and click on the "PDF" button for the respective policy card.' },
-    { q: 'Can I change my nominee online?', a: 'Yes, you can raise a "Nominee Change" request in the Service Requests section.' },
-    { q: 'What is the grace period for premium payment?', a: 'Generally, it is 30 days for life insurance and 15 days for health/motor insurance.' },
+    { q: 'How to download policy document?', a: 'Go to the "My Policies" section from the sidebar, click on your active policy card, and you will see a "Download PDF" button. Your document will be saved as a text file or PDF immediately.' },
+    { q: 'What is the claim settlement ratio?', a: 'Our partners (HDFC Ergo, Tata AIG, LIC) maintain an industry-leading average claim settlement ratio of 98.5%, ensuring peace of mind for you and your family.' },
+    { q: 'Can I pay premium via UPI?', a: 'Yes, we support all major UPI apps including Google Pay, PhonePe, and Paytm. You can find the payment option under the "Payments" tab in your dashboard.' },
+    { q: 'How to add a new nominee?', a: 'To update your nominee, go to the "Services" section and select "Nominee Change". Fill out the required details and our team will update your records within 24 hours.' }
   ];
 
-  return (
-    <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-700">
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
-        <div>
-           <div className="flex items-center gap-2 mb-3">
-              <LifeBuoy className="w-5 h-5 text-blue-600" />
-              <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Customer Assistance</span>
-           </div>
-           <h1 className="text-4xl font-black text-slate-900 tracking-tight">Help Center</h1>
-           <p className="text-slate-500 font-medium mt-2">Get instant support or explore our knowledge base for answers.</p>
+  const guides = [
+    { title: 'Choosing the Right Plan', duration: '5 min read', icon: '🎯' },
+    { title: 'Claim Process Walkthrough', duration: '8 min read', icon: '📋' },
+    { title: 'Understanding Tax Benefits', duration: '6 min read', icon: '💰' },
+    { title: 'Policy Renewal Guide', duration: '4 min read', icon: '🔄' }
+  ];
+
+  const filteredFaqs = faqs.filter(faq => 
+    faq.q.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  if (showFeedbackForm) {
+    return (
+      <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+        <h1 className="text-2xl font-black text-slate-900 tracking-tight">Write a Review</h1>
+        <div className="bg-white rounded-[40px] border border-slate-200/60 shadow-sm p-10 max-w-2xl">
+           <form className="space-y-6" onSubmit={handleFeedbackSubmit}>
+              <div className="flex gap-2">
+                 {[1,2,3,4,5].map(star => (
+                    <button key={star} type="button" className="text-3xl text-orange-400 hover:scale-110 transition-transform">★</button>
+                 ))}
+              </div>
+              <div className="space-y-2">
+                 <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Share your experience</label>
+                 <textarea 
+                   rows={4}
+                   placeholder="What do you like about our service?"
+                   className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold outline-none focus:ring-4 focus:ring-blue-50"
+                 />
+              </div>
+              <div className="flex gap-4 pt-4">
+                <button type="button" onClick={() => setShowFeedbackForm(false)} className="flex-1 py-4 border border-slate-200 rounded-2xl text-[10px] font-black uppercase tracking-widest text-slate-500 hover:bg-slate-50 transition-all">Cancel</button>
+                <button type="submit" className="flex-1 py-4 bg-blue-600 text-white rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-blue-700 shadow-xl shadow-blue-200 transition-all">Post Review</button>
+              </div>
+           </form>
         </div>
-        <div className="bg-blue-50 px-6 py-3 rounded-2xl border border-blue-100 flex items-center gap-3">
-           <Sparkles className="w-5 h-5 text-blue-600" />
-           <span className="text-xs font-bold text-blue-700 uppercase tracking-widest">AI Support Active</span>
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-8 animate-in fade-in slide-in-from-top-4 duration-700">
+      <div className="text-center max-w-2xl mx-auto space-y-4">
+        <h1 className="text-4xl font-black text-slate-900 tracking-tight">How can we help?</h1>
+        <p className="text-slate-500 font-medium">Search our knowledge base or get in touch with our experts.</p>
+        
+        <form onSubmit={handleSearchKB} className="relative mt-8 group">
+          <Search className="absolute left-6 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 group-focus-within:text-blue-600 transition-colors" />
+          <input 
+            type="text" 
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Search for policies, claims, or account settings..."
+            className="w-full pl-16 pr-6 py-5 bg-white border border-slate-200 rounded-[24px] shadow-sm focus:outline-none focus:ring-4 focus:ring-blue-50 focus:border-blue-200 transition-all text-sm font-medium"
+          />
+        </form>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="bg-white p-8 rounded-[32px] border border-slate-100 shadow-sm hover:shadow-xl transition-all group">
+           <div className="w-14 h-14 bg-blue-50 rounded-2xl flex items-center justify-center text-blue-600 mb-6 group-hover:scale-110 transition-transform">
+              <Phone className="w-6 h-6" />
+           </div>
+           <h3 className="text-xl font-black text-slate-900 mb-2">Call Us</h3>
+           <p className="text-slate-500 text-xs leading-relaxed mb-6">Talk to our experts for immediate assistance with your queries.</p>
+           <a 
+             href="tel:18002005555"
+             className="w-full py-3 bg-slate-900 text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-slate-800 transition-all flex items-center justify-center"
+           >
+              1800-200-5555
+           </a>
+        </div>
+
+        <div className="bg-white p-8 rounded-[32px] border border-slate-100 shadow-sm hover:shadow-xl transition-all group">
+           <div className="w-14 h-14 bg-emerald-50 rounded-2xl flex items-center justify-center text-emerald-600 mb-6 group-hover:scale-110 transition-transform">
+              <MessageSquare className="w-6 h-6" />
+           </div>
+           <h3 className="text-xl font-black text-slate-900 mb-2">WhatsApp</h3>
+           <p className="text-slate-500 text-xs leading-relaxed mb-6">Quick resolutions for your service requests on WhatsApp.</p>
+           <a 
+             href="https://wa.me/919812345678"
+             target="_blank"
+             rel="noreferrer"
+             className="w-full py-3 bg-emerald-600 text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-emerald-700 transition-all flex items-center justify-center"
+           >
+              Start Chat
+           </a>
+        </div>
+
+        <div className="bg-white p-8 rounded-[32px] border border-slate-100 shadow-sm hover:shadow-xl transition-all group">
+           <div className="w-14 h-14 bg-purple-50 rounded-2xl flex items-center justify-center text-purple-600 mb-6 group-hover:scale-110 transition-transform">
+              <Book className="w-6 h-6" />
+           </div>
+           <h3 className="text-xl font-black text-slate-900 mb-2">Guides</h3>
+           <p className="text-slate-500 text-xs leading-relaxed mb-6">Read our detailed guides on choosing the right insurance.</p>
+           <button 
+             onClick={() => setShowGuides(!showGuides)}
+             className={`w-full py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all flex items-center justify-center border ${
+               showGuides ? 'bg-purple-600 text-white border-purple-600' : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'
+             }`}
+           >
+              {showGuides ? 'Close Guides' : 'Browse KB'}
+           </button>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-        {/* Contact Grid */}
-        <div className="lg:col-span-8 space-y-8">
-           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {[
-                { label: 'Live Chat', icon: MessageSquare, color: 'bg-blue-50 text-blue-600', desc: 'Agent available', target: 'Chat' },
-                { label: 'WhatsApp', icon: Phone, color: 'bg-emerald-50 text-emerald-600', desc: 'Instant reply', target: 'Connect' },
-                { label: 'Call Support', icon: Phone, color: 'bg-purple-50 text-purple-600', desc: '1800-123-4567', target: 'Call' },
-              ].map((method, i) => (
-                <button key={i} className="bg-white p-8 rounded-[40px] border border-slate-200/60 shadow-sm hover:shadow-xl hover:border-blue-200 transition-all text-center group">
-                   <div className={`w-16 h-16 ${method.color} rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform shadow-inner`}>
-                      <method.icon className="w-8 h-8" />
-                   </div>
-                   <h3 className="text-xl font-black text-slate-900 mb-1">{method.label}</h3>
-                   <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-6">{method.desc}</p>
-                   <span className="inline-flex items-center gap-2 text-xs font-black text-blue-600 uppercase tracking-widest group-hover:underline">
-                      {method.target} <ExternalLink className="w-3 h-3" />
-                   </span>
-                </button>
-              ))}
-           </div>
+      {showGuides && (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 animate-in slide-in-from-right-4 duration-500">
+           {guides.map((guide, i) => (
+             <div key={i} className="bg-white p-6 rounded-[24px] border border-slate-100 shadow-sm hover:border-purple-200 hover:shadow-lg transition-all cursor-pointer group">
+                <div className="text-2xl mb-4 group-hover:scale-110 transition-transform">{guide.icon}</div>
+                <h4 className="text-sm font-black text-slate-900 mb-1">{guide.title}</h4>
+                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{guide.duration}</p>
+             </div>
+           ))}
+        </div>
+      )}
 
-           {/* Support Ticket Card */}
-           <div className="bg-white rounded-[40px] border border-slate-200/60 shadow-sm overflow-hidden">
-              <div className="p-8 border-b border-slate-50">
-                 <h3 className="text-xl font-black text-slate-900 flex items-center gap-3">
-                    <LifeBuoy className="w-6 h-6 text-blue-600" />
-                    Open a Support Ticket
-                 </h3>
-              </div>
-              <div className="p-10 space-y-8">
-                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div className="space-y-2">
-                       <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-2">Issue Category</label>
-                       <select className="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl text-sm font-bold focus:ring-2 focus:ring-blue-100 transition-all appearance-none cursor-pointer">
-                          <option>Premium Payment Issue</option>
-                          <option>Claim Status Inquiry</option>
-                          <option>Policy Correction</option>
-                          <option>App Feedback</option>
-                          <option>Other Queries</option>
-                       </select>
-                    </div>
-                    <div className="space-y-2">
-                       <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-2">Priority Level</label>
-                       <select className="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl text-sm font-bold focus:ring-2 focus:ring-blue-100 transition-all appearance-none cursor-pointer">
-                          <option>Normal</option>
-                          <option>Urgent</option>
-                          <option>Critical (System Failure)</option>
-                       </select>
-                    </div>
-                 </div>
-                 <div className="space-y-2">
-                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-2">Short Description</label>
-                    <input type="text" placeholder="e.g. Unable to download health policy PDF" className="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl text-sm font-bold focus:ring-2 focus:ring-blue-100 transition-all" />
-                 </div>
-                 <div className="space-y-2">
-                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-2">Detailed Message</label>
-                    <textarea rows={4} placeholder="Please provide as much detail as possible..." className="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl text-sm font-bold focus:ring-2 focus:ring-blue-100 transition-all resize-none"></textarea>
-                 </div>
-                 <button className="w-full py-5 bg-slate-900 text-white rounded-[24px] font-black text-xs uppercase tracking-widest hover:bg-slate-800 shadow-2xl shadow-slate-200 transition-all active:scale-95 flex items-center justify-center gap-3">
-                    Submit Support Ticket
-                    <Send className="w-4 h-4" />
-                 </button>
-              </div>
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        <div className="lg:col-span-8 space-y-6">
+           <h2 className="text-2xl font-black text-slate-900 flex items-center gap-3 px-2">
+             <HelpCircle className="w-6 h-6 text-blue-600" />
+             Frequently Asked Questions
+           </h2>
+           <div className="space-y-4">
+              {(searchQuery ? filteredFaqs : faqs).map((faq, i) => (
+                <div key={i} className="bg-white rounded-[24px] border border-slate-100 overflow-hidden group">
+                   <button 
+                     onClick={() => setExpandedFaq(expandedFaq === i ? null : i)}
+                     className="w-full p-6 text-left flex justify-between items-center hover:bg-slate-50/50 transition-colors"
+                   >
+                      <span className={`text-sm font-black transition-colors ${expandedFaq === i ? 'text-blue-600' : 'text-slate-800'}`}>
+                        {faq.q}
+                      </span>
+                      <ChevronDown className={`w-4 h-4 text-slate-300 transition-all duration-300 ${expandedFaq === i ? 'rotate-180 text-blue-600' : ''}`} />
+                   </button>
+                   {expandedFaq === i && (
+                     <div className="px-6 pb-6 animate-in slide-in-from-top-2 duration-300">
+                        <p className="text-sm text-slate-500 font-medium leading-relaxed bg-slate-50 p-5 rounded-2xl border border-slate-100">
+                           {faq.a}
+                        </p>
+                     </div>
+                   )}
+                </div>
+              ))}
+              {filteredFaqs.length === 0 && searchQuery && (
+                <div className="text-center py-10">
+                   <p className="text-slate-400 font-bold">No matching questions found.</p>
+                </div>
+              )}
            </div>
         </div>
 
-        {/* Sidebar: FAQs */}
-        <div className="lg:col-span-4 space-y-8">
-           <div className="bg-slate-50 rounded-[40px] p-10 border border-slate-200/50">
-              <h3 className="text-sm font-black text-slate-400 uppercase tracking-widest mb-10 flex items-center gap-3">
-                 <FileQuestion className="w-5 h-5 text-orange-500" />
-                 Popular Questions
-              </h3>
-              <div className="space-y-6">
-                 {faqs.map((faq, i) => (
-                   <div key={i} className="group cursor-pointer">
-                      <p className="text-sm font-bold text-slate-800 mb-2 group-hover:text-blue-600 transition-colors flex items-center justify-between">
-                         {faq.q}
-                         <ChevronRight className="w-4 h-4 text-slate-300 transition-transform group-hover:translate-x-1" />
-                      </p>
-                      <p className="text-xs text-slate-500 leading-relaxed hidden group-hover:block transition-all animate-in fade-in slide-in-from-top-1">
-                         {faq.a}
-                      </p>
-                      <div className="h-px bg-slate-200 mt-6 group-last:hidden"></div>
-                   </div>
-                 ))}
-              </div>
-              <button className="w-full mt-10 py-4 bg-white border border-slate-200 rounded-2xl text-[10px] font-black uppercase tracking-widest text-slate-500 hover:bg-slate-50 transition-all">
-                 Search Knowledge Base
-              </button>
-           </div>
-
-           {/* Feedback Promo */}
-           <div className="bg-gradient-to-br from-indigo-600 to-blue-700 rounded-[40px] p-10 text-white relative overflow-hidden shadow-2xl shadow-blue-200 group">
+        <div className="lg:col-span-4 space-y-6">
+           <div className="bg-blue-600 rounded-[40px] p-10 text-white relative overflow-hidden group shadow-2xl shadow-blue-200">
               <div className="relative z-10">
-                 <h3 className="text-2xl font-black mb-3">Help us improve Insurance Advisor?</h3>
-                 <p className="text-white/70 text-sm font-medium leading-relaxed mb-8">
-                   Your feedback drives our innovation. Share your experience with us.
+                 <Heart className="w-10 h-10 text-blue-200 mb-6 group-hover:scale-110 transition-transform duration-500" />
+                 <h3 className="text-2xl font-black mb-2">Share Feedback</h3>
+                 <p className="text-blue-100 text-xs font-medium leading-relaxed mb-8">
+                    Your feedback helps us build a better experience for everyone.
                  </p>
-                 <button className="px-8 py-4 bg-white text-blue-600 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-blue-50 transition-all active:scale-95">
-                    Share Feedback
+                 <button 
+                   onClick={() => setShowFeedbackForm(true)}
+                   className="flex items-center gap-2 px-6 py-3 bg-white text-blue-600 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-blue-50 transition-all active:scale-95"
+                 >
+                    Write a Review <ExternalLink className="w-3.5 h-3.5" />
                  </button>
               </div>
-              {/* Decoration */}
-              <div className="absolute -bottom-10 -right-10 w-48 h-48 bg-white/10 rounded-full blur-3xl group-hover:scale-110 transition-transform"></div>
+              <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-blue-400/20 rounded-full blur-3xl"></div>
+           </div>
+
+           <div className="bg-white rounded-[40px] border border-slate-100 p-10 text-center">
+              <MessageCircle className="w-10 h-10 text-slate-200 mx-auto mb-4" />
+              <h4 className="text-sm font-black text-slate-900 mb-1">Still stuck?</h4>
+              <p className="text-xs text-slate-400 font-medium mb-6">Our average response time is 15 mins.</p>
+              <button 
+                onClick={() => toast('Connecting to live chat agent...')}
+                className="text-[10px] font-black text-blue-600 uppercase tracking-widest hover:text-blue-700 transition-colors"
+              >
+                 Start Live Chat
+              </button>
            </div>
         </div>
       </div>

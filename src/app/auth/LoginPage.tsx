@@ -1,4 +1,3 @@
-/* src/app/auth/LoginPage.tsx */
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
@@ -19,7 +18,7 @@ const LoginPage: React.FC = () => {
     setLoading(true);
     try {
       const userData = await login(formData);
-      toast.success('Logged in successfully!');
+      // Removed success toast as per user request to avoid "popups"
       if (userData) {
         if (userData.role === 'SUPER_ADMIN') {
           navigate('/super_admin');
@@ -51,32 +50,32 @@ const LoginPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-slate-50 p-4">
+    <div className="min-h-screen flex items-center justify-center bg-slate-50 p-4 animate-in fade-in duration-700">
       <div className="max-w-md w-full bg-white rounded-[32px] shadow-xl border border-slate-100 p-8 md:p-10">
         <div className="text-center mb-8">
-          <h2 className="text-3xl font-black text-slate-900">Welcome Back</h2>
-          <p className="text-slate-500 mt-2 font-medium">Log in to your insurance account</p>
+          <h2 className="text-3xl font-black text-slate-900 tracking-tight">Insurance Advisor</h2>
+          <p className="text-slate-500 mt-2 font-medium">Access your secure portal</p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-5">
-          <div className="space-y-1.5">
-            <label className="text-sm font-bold text-slate-700">Email Address</label>
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="space-y-2">
+            <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Email Address</label>
             <input
               type="email"
               name="email"
               value={formData.email}
               onChange={handleChange}
-              placeholder="name@company.com"
-              className="w-full px-5 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all text-sm font-medium"
+              placeholder="name@example.com"
+              className="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-4 focus:ring-blue-50 focus:border-blue-500 outline-none transition-all text-sm font-bold"
               disabled={loading}
               required
             />
           </div>
 
-          <div className="space-y-1.5">
+          <div className="space-y-2">
             <div className="flex justify-between items-center">
-              <label className="text-sm font-bold text-slate-700">Password</label>
-              <a href="#" className="text-xs font-bold text-blue-600 hover:text-blue-700 transition-colors">Forgot password?</a>
+              <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Password</label>
+              <a href="#" className="text-[10px] font-black text-blue-600 uppercase tracking-widest hover:text-blue-700 transition-colors">Reset</a>
             </div>
             <input
               type="password"
@@ -84,7 +83,7 @@ const LoginPage: React.FC = () => {
               value={formData.password}
               onChange={handleChange}
               placeholder="••••••••"
-              className="w-full px-5 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all text-sm font-medium"
+              className="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-4 focus:ring-blue-50 focus:border-blue-500 outline-none transition-all text-sm font-bold"
               disabled={loading}
               required
             />
@@ -93,21 +92,21 @@ const LoginPage: React.FC = () => {
           <button
             type="submit"
             disabled={loading}
-            className={`w-full bg-slate-900 text-white py-4 rounded-2xl font-bold text-base shadow-lg shadow-slate-400/20 transition-all flex items-center justify-center gap-2 ${loading ? 'opacity-70 cursor-not-allowed' : 'hover:bg-slate-800'}`}
+            className={`w-full bg-slate-900 text-white py-4 rounded-2xl font-black text-[11px] uppercase tracking-widest shadow-xl shadow-slate-200 transition-all flex items-center justify-center gap-2 ${loading ? 'opacity-70 cursor-not-allowed' : 'hover:bg-slate-800 active:scale-[0.98]'}`}
           >
             {loading ? (
               <>
-                <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-                Logging in...
+                <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                Verifying...
               </>
             ) : 'Sign In'}
           </button>
         </form>
 
-        <div className="mt-8 pt-6 border-t border-slate-100 text-center space-y-4">
-          <p className="text-sm text-slate-500 font-medium">
+        <div className="mt-8 pt-8 border-t border-slate-50 text-center">
+          <p className="text-xs text-slate-400 font-medium">
             Don't have an account?{' '}
-            <Link to="/register" className="text-blue-600 font-bold hover:text-blue-700 transition-colors">Create Account</Link>
+            <Link to="/register" className="text-blue-600 font-black hover:text-blue-700 transition-colors">Join Now</Link>
           </p>
         </div>
       </div>

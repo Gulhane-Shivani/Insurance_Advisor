@@ -1,5 +1,6 @@
 import React from 'react';
 import { Shield, Clock, AlertCircle, CreditCard, Download, FileText, Phone, ChevronRight, Activity, Zap } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 interface OverviewProps {
   user: any;
@@ -7,6 +8,8 @@ interface OverviewProps {
 }
 
 const Overview: React.FC<OverviewProps> = ({ user, onNavigate }) => {
+  const navigate = useNavigate();
+
   return (
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
       {/* Header with quick stats */}
@@ -24,22 +27,31 @@ const Overview: React.FC<OverviewProps> = ({ user, onNavigate }) => {
            <p className="text-slate-500 font-medium text-base mt-1">Your insurance portfolio summary.</p>
         </div>
 
-        <div className="flex flex-wrap gap-4">
-           {[
-             { label: 'Active Policies', value: '03', icon: Shield, color: 'text-blue-600' },
-             { label: 'Pending Claims', value: '01', icon: AlertCircle, color: 'text-orange-500' },
-             { label: 'Reward Points', value: '2,450', icon: Zap, color: 'text-purple-600' },
-           ].map((stat, i) => (
-             <div key={i} className="bg-white px-5 py-3.5 rounded-2xl border border-slate-200/60 shadow-sm flex items-center gap-4 hover:shadow-md transition-shadow">
-                <div className={`w-9 h-9 rounded-xl bg-slate-50 flex items-center justify-center ${stat.color}`}>
-                   <stat.icon className="w-4.5 h-4.5" />
+        <div className="flex flex-wrap items-center gap-4">
+           <button 
+             onClick={() => navigate('/compare')}
+             className="px-6 py-3.5 bg-blue-600 text-white rounded-xl text-[11px] font-black uppercase tracking-widest hover:bg-blue-700 shadow-xl shadow-blue-200 transition-all active:scale-95 flex items-center gap-2"
+           >
+              <Zap className="w-4 h-4" /> Add Policy
+           </button>
+
+           <div className="flex flex-wrap gap-4">
+              {[
+                { label: 'Active Policies', value: '03', icon: Shield, color: 'text-blue-600' },
+                { label: 'Pending Claims', value: '01', icon: AlertCircle, color: 'text-orange-500' },
+                { label: 'Reward Points', value: '2,450', icon: Zap, color: 'text-purple-600' },
+              ].map((stat, i) => (
+                <div key={i} className="bg-white px-5 py-3.5 rounded-2xl border border-slate-200/60 shadow-sm flex items-center gap-4 hover:shadow-md transition-shadow">
+                   <div className={`w-9 h-9 rounded-xl bg-slate-50 flex items-center justify-center ${stat.color}`}>
+                      <stat.icon className="w-4.5 h-4.5" />
+                   </div>
+                   <div>
+                      <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-0.5">{stat.label}</p>
+                      <p className="text-lg font-black text-slate-900 leading-none">{stat.value}</p>
+                   </div>
                 </div>
-                <div>
-                   <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-0.5">{stat.label}</p>
-                   <p className="text-lg font-black text-slate-900 leading-none">{stat.value}</p>
-                </div>
-             </div>
-           ))}
+              ))}
+           </div>
         </div>
       </div>
 
@@ -114,7 +126,7 @@ const Overview: React.FC<OverviewProps> = ({ user, onNavigate }) => {
              >
                 <div className={`w-12 h-12 ${action.color} rounded-2xl flex items-center justify-center transition-transform group-hover:scale-110`}>
                    <action.icon className="w-6 h-6" />
-                </div>
+                 </div>
                 <span className="text-[10px] font-black text-slate-900 uppercase tracking-widest">{action.label}</span>
              </button>
            ))}
@@ -192,20 +204,7 @@ const Overview: React.FC<OverviewProps> = ({ user, onNavigate }) => {
       </div>
 
       {/* Quick Action Footer */}
-      <div className="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-[32px] p-8 text-white flex flex-col md:flex-row items-center justify-between gap-6 shadow-2xl shadow-blue-200">
-         <div className="flex items-center gap-5">
-            <div className="w-14 h-14 bg-white/10 backdrop-blur-md rounded-2xl flex items-center justify-center shrink-0 border border-white/20">
-               <Download className="w-6 h-6" />
-            </div>
-            <div>
-               <h3 className="text-xl font-black mb-1 leading-tight">Documents Updated</h3>
-               <p className="text-white/70 font-medium text-sm">New e-cards for your health policy are now ready.</p>
-            </div>
-         </div>
-         <button className="px-8 py-3.5 bg-white text-blue-600 rounded-xl font-black text-[11px] uppercase tracking-widest hover:bg-blue-50 transition-all shadow-xl shadow-blue-900/20 active:scale-95 whitespace-nowrap">
-            Download PDF
-         </button>
-      </div>
+      
     </div>
   );
 };
