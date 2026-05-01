@@ -1,48 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Shield, Download, CreditCard, RefreshCw, ChevronRight, MoreHorizontal, Calendar, Info, ArrowLeft, CheckCircle2, AlertCircle, FileText, PieChart, Activity, MapPin, Phone, Mail, X, Check } from 'lucide-react';
 import toast from 'react-hot-toast';
 
-const MyPolicies: React.FC = () => {
+interface MyPoliciesProps {
+  newlyBoughtPolicy?: any;
+}
+
+const MyPolicies: React.FC<MyPoliciesProps> = ({ newlyBoughtPolicy }) => {
   const navigate = useNavigate();
   const [selectedPolicy, setSelectedPolicy] = useState<any>(null);
   const [showAddForm, setShowAddForm] = useState(false);
 
-  const handleExport = () => {
-    const data = JSON.stringify(policies, null, 2);
-    const blob = new Blob([data], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = 'policy_portfolio_export.json';
-    link.click();
-    URL.revokeObjectURL(url);
-    toast.success('Portfolio exported successfully');
-  };
-
-  const handleDownloadPDF = (id: string) => {
-    const content = `Policy Document for ${id}\nGenerated on: ${new Date().toLocaleDateString()}\nStatus: Active\nCoverage: Premium Plus`;
-    const blob = new Blob([content], { type: 'text/plain' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = `${id}_document.txt`;
-    link.click();
-    URL.revokeObjectURL(url);
-    toast.success(`Document ${id} downloaded`);
-  };
-
-  const handlePayNow = (amount: string) => {
-    const confirmPayment = window.confirm(`Proceed to pay ${amount}?`);
-    if (confirmPayment) {
-      toast.loading('Processing payment...', { duration: 2000 });
-      setTimeout(() => {
-        toast.success('Payment successful! Your policy is now up to date.');
-      }, 2000);
-    }
-  };
-
-  const policies = [
+  const initialPolicies = [
     {
       id: 'POL-12345',
       company: 'HDFC Ergo',
@@ -101,6 +71,73 @@ const MyPolicies: React.FC = () => {
       contact: { name: 'Suresh Kumar', phone: '+91 90000 11111', email: 'help@licindia.com' }
     }
   ];
+
+  const [policyList, setPolicyList] = useState(initialPolicies);
+
+  useEffect(() => {
+    if (newlyBoughtPolicy) {
+      // Map the comparison plan format to the policy format
+      const formattedPolicy = {
+        id: `POL-${Math.floor(Math.random() * 90000) + 10000}`,
+        company: newlyBoughtPolicy.carrierName,
+        product: newlyBoughtPolicy.planName,
+        type: newlyBoughtPolicy.type.charAt(0).toUpperCase() + newlyBoughtPolicy.type.slice(1),
+        sumAssured: newlyBoughtPolicy.coverageAmount,
+        premium: `₹${newlyBoughtPolicy.monthlyPrice}`,
+        dueDate: new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
+        status: 'Active',
+        startDate: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
+        endDate: new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
+        icon: newlyBoughtPolicy.type === 'health' ? '🏥' : newlyBoughtPolicy.type === 'car' ? '🚗' : newlyBoughtPolicy.type === 'life' ? '👴' : '💼',
+        color: newlyBoughtPolicy.type === 'health' ? 'blue' : newlyBoughtPolicy.type === 'car' ? 'orange' : 'purple',
+        nextPremium: `₹${newlyBoughtPolicy.monthlyPrice} on renewal`,
+        nominee: 'To be assigned',
+        coverage: newlyBoughtPolicy.benefits,
+        claims: 'New Policy',
+        contact: { name: 'Assigned Advisor', phone: '+91 1800-INSURE', email: 'support@insuranceadvisor.com' }
+      };
+
+      // Check if already exists to prevent duplicate adding on re-renders if state persists
+      if (!policyList.some(p => p.product === formattedPolicy.product && p.company === formattedPolicy.company)) {
+        setPolicyList(prev => [formattedPolicy, ...prev]);
+        toast.success(`Welcome aboard! Your ${formattedPolicy.product} policy is now active.`, { icon: '🎉', duration: 5000 });
+      }
+    }
+  }, [newlyBoughtPolicy]);
+
+  const handleExport = () => {
+    const data = JSON.stringify(policyList, null, 2);
+    const blob = new Blob([data], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'policy_portfolio_export.json';
+    link.click();
+    URL.revokeObjectURL(url);
+    toast.success('Portfolio exported successfully');
+  };
+
+  const handleDownloadPDF = (id: string) => {
+    const content = `Policy Document for ${id}\nGenerated on: ${new Date().toLocaleDateString()}\nStatus: Active\nCoverage: Premium Plus`;
+    const blob = new Blob([content], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `${id}_document.txt`;
+    link.click();
+    URL.revokeObjectURL(url);
+    toast.success(`Document ${id} downloaded`);
+  };
+
+  const handlePayNow = (amount: string) => {
+    const confirmPayment = window.confirm(`Proceed to pay ${amount}?`);
+    if (confirmPayment) {
+      toast.loading('Processing payment...', { duration: 2000 });
+      setTimeout(() => {
+        toast.success('Payment successful! Your policy is now up to date.');
+      }, 2000);
+    }
+  };
 
   if (showAddForm) {
     return (
@@ -368,7 +405,7 @@ const MyPolicies: React.FC = () => {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {policies.map((policy) => (
+        {policyList.map((policy) => (
           <div key={policy.id} className="bg-white rounded-[32px] border border-slate-200/60 shadow-sm overflow-hidden hover:shadow-xl hover:border-blue-100 transition-all group relative">
              <div className="p-7 relative">
                 <div className="flex justify-between items-start mb-6">

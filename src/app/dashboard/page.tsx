@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate, useLocation } from 'react-router-dom';
 import {
   LayoutDashboard,
   Shield,
@@ -31,9 +31,22 @@ import Support from './sections/Support';
 const DashboardPage: React.FC = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const [activeSection, setActiveSection] = useState('overview');
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [newlyBoughtPolicy, setNewlyBoughtPolicy] = useState<any>(null);
+
+  useEffect(() => {
+    if (location.state && location.state.activeSection) {
+      setActiveSection(location.state.activeSection);
+      if (location.state.newPolicy) {
+        setNewlyBoughtPolicy(location.state.newPolicy);
+      }
+      // Clear state to avoid re-triggering on refresh
+      window.history.replaceState({}, document.title);
+    }
+  }, [location]);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
@@ -62,7 +75,7 @@ const DashboardPage: React.FC = () => {
   const renderSection = () => {
     switch (activeSection) {
       case 'overview': return <Overview user={user} onNavigate={setActiveSection} />;
-      case 'policies': return <MyPolicies />;
+      case 'policies': return <MyPolicies newlyBoughtPolicy={newlyBoughtPolicy} />;
       case 'payments': return <Payments />;
       case 'claims': return <Claims />;
       case 'requests': return <ServiceRequests />;
