@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
+/* src/app/agent_dashboard/page.tsx */
+import React, { useState, useEffect, useRef } from 'react';
 import { 
   LayoutDashboard, UserPlus, Users, Zap, Calendar, 
-  DollarSign, Activity, Settings, LogOut, Menu, X, Bell, Search, User, ChevronRight, ChevronDown
+  DollarSign, Activity, Settings, LogOut, Menu, X, Bell, Search, User, ChevronRight, ChevronDown, FileText
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import './agent_dashboard.css';
+import toast from 'react-hot-toast';
 
 // Section Imports
 import DashboardOverview from './sections/DashboardOverview';
@@ -26,15 +28,21 @@ const AgentDashboard: React.FC = () => {
   const [activeSection, setActiveSection] = useState('Overview');
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const dropdownRef = React.useRef<HTMLDivElement>(null);
+  const [globalSearchTerm, setGlobalSearchTerm] = useState('');
+  const [showSearchResults, setShowSearchResults] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const searchRef = useRef<HTMLDivElement>(null);
 
   // For 360 View Redirection
   const [selectedCustomer, setSelectedCustomer] = useState<any>(null);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
         setDropdownOpen(false);
+      }
+      if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
+        setShowSearchResults(false);
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
@@ -54,6 +62,30 @@ const AgentDashboard: React.FC = () => {
     { id: 'Activity', icon: Activity, label: 'Activity Log' },
     { id: 'Profile', icon: User, label: 'My Profile' },
   ];
+
+  const searchResults = [
+    { id: '1', title: 'Rajesh Kumar', type: 'Customer', section: 'Customers', icon: Users },
+    { id: '2', title: 'Silver Shield Plus', type: 'Policy', section: 'Customers', icon: FileText },
+    { id: '3', title: 'Anjali Sharma', type: 'Lead', section: 'Leads', icon: UserPlus },
+    { id: '4', title: 'Renewal: Rajesh', type: 'Task', section: 'Tasks', icon: Calendar },
+  ].filter(res => res.title.toLowerCase().includes(globalSearchTerm.toLowerCase()));
+
+  const handleGlobalSearchSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchResults.length > 0) {
+      handleResultClick(searchResults[0]);
+    }
+  };
+
+  const handleResultClick = (res: any) => {
+    toast.loading(`Navigating to ${res.title}...`, { duration: 1000 });
+    setTimeout(() => {
+      setActiveSection(res.section);
+      setShowSearchResults(false);
+      setGlobalSearchTerm('');
+      toast.success(`Context switched to ${res.section}`);
+    }, 1000);
+  };
 
   const handleViewProfile = (customer: any) => {
     setSelectedCustomer(customer);
@@ -102,7 +134,7 @@ const AgentDashboard: React.FC = () => {
             </div>
           </div>
 
-          <nav className="flex-1 px-6 space-y-1 pb-4">
+          <nav className="flex-1 px-6 space-y-1 pb-4 border-b border-white/5 overflow-y-auto custom-scrollbar">
             {navItems.map((item) => (
               <button
                 key={item.id}
@@ -162,7 +194,7 @@ const AgentDashboard: React.FC = () => {
       {/* Main Content */}
       <main className="flex-1 flex flex-col min-w-0 bg-slate-50 overflow-hidden">
         {/* Header */}
-        <header className="h-24 bg-white border-b border-slate-100 flex items-center justify-between px-8 z-30 shadow-sm">
+        <header className="h-24 bg-white border-b border-slate-100 flex items-center justify-between px-8 z-30 shadow-sm relative">
           <div className="flex items-center gap-4">
             <button onClick={() => setIsSidebarOpen(!isSidebarOpen)} className="lg:hidden p-3 bg-slate-50 rounded-xl text-slate-600">
               {isSidebarOpen ? <X size={20} /> : <Menu size={20} />}
@@ -174,14 +206,56 @@ const AgentDashboard: React.FC = () => {
           </div>
 
           <div className="flex items-center gap-6">
-            <div className="hidden md:flex relative group">
+            <div className="hidden md:flex relative group" ref={searchRef}>
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-indigo-500 transition-colors" size={18} />
-              <input 
-                type="text" 
-                placeholder="Search leads, policies, or clients..." 
-                className="pl-12 pr-6 py-3.5 bg-slate-50 border border-slate-100 rounded-[20px] text-sm font-medium w-80 outline-none focus:bg-white focus:ring-4 focus:ring-indigo-500/5 focus:border-indigo-500 transition-all shadow-sm"
-              />
+              <form onSubmit={handleGlobalSearchSubmit}>
+                <input 
+                  type="text" 
+                  placeholder="Search leads, policies, or clients..." 
+                  className="pl-12 pr-6 py-3.5 bg-slate-50 border border-slate-100 rounded-[20px] text-sm font-medium w-80 outline-none focus:bg-white focus:ring-4 focus:ring-indigo-500/5 focus:border-indigo-500 transition-all shadow-sm"
+                  value={globalSearchTerm}
+                  onChange={(e) => { setGlobalSearchTerm(e.target.value); setShowSearchResults(true); }}
+                  onFocus={() => setShowSearchResults(true)}
+                />
+              </form>
+
+              {/* Search Results Pop-up */}
+              {showSearchResults && globalSearchTerm.length > 0 && (
+                <div className="absolute top-[calc(100%+12px)] left-0 w-full bg-white rounded-[24px] shadow-2xl border border-slate-100 overflow-hidden z-50 animate-in fade-in slide-in-from-top-2">
+                   <div className="p-4 bg-slate-50 border-b border-slate-100">
+                      <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Search Results ({searchResults.length})</p>
+                   </div>
+                   <div className="max-h-[350px] overflow-y-auto">
+                      {searchResults.length > 0 ? (
+                        searchResults.map(res => (
+                          <button 
+                            key={res.id}
+                            onClick={() => handleResultClick(res)}
+                            className="w-full flex items-center justify-between gap-4 p-4 hover:bg-indigo-50 transition-colors group text-left"
+                          >
+                             <div className="flex items-center gap-3">
+                                <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center text-slate-400 group-hover:text-indigo-600 transition-colors shadow-sm">
+                                   <res.icon size={18} />
+                                </div>
+                                <div>
+                                   <p className="text-sm font-black text-slate-800">{res.title}</p>
+                                   <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{res.type}</p>
+                                </div>
+                             </div>
+                             <ChevronRight size={14} className="text-slate-300 group-hover:text-indigo-400 transition-transform group-hover:translate-x-1" />
+                          </button>
+                        ))
+                      ) : (
+                        <div className="p-8 text-center">
+                           <Search size={32} className="mx-auto text-slate-200 mb-3" />
+                           <p className="text-xs font-bold text-slate-400">No matches found in your repository</p>
+                        </div>
+                      )}
+                   </div>
+                </div>
+              )}
             </div>
+
             <div className="flex items-center gap-2">
               <button className="relative p-3 bg-slate-50 hover:bg-slate-100 rounded-xl text-slate-600 transition-all group">
                 <Bell size={20} />

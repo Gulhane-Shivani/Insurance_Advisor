@@ -5,7 +5,7 @@ import 'react-calendar/dist/Calendar.css';
 import { 
   Clock, Plus, Check, Calendar as CalendarIcon, 
   Users, Phone, AlertCircle, Trash2, Edit2, 
-  ChevronRight, ArrowRight
+  ChevronRight, ArrowRight, X
 } from 'lucide-react';
 import { Card, Button, Modal } from '../../../components/agent/UI';
 import toast from 'react-hot-toast';
@@ -22,10 +22,52 @@ const TasksCalendar: React.FC = () => {
   const [selectedDate, setSelectedDate] = useState<any>(new Date());
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeTab, setActiveTab] = useState('Today');
+  
+  // Edit State
+  const [editingTask, setEditingTask] = useState<any>(null);
+  const [formData, setFormData] = useState({
+    title: '', category: 'Meeting', priority: 'High', description: '', time: '10:00 AM'
+  });
 
   const toggleTask = (id: string) => {
     setTasks(tasks.map(t => t.id === id ? { ...t, completed: !t.completed } : t));
     toast.success('Task status updated');
+  };
+
+  const handleDelete = (id: string) => {
+    setTasks(tasks.filter(t => t.id !== id));
+    toast.success('Task removed from schedule');
+  };
+
+  const handleEdit = (task: any) => {
+    setEditingTask(task);
+    setFormData({
+      title: task.title,
+      category: task.category,
+      priority: task.priority,
+      description: task.description,
+      time: task.time
+    });
+    setIsModalOpen(true);
+  };
+
+  const handleFormSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (editingTask) {
+      setTasks(tasks.map(t => t.id === editingTask.id ? { ...t, ...formData } : t));
+      toast.success('Task updated successfully');
+    } else {
+      const newTask = {
+        ...formData,
+        id: Date.now().toString(),
+        completed: false
+      };
+      setTasks([newTask, ...tasks]);
+      toast.success('New event scheduled');
+    }
+    setIsModalOpen(false);
+    setEditingTask(null);
+    setFormData({ title: '', category: 'Meeting', priority: 'High', description: '', time: '10:00 AM' });
   };
 
   const getPriorityColor = (p: string) => {
@@ -53,11 +95,11 @@ const TasksCalendar: React.FC = () => {
           <div className="flex items-center justify-between mb-8 px-2">
              <h3 className="text-xl font-black text-slate-800 flex items-center gap-3">
                 <div className="w-10 h-10 rounded-xl bg-indigo-50 flex items-center justify-center text-indigo-600 shadow-sm shadow-indigo-200/50">
-                  <CalendarIcon size={20} />
+                   <CalendarIcon size={20} />
                 </div>
                 Schedule
              </h3>
-             <Button variant="outline" size="sm" icon={<Plus size={14} />}>Add Event</Button>
+             <Button variant="outline" size="sm" icon={<Plus size={14} />} onClick={() => { setEditingTask(null); setIsModalOpen(true); }}>Add Event</Button>
           </div>
           <div className="custom-calendar-wrapper">
             <Calendar 
@@ -105,7 +147,7 @@ const TasksCalendar: React.FC = () => {
                 </button>
               ))}
            </div>
-           <Button onClick={() => setIsModalOpen(true)} icon={<Plus size={18} />} className="shadow-lg shadow-indigo-600/10">Quick Task</Button>
+           <Button onClick={() => { setEditingTask(null); setIsModalOpen(true); }} icon={<Plus size={18} />} className="shadow-lg shadow-indigo-600/10">Quick Task</Button>
         </div>
 
         <div className="space-y-4">
@@ -150,8 +192,8 @@ const TasksCalendar: React.FC = () => {
                               )}
                            </div>
                            <div className="flex items-center gap-2">
-                              <button className="p-2 text-slate-300 hover:text-indigo-600 transition-colors"><Edit2 size={16} /></button>
-                              <button className="p-2 text-slate-300 hover:text-red-500 transition-colors"><Trash2 size={16} /></button>
+                              <button onClick={() => handleEdit(task)} className="p-2 text-slate-300 hover:text-indigo-600 transition-colors"><Edit2 size={16} /></button>
+                              <button onClick={() => handleDelete(task.id)} className="p-2 text-slate-300 hover:text-red-500 transition-colors"><Trash2 size={16} /></button>
                            </div>
                         </div>
                      </div>
@@ -168,34 +210,85 @@ const TasksCalendar: React.FC = () => {
         </div>
       </div>
 
-      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title="Schedule New Follow-up">
-        <form onSubmit={(e) => { e.preventDefault(); toast.success('Event scheduled successfully'); setIsModalOpen(false); }} className="space-y-6">
-          <div className="space-y-1.5">
-             <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Task / Meeting Title</label>
-             <input className="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl text-sm font-bold outline-none focus:border-indigo-500 focus:bg-white transition-all" placeholder="e.g. Policy Signing with Sarah" required />
-          </div>
-          <div className="grid grid-cols-2 gap-4">
-             <div className="space-y-1.5">
-                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Category</label>
-                <select className="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl text-sm font-bold outline-none focus:border-indigo-500 focus:bg-white transition-all">
-                   <option>Renewal Call</option>
-                   <option>Meeting</option>
-                   <option>Service Request</option>
-                   <option>Admin Task</option>
-                </select>
+      {/* Scheduler Modal */}
+      {isModalOpen && (
+        <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
+           <div className="bg-white rounded-[32px] w-full max-w-xl shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200">
+             <div className="p-6 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
+               <h3 className="text-xl font-black text-slate-800 tracking-tight">{editingTask ? 'Edit Schedule Item' : 'Add New Event'}</h3>
+               <button onClick={() => { setIsModalOpen(false); setEditingTask(null); }} className="p-2 text-slate-400 hover:text-slate-600 bg-white rounded-xl shadow-sm"><X size={20} /></button>
              </div>
-             <div className="space-y-1.5">
-                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Priority</label>
-                <select className="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl text-sm font-bold outline-none focus:border-indigo-500 focus:bg-white transition-all">
-                   <option>High</option>
-                   <option>Medium</option>
-                   <option>Low</option>
-                </select>
-             </div>
-          </div>
-          <Button type="submit" className="w-full py-4 text-sm shadow-xl shadow-indigo-600/20">Add to Schedule</Button>
-        </form>
-      </Modal>
+             <form onSubmit={handleFormSubmit} className="p-8 space-y-6">
+                <div className="space-y-1.5">
+                   <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Title / Agenda</label>
+                   <input 
+                     required
+                     className="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl text-sm font-bold outline-none focus:bg-white focus:border-indigo-500 transition-all" 
+                     placeholder="e.g. Policy Review with Client" 
+                     value={formData.title}
+                     onChange={(e) => setFormData({...formData, title: e.target.value})}
+                   />
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                   <div className="space-y-1.5">
+                      <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Category</label>
+                      <select 
+                        className="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl text-xs font-bold outline-none focus:bg-white focus:border-indigo-500 transition-all"
+                        value={formData.category}
+                        onChange={(e) => setFormData({...formData, category: e.target.value})}
+                      >
+                         <option>Renewal</option>
+                         <option>Meeting</option>
+                         <option>Service</option>
+                         <option>Admin</option>
+                      </select>
+                   </div>
+                   <div className="space-y-1.5">
+                      <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Priority</label>
+                      <select 
+                        className="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl text-xs font-bold outline-none focus:bg-white focus:border-indigo-500 transition-all"
+                        value={formData.priority}
+                        onChange={(e) => setFormData({...formData, priority: e.target.value})}
+                      >
+                         <option>High</option>
+                         <option>Medium</option>
+                         <option>Low</option>
+                      </select>
+                   </div>
+                </div>
+
+                <div className="space-y-1.5">
+                   <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Time</label>
+                   <input 
+                     type="text"
+                     className="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl text-sm font-bold outline-none focus:bg-white focus:border-indigo-500 transition-all" 
+                     placeholder="e.g. 10:30 AM" 
+                     value={formData.time}
+                     onChange={(e) => setFormData({...formData, time: e.target.value})}
+                   />
+                </div>
+
+                <div className="space-y-1.5">
+                   <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Notes / Description</label>
+                   <input 
+                     className="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl text-sm font-bold outline-none focus:bg-white focus:border-indigo-500 transition-all" 
+                     placeholder="Add more context..." 
+                     value={formData.description}
+                     onChange={(e) => setFormData({...formData, description: e.target.value})}
+                   />
+                </div>
+
+                <div className="pt-4 flex gap-3">
+                   <button type="button" onClick={() => setIsModalOpen(false)} className="flex-1 py-4 bg-slate-100 text-slate-600 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-slate-200 transition-all">Cancel</button>
+                   <button type="submit" className="flex-1 py-4 bg-indigo-600 text-white rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-600/20">
+                      {editingTask ? 'Update Event' : 'Schedule Event'}
+                   </button>
+                </div>
+             </form>
+           </div>
+        </div>
+      )}
     </div>
   );
 };
