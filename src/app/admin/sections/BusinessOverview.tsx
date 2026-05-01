@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { 
   Users, 
   ShieldCheck, 
@@ -16,10 +16,10 @@ const BusinessOverview: React.FC = () => {
   const [chartPeriod, setChartPeriod] = useState('Monthly');
   
   // Filter States
-  const [dateRange, setDateRange] = useState('Last 30 Days');
+  const [dateRange, setDateRange] = useState('This Quarter');
   const [isDateOpen, setIsDateOpen] = useState(false);
   
-  const [branch, setBranch] = useState('All Branches');
+  const [branch, setBranch] = useState('North Region (Delhi)');
   const [isBranchOpen, setIsBranchOpen] = useState(false);
 
   // Close dropdowns on outside click
@@ -37,11 +37,51 @@ const BusinessOverview: React.FC = () => {
 
   const dateOptions = ['Today', 'Last 7 Days', 'Last 30 Days', 'This Quarter', 'This Year'];
   const branchOptions = ['All Branches', 'North Region (Delhi)', 'South Region (Bangalore)', 'West Region (Mumbai)', 'East Region (Kolkata)'];
+
+  // Simulated dynamic data calculation based on filters
+  const filteredData = useMemo(() => {
+    // Base values
+    let basePolicies = 12842;
+    let baseRevenue = 4.2;
+    let baseCustomers = 8421;
+    let baseLeads = 452;
+
+    // Apply multipliers based on date range
+    const dateMultipliers: Record<string, number> = {
+      'Today': 0.05,
+      'Last 7 Days': 0.25,
+      'Last 30 Days': 0.6,
+      'This Quarter': 1,
+      'This Year': 3.5
+    };
+
+    // Apply multipliers based on branch
+    const branchMultipliers: Record<string, number> = {
+      'All Branches': 1,
+      'North Region (Delhi)': 0.35,
+      'South Region (Bangalore)': 0.25,
+      'West Region (Mumbai)': 0.2,
+      'East Region (Kolkata)': 0.2
+    };
+
+    const multiplier = (dateMultipliers[dateRange] || 1) * (branchMultipliers[branch] || 1);
+
+    return {
+      policies: Math.floor(basePolicies * multiplier).toLocaleString(),
+      revenue: (baseRevenue * multiplier).toFixed(1) + (baseRevenue * multiplier > 1 ? 'Cr' : 'L'),
+      customers: Math.floor(baseCustomers * multiplier).toLocaleString(),
+      leads: Math.floor(baseLeads * multiplier).toLocaleString(),
+      lossRatio: (40 + Math.random() * 5).toFixed(1) + '%',
+      retention: (90 + Math.random() * 5).toFixed(1) + '%',
+      renewal: (85 + Math.random() * 5).toFixed(1) + '%'
+    };
+  }, [dateRange, branch]);
+
   const kpis = [
-    { label: 'Total Policies', value: '12,842', trend: '+12.5%', isUp: true, icon: ShieldCheck, color: 'blue' },
-    { label: 'Total Revenue', value: '₹4.2Cr', trend: '+8.2%', isUp: true, icon: Wallet, color: 'indigo' },
-    { label: 'Active Customers', value: '8,421', trend: '+15.3%', isUp: true, icon: Users, color: 'emerald' },
-    { label: 'Total Leads', value: '452', trend: '-2.4%', isUp: false, icon: Activity, color: 'purple' },
+    { label: 'Total Policies', value: filteredData.policies, trend: '+12.5%', isUp: true, icon: ShieldCheck, color: 'blue' },
+    { label: 'Total Revenue', value: '₹' + filteredData.revenue, trend: '+8.2%', isUp: true, icon: Wallet, color: 'indigo' },
+    { label: 'Active Customers', value: filteredData.customers, trend: '+15.3%', isUp: true, icon: Users, color: 'emerald' },
+    { label: 'Total Leads', value: filteredData.leads, trend: '-2.4%', isUp: false, icon: Activity, color: 'purple' },
   ];
 
   return (
@@ -57,8 +97,8 @@ const BusinessOverview: React.FC = () => {
            {/* Date Filter */}
            <div className="relative" ref={dateRef}>
              <button 
-               onClick={() => { setIsDateOpen(!isDateOpen); setIsBranchOpen(false); }} 
-               className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-[10px] font-bold text-slate-600 hover:bg-slate-100 transition-colors"
+                onClick={() => { setIsDateOpen(!isDateOpen); setIsBranchOpen(false); }} 
+                className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-[10px] font-bold text-slate-600 hover:bg-slate-100 transition-colors"
              >
                 <Calendar className="w-3.5 h-3.5" />
                 <span>{dateRange}</span>
@@ -70,7 +110,11 @@ const BusinessOverview: React.FC = () => {
                  {dateOptions.map(opt => (
                    <button 
                      key={opt}
-                     onClick={() => { setDateRange(opt); setIsDateOpen(false); }}
+                     onClick={() => { 
+                       setDateRange(opt); 
+                       setIsDateOpen(false);
+                       toast.success(`View updated for ${opt}`);
+                     }}
                      className={`w-full text-left px-4 py-2 text-[11px] font-bold hover:bg-slate-50 transition-colors ${dateRange === opt ? 'text-indigo-600 bg-indigo-50/50' : 'text-slate-700'}`}
                    >
                      {opt}
@@ -83,8 +127,8 @@ const BusinessOverview: React.FC = () => {
            {/* Branch Filter */}
            <div className="relative" ref={branchRef}>
              <button 
-               onClick={() => { setIsBranchOpen(!isBranchOpen); setIsDateOpen(false); }} 
-               className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-[10px] font-bold text-slate-600 hover:bg-slate-100 transition-colors"
+                onClick={() => { setIsBranchOpen(!isBranchOpen); setIsDateOpen(false); }} 
+                className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-[10px] font-bold text-slate-600 hover:bg-slate-100 transition-colors"
              >
                 <Filter className="w-3.5 h-3.5" />
                 <span>{branch}</span>
@@ -96,7 +140,11 @@ const BusinessOverview: React.FC = () => {
                  {branchOptions.map(opt => (
                    <button 
                      key={opt}
-                     onClick={() => { setBranch(opt); setIsBranchOpen(false); }}
+                     onClick={() => { 
+                       setBranch(opt); 
+                       setIsBranchOpen(false);
+                       toast.success(`Displaying data for ${opt}`);
+                     }}
                      className={`w-full text-left px-4 py-2 text-[11px] font-bold hover:bg-slate-50 transition-colors ${branch === opt ? 'text-indigo-600 bg-indigo-50/50' : 'text-slate-700'}`}
                    >
                      {opt}
@@ -114,14 +162,14 @@ const BusinessOverview: React.FC = () => {
            <div key={i} className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm hover:border-indigo-200 transition-all">
               <div className="flex justify-between items-start mb-4">
                  <div className={`w-9 h-9 rounded-xl flex items-center justify-center ${
-                   kpi.color === 'blue' ? 'bg-blue-50 text-blue-600' : 
-                   kpi.color === 'indigo' ? 'bg-indigo-50 text-indigo-600' : 
-                   kpi.color === 'emerald' ? 'bg-emerald-50 text-emerald-600' : 'bg-purple-50 text-purple-600'
+                    kpi.color === 'blue' ? 'bg-blue-50 text-blue-600' : 
+                    kpi.color === 'indigo' ? 'bg-indigo-50 text-indigo-600' : 
+                    kpi.color === 'emerald' ? 'bg-emerald-50 text-emerald-600' : 'bg-purple-50 text-purple-600'
                  }`}>
                     <kpi.icon className="w-4.5 h-4.5" />
                  </div>
                  <div className={`flex items-center gap-0.5 px-1.5 py-0.5 rounded-md text-[9px] font-black ${
-                   kpi.isUp ? 'bg-emerald-50 text-emerald-600' : 'bg-red-50 text-red-600'
+                    kpi.isUp ? 'bg-emerald-50 text-emerald-600' : 'bg-red-50 text-red-600'
                  }`}>
                     {kpi.isUp ? <ArrowUpRight className="w-2.5 h-2.5" /> : <ArrowDownRight className="w-2.5 h-2.5" />}
                     {kpi.trend}
@@ -184,9 +232,9 @@ const BusinessOverview: React.FC = () => {
             <h3 className="text-sm font-black mb-6 uppercase tracking-wider text-indigo-400">System Efficiency</h3>
             <div className="space-y-5">
                {[
-                 { label: 'Loss Ratio', val: '42.5%', color: 'emerald' },
-                 { label: 'Retention Rate', val: '94.2%', color: 'indigo' },
-                 { label: 'Renewal Rate', val: '88.1%', color: 'blue' }
+                 { label: 'Loss Ratio', val: filteredData.lossRatio, color: 'emerald' },
+                 { label: 'Retention Rate', val: filteredData.retention, color: 'indigo' },
+                 { label: 'Renewal Rate', val: filteredData.renewal, color: 'blue' }
                ].map((r, i) => (
                  <div key={i} className="space-y-1.5">
                     <div className="flex justify-between text-[9px] font-black uppercase tracking-widest">
@@ -194,7 +242,7 @@ const BusinessOverview: React.FC = () => {
                        <span className="text-white">{r.val}</span>
                     </div>
                     <div className="h-1 w-full bg-white/10 rounded-full overflow-hidden">
-                       <div className={`h-full bg-${r.color}-500`} style={{ width: r.val }}></div>
+                       <div className={`h-full bg-${r.color}-500 transition-all duration-700`} style={{ width: r.val }}></div>
                     </div>
                  </div>
                ))}

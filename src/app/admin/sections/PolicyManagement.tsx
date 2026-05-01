@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { 
   Shield, 
   Search, 
@@ -21,6 +21,7 @@ const PolicyManagement: React.FC = () => {
     { id: 'POL-5510', holder: 'Sneha Reddy', type: 'Life Insurance', status: 'Active', amount: '₹25.0L', date: '20 Apr 2024' },
   ]);
 
+  const [searchTerm, setSearchTerm] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingPolicyId, setEditingPolicyId] = useState<string | null>(null);
   const [formData, setFormData] = useState({
@@ -29,6 +30,14 @@ const PolicyManagement: React.FC = () => {
     status: 'Active',
     amount: ''
   });
+
+  const filteredPolicies = useMemo(() => {
+    return policies.filter(policy => 
+      policy.holder.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      policy.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      policy.type.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  }, [policies, searchTerm]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -108,7 +117,9 @@ const PolicyManagement: React.FC = () => {
                  <input 
                    type="text" 
                    placeholder="Search policies..." 
-                   className="pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium w-64 outline-none focus:border-indigo-500"
+                   value={searchTerm}
+                   onChange={(e) => setSearchTerm(e.target.value)}
+                   className="pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium w-64 outline-none focus:border-indigo-500 transition-all"
                  />
               </div>
               <button className="p-2 bg-slate-50 border border-slate-200 rounded-xl text-slate-600 hover:bg-slate-100 transition-colors">
@@ -136,7 +147,7 @@ const PolicyManagement: React.FC = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
-              {policies.map((policy) => (
+              {filteredPolicies.map((policy) => (
                 <tr key={policy.id} className="hover:bg-slate-50/80 transition-colors group">
                   <td className="px-5 py-3">
                     <span className="text-xs font-black text-slate-800">{policy.id}</span>
@@ -178,6 +189,11 @@ const PolicyManagement: React.FC = () => {
                   </td>
                 </tr>
               ))}
+              {filteredPolicies.length === 0 && (
+                <tr>
+                   <td colSpan={6} className="px-5 py-10 text-center text-slate-400 text-[11px] font-bold">No policies found matching "{searchTerm}"</td>
+                </tr>
+              )}
             </tbody>
           </table>
         </div>

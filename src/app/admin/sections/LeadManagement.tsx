@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { 
   Search, 
   Plus, 
@@ -18,6 +18,7 @@ const LeadManagement: React.FC = () => {
     { name: 'Karan Malhotra', product: 'Business Liability', source: 'Web Inquiry', status: 'Hot', agent: 'Rahul V.', date: '5h ago' },
   ]);
 
+  const [searchTerm, setSearchTerm] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
@@ -26,6 +27,14 @@ const LeadManagement: React.FC = () => {
     status: 'Warm',
     agent: 'Unassigned'
   });
+
+  const filteredLeads = useMemo(() => {
+    return leads.filter(lead => 
+      lead.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      lead.product.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      lead.agent.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  }, [leads, searchTerm]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -77,7 +86,9 @@ const LeadManagement: React.FC = () => {
                  <input 
                    type="text" 
                    placeholder="Search leads..." 
-                   className="pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-[11px] font-medium w-48 outline-none focus:border-indigo-500"
+                   value={searchTerm}
+                   onChange={(e) => setSearchTerm(e.target.value)}
+                   className="pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-[11px] font-medium w-48 outline-none focus:border-indigo-500 transition-all"
                  />
               </div>
               <button 
@@ -101,7 +112,7 @@ const LeadManagement: React.FC = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
-              {leads.map((lead, i) => (
+              {filteredLeads.map((lead, i) => (
                 <tr key={i} className="hover:bg-slate-50/80 transition-colors group">
                   <td className="px-5 py-3">
                     <div className="flex items-center gap-3">
@@ -140,6 +151,11 @@ const LeadManagement: React.FC = () => {
                   </td>
                 </tr>
               ))}
+              {filteredLeads.length === 0 && (
+                <tr>
+                   <td colSpan={5} className="px-5 py-10 text-center text-slate-400 text-[11px] font-bold">No leads found matching "{searchTerm}"</td>
+                </tr>
+              )}
             </tbody>
           </table>
         </div>
