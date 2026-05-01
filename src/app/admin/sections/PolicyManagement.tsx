@@ -12,6 +12,8 @@ import {
   Download,
   X
 } from 'lucide-react';
+import toast from 'react-hot-toast';
+import { jsPDF } from 'jspdf';
 
 const PolicyManagement: React.FC = () => {
   const [policies, setPolicies] = useState([
@@ -38,6 +40,53 @@ const PolicyManagement: React.FC = () => {
       policy.type.toLowerCase().includes(searchTerm.toLowerCase())
     );
   }, [policies, searchTerm]);
+
+  const handleExportData = () => {
+    try {
+      const doc = new jsPDF();
+      doc.setFontSize(22);
+      doc.setTextColor(99, 102, 241);
+      doc.text("POLICY REPOSITORY EXPORT", 105, 20, { align: 'center' });
+      
+      doc.setFontSize(10);
+      doc.setTextColor(100, 116, 139);
+      doc.text(`Exported on: ${new Date().toLocaleString()}`, 105, 28, { align: 'center' });
+      
+      doc.setDrawColor(226, 232, 240);
+      doc.line(20, 35, 190, 35);
+      
+      // Table Header
+      doc.setFillColor(248, 250, 252);
+      doc.rect(20, 45, 170, 10, 'F');
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(9);
+      doc.setTextColor(30, 41, 59);
+      doc.text("ID", 25, 51);
+      doc.text("HOLDER", 50, 51);
+      doc.text("TYPE", 90, 51);
+      doc.text("STATUS", 130, 51);
+      doc.text("COVERAGE", 160, 51);
+      
+      // Table Rows
+      doc.setFont("helvetica", "normal");
+      let currentY = 62;
+      filteredPolicies.forEach((p) => {
+        doc.text(p.id, 25, currentY);
+        doc.text(p.holder, 50, currentY);
+        doc.text(p.type, 90, currentY);
+        doc.text(p.status, 130, currentY);
+        doc.text(p.amount, 160, currentY);
+        currentY += 10;
+        doc.setDrawColor(241, 245, 249);
+        doc.line(20, currentY - 6, 190, currentY - 6);
+      });
+      
+      doc.save(`Policy_Repository_${new Date().getTime()}.pdf`);
+      toast.success('Policy data exported successfully');
+    } catch (err) {
+      toast.error('Failed to export data');
+    }
+  };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -77,6 +126,7 @@ const PolicyManagement: React.FC = () => {
       setPolicies([newPolicy, ...policies]);
     }
     setIsModalOpen(false);
+    toast.success(editingPolicyId ? 'Policy updated' : 'New policy created');
   };
 
   return (
@@ -199,8 +249,11 @@ const PolicyManagement: React.FC = () => {
         </div>
 
         <div className="p-4 bg-slate-50/50 border-t border-slate-100 flex items-center justify-between">
-           <button className="flex items-center gap-1.5 text-[10px] font-bold text-slate-500 hover:text-slate-800 transition-colors uppercase tracking-widest">
-             <Download className="w-3.5 h-3.5" /> Export Data
+           <button 
+             onClick={handleExportData}
+             className="flex items-center gap-1.5 text-[10px] font-bold text-slate-500 hover:text-slate-800 transition-colors uppercase tracking-widest"
+           >
+             <Download className="w-3.5 h-3.5" /> Export Data (PDF)
            </button>
            <div className="flex items-center gap-3">
               <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Page 1 of 32</span>
