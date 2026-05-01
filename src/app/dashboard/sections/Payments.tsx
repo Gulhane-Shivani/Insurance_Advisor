@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { CreditCard, History, Clock, Download, ChevronRight, ArrowUpRight, Wallet, CheckCircle2, X, Plus, ShieldCheck, Zap, Lock, ArrowRight, Shield } from 'lucide-react';
 import toast from 'react-hot-toast';
+import { jsPDF } from 'jspdf';
 
 const Payments: React.FC = () => {
   const [upcomingPayments, setUpcomingPayments] = useState([
@@ -74,8 +75,59 @@ const Payments: React.FC = () => {
      }, 1500);
   };
 
-  const downloadReceipt = (id: string) => {
-    toast.success('Receipt downloaded successfully');
+  const downloadReceipt = (txn: any) => {
+    try {
+      const doc = new jsPDF();
+      
+      doc.setFontSize(22);
+      doc.setTextColor(37, 99, 235); // Blue-600
+      doc.text("INSURANCE ADVISOR", 105, 20, { align: 'center' });
+      
+      doc.setFontSize(10);
+      doc.setTextColor(100, 116, 139);
+      doc.text("Payment Confirmation Receipt", 105, 28, { align: 'center' });
+      
+      doc.setDrawColor(226, 232, 240);
+      doc.line(20, 35, 190, 35);
+      
+      doc.setFontSize(12);
+      doc.setTextColor(30, 41, 59);
+      
+      let currentY = 50;
+      const addField = (label: string, value: string) => {
+        doc.setFont("helvetica", "bold");
+        doc.text(`${label}:`, 30, currentY);
+        doc.setFont("helvetica", "normal");
+        doc.text(value, 80, currentY);
+        currentY += 12;
+      };
+
+      addField("Transaction ID", txn.id);
+      addField("Policy Name", txn.policy);
+      addField("Payment Date", txn.date);
+      addField("Payment Mode", txn.method);
+      addField("Status", "SUCCESSFUL");
+      
+      currentY += 10;
+      doc.setFillColor(248, 250, 252);
+      doc.roundedRect(25, currentY - 8, 160, 25, 3, 3, 'F');
+      
+      doc.setFontSize(14);
+      doc.setFont("helvetica", "bold");
+      doc.text("Amount Paid:", 35, currentY + 8);
+      doc.setTextColor(37, 99, 235);
+      doc.text(txn.amount, 140, currentY + 8);
+      
+      doc.setFontSize(9);
+      doc.setTextColor(148, 163, 184);
+      doc.text("This receipt confirms your successful premium payment.", 105, 140, { align: 'center' });
+      doc.text(`Generated securely on ${new Date().toLocaleString()}`, 105, 146, { align: 'center' });
+
+      doc.save(`Premium_Receipt_${txn.id}.pdf`);
+      toast.success('PDF Receipt downloaded');
+    } catch (error) {
+      toast.error('Failed to generate PDF');
+    }
   };
 
   const closeGateway = () => {
@@ -246,9 +298,9 @@ const Payments: React.FC = () => {
                          </td>
                          <td className="px-7 py-4 text-right">
                             <button 
-                              onClick={() => downloadReceipt(history.id)}
+                              onClick={() => downloadReceipt(history)}
                               className="p-1.5 bg-slate-50 rounded-lg text-slate-400 group-hover:text-blue-600 group-hover:bg-blue-50 transition-all border border-transparent hover:border-blue-100"
-                              title="Download Receipt"
+                              title="Download PDF Receipt"
                             >
                                <Download className="w-3.5 h-3.5" />
                             </button>
