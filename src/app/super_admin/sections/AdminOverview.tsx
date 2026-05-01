@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
+import toast from 'react-hot-toast';
 import { 
   Users, 
   ShieldCheck, 
@@ -13,6 +14,9 @@ import {
 } from 'lucide-react';
 
 const AdminOverview: React.FC = () => {
+  const [revenueScope, setRevenueScope] = useState('Monthly');
+  const [isAuditing, setIsAuditing] = useState(false);
+  const [lastAudit, setLastAudit] = useState('');
   const kpis = [
     { label: 'Total Policies', value: '12,842', trend: '+12.5%', isUp: true, icon: ShieldCheck, color: 'blue' },
     { label: 'Total Revenue', value: '₹4.2Cr', trend: '+8.2%', isUp: true, icon: Wallet, color: 'indigo' },
@@ -65,7 +69,7 @@ const AdminOverview: React.FC = () => {
                </div>
                <div className="flex gap-2 bg-slate-50 p-1 rounded-lg">
                   {['Weekly', 'Monthly'].map(t => (
-                    <button key={t} className={`px-4 py-1.5 rounded-md text-[10px] font-bold transition-all ${t === 'Monthly' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-400'}`}>{t}</button>
+                    <button key={t} onClick={() => setRevenueScope(t)} className={`px-4 py-1.5 rounded-md text-[10px] font-bold transition-all ${t === revenueScope ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-400'}`}>{t}</button>
                   ))}
                </div>
             </div>
@@ -135,9 +139,22 @@ const AdminOverview: React.FC = () => {
             </div>
             
             <div className="mt-8 pt-6 border-t border-white/5">
-               <button className="w-full flex items-center justify-center gap-2 py-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all">
-                  Run Full Audit <ArrowRight className="w-3.5 h-3.5" />
+               <button 
+                 onClick={() => {
+                   setIsAuditing(true);
+                   setTimeout(() => {
+                     setIsAuditing(false);
+                     setLastAudit('Just now');
+                     toast.success('System audit completed successfully');
+                   }, 2500);
+                 }}
+                 disabled={isAuditing}
+                 className="w-full flex items-center justify-center gap-2 py-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all disabled:opacity-50"
+               >
+                  {isAuditing ? <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div> : 'Run Full Audit'}
+                  {!isAuditing && <ArrowRight className="w-3.5 h-3.5" />}
                </button>
+               {lastAudit && <p className="text-center text-[9px] text-slate-500 font-bold uppercase tracking-widest mt-3">Last audit: {lastAudit}</p>}
             </div>
          </div>
       </div>

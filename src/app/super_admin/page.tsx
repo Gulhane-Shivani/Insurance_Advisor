@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import toast from 'react-hot-toast';
 import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { 
@@ -26,6 +27,8 @@ import UserManagement from './sections/UserManagement';
 import MasterSettings from './sections/MasterSettings';
 import Reports from './sections/Reports';
 import SystemConfig from './sections/SystemConfig';
+import AuditLogs from './sections/AuditLogs';
+import SystemStats from './sections/SystemStats';
 
 const SuperAdminDashboard: React.FC = () => {
   const { logout } = useAuth();
@@ -70,11 +73,15 @@ const SuperAdminDashboard: React.FC = () => {
       case 'master': return <MasterSettings />;
       case 'reports': return <Reports />;
       case 'system': return <SystemConfig />;
+      case 'audit': return <AuditLogs />;
+      case 'stats': return <SystemStats />;
       default: return <AdminOverview />;
     }
   };
 
   const getPageTitle = () => {
+    if (activeSection === 'audit') return 'Audit Logs';
+    if (activeSection === 'stats') return 'System Stats';
     const current = adminMenuItems.find(item => item.id === activeSection);
     return current ? current.label : 'Super Admin';
   };
@@ -122,11 +129,11 @@ const SuperAdminDashboard: React.FC = () => {
 
           <div className="pt-8 mt-8 border-t border-slate-800">
              <div className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-4 px-4">Root Access</div>
-             <button className="w-full flex items-center px-4 py-3 text-sm font-bold text-slate-400 hover:bg-slate-800 hover:text-white rounded-xl transition-all">
-                <History className="mr-3 h-5 w-5 text-slate-500" /> Audit Logs
+             <button onClick={() => { setActiveSection('audit'); setIsSidebarOpen(false); }} className={`w-full flex items-center px-4 py-3 text-sm font-bold rounded-xl transition-all duration-200 ${activeSection === 'audit' ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-900/50' : 'text-slate-400 hover:bg-slate-800 hover:text-white'}`}>
+                <History className={`mr-3 h-5 w-5 ${activeSection === 'audit' ? 'text-white' : 'text-slate-500'}`} /> Audit Logs
              </button>
-             <button className="w-full flex items-center px-4 py-3 text-sm font-bold text-slate-400 hover:bg-slate-800 hover:text-white rounded-xl transition-all">
-                <Activity className="mr-3 h-5 w-5 text-slate-500" /> System Stats
+             <button onClick={() => { setActiveSection('stats'); setIsSidebarOpen(false); }} className={`w-full flex items-center px-4 py-3 text-sm font-bold rounded-xl transition-all duration-200 ${activeSection === 'stats' ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-900/50' : 'text-slate-400 hover:bg-slate-800 hover:text-white'}`}>
+                <Activity className={`mr-3 h-5 w-5 ${activeSection === 'stats' ? 'text-white' : 'text-slate-500'}`} /> System Stats
              </button>
           </div>
         </nav>
@@ -189,11 +196,11 @@ const SuperAdminDashboard: React.FC = () => {
                     <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Master Authority Hub</p>
                   </div>
                   
-                  <button className="w-full text-left px-5 py-3 text-xs font-bold text-slate-600 hover:bg-slate-50 rounded-xl flex items-center gap-3 transition-colors">
+                  <button onClick={() => { setActiveSection('users'); setDropdownOpen(false); }} className="w-full text-left px-5 py-3 text-xs font-bold text-slate-600 hover:bg-slate-50 rounded-xl flex items-center gap-3 transition-colors">
                     <UserIcon className="w-4 h-4 text-slate-400" />
                     Console Profile
                   </button>
-                  <button className="w-full text-left px-5 py-3 text-xs font-bold text-slate-600 hover:bg-slate-50 rounded-xl flex items-center gap-3 transition-colors">
+                  <button onClick={() => { setActiveSection('system'); setDropdownOpen(false); }} className="w-full text-left px-5 py-3 text-xs font-bold text-slate-600 hover:bg-slate-50 rounded-xl flex items-center gap-3 transition-colors">
                     <Settings className="w-4 h-4 text-slate-400" />
                     Security Settings
                   </button>

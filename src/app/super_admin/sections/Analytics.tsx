@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { 
   MapPin, 
   Activity, 
@@ -6,12 +6,45 @@ import {
 } from 'lucide-react';
 
 const Analytics: React.FC = () => {
-  const branchPerformance = [
-    { city: 'Mumbai', revenue: '₹1.2Cr', growth: '+12%', efficiency: '94%', color: 'emerald' },
-    { city: 'Delhi', revenue: '₹95L', growth: '+8%', efficiency: '88%', color: 'teal' },
-    { city: 'Bangalore', revenue: '₹88L', growth: '+15%', efficiency: '91%', color: 'sky' },
-    { city: 'Pune', revenue: '₹52L', growth: '+22%', efficiency: '96%', color: 'indigo' },
-  ];
+  const [scope, setScope] = useState('Global');
+  
+  const getBranchData = () => {
+    switch (scope) {
+      case 'Regional':
+        return [
+          { city: 'Mumbai North', revenue: '₹45L', growth: '+14%', efficiency: '96%', color: 'emerald' },
+          { city: 'Delhi NCR', revenue: '₹38L', growth: '+11%', efficiency: '90%', color: 'teal' },
+          { city: 'Bangalore East', revenue: '₹32L', growth: '+18%', efficiency: '93%', color: 'sky' },
+          { city: 'Pune West', revenue: '₹18L', growth: '+25%', efficiency: '98%', color: 'indigo' },
+        ];
+      case 'Local':
+        return [
+          { city: 'Andheri', revenue: '₹15L', growth: '+20%', efficiency: '97%', color: 'emerald' },
+          { city: 'Connaught', revenue: '₹12L', growth: '+15%', efficiency: '92%', color: 'teal' },
+          { city: 'Whitefield', revenue: '₹14L', growth: '+22%', efficiency: '95%', color: 'sky' },
+          { city: 'Hinjewadi', revenue: '₹8L', growth: '+30%', efficiency: '99%', color: 'indigo' },
+        ];
+      default:
+        return [
+          { city: 'Mumbai', revenue: '₹1.2Cr', growth: '+12%', efficiency: '94%', color: 'emerald' },
+          { city: 'Delhi', revenue: '₹95L', growth: '+8%', efficiency: '88%', color: 'teal' },
+          { city: 'Bangalore', revenue: '₹88L', growth: '+15%', efficiency: '91%', color: 'sky' },
+          { city: 'Pune', revenue: '₹52L', growth: '+22%', efficiency: '96%', color: 'indigo' },
+        ];
+    }
+  };
+
+  const getEfficiency = () => {
+    switch (scope) {
+      case 'Regional': return 92;
+      case 'Local': return 96;
+      default: return 85;
+    }
+  };
+
+  const branchPerformance = getBranchData();
+  const efficiency = getEfficiency();
+  const strokeOffset = 282.7 - (282.7 * efficiency) / 100;
 
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
@@ -23,7 +56,7 @@ const Analytics: React.FC = () => {
          </div>
          <div className="flex bg-slate-100 p-1 rounded-xl">
            {['Global', 'Regional', 'Local'].map(t => (
-             <button key={t} className={`px-5 py-2 rounded-lg text-xs font-bold transition-all ${t === 'Global' ? 'bg-white text-emerald-600 shadow-sm border border-emerald-100' : 'text-slate-500 hover:text-slate-900'}`}>{t}</button>
+             <button key={t} onClick={() => setScope(t)} className={`px-5 py-2 rounded-lg text-xs font-bold transition-all ${t === scope ? 'bg-white text-emerald-600 shadow-sm border border-emerald-100' : 'text-slate-500 hover:text-slate-900'}`}>{t}</button>
            ))}
          </div>
       </div>
@@ -75,10 +108,10 @@ const Analytics: React.FC = () => {
             <div className="relative w-40 h-40 flex items-center justify-center">
                <svg className="w-full h-full -rotate-90" viewBox="0 0 100 100">
                   <circle cx="50" cy="50" r="45" fill="none" stroke="#F1F5F9" strokeWidth="8" />
-                  <circle cx="50" cy="50" r="45" fill="none" stroke="#10B981" strokeWidth="10" strokeDasharray="282.7" strokeDashoffset="42.4" strokeLinecap="round" className="drop-shadow-[0_0_8px_rgba(16,185,129,0.3)]" />
+                  <circle cx="50" cy="50" r="45" fill="none" stroke="#10B981" strokeWidth="10" strokeDasharray="282.7" strokeDashoffset={strokeOffset} strokeLinecap="round" className="drop-shadow-[0_0_8px_rgba(16,185,129,0.3)] transition-all duration-1000" />
                </svg>
                <div className="absolute text-center">
-                  <span className="text-4xl font-black text-slate-900">85%</span>
+                  <span className="text-4xl font-black text-slate-900">{efficiency}%</span>
                </div>
             </div>
          </div>

@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
+import toast from 'react-hot-toast';
 import { 
   Download, 
   Wallet, 
@@ -10,6 +11,44 @@ import {
 } from 'lucide-react';
 
 const Reports: React.FC = () => {
+  const [selectedFormat, setSelectedFormat] = useState('Excel');
+  const [selectedCategory, setSelectedCategory] = useState('Financial Performance');
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [exportsList, setExportsList] = useState([
+    { id: 1, name: 'Revenue_Reconciliation.xlsx', date: 'Oct 24', user: 'Admin Hub', size: '2.4 MB' },
+    { id: 2, name: 'Commission_Payable.pdf', date: 'Oct 22', user: 'Finance', size: '1.1 MB' },
+    { id: 3, name: 'Claims_Audit.csv', date: 'Oct 20', user: 'System', size: '840 KB' },
+  ]);
+
+  const handleDownload = (filename: string) => {
+    // Perform actual dummy download action
+    const element = document.createElement("a");
+    const file = new Blob([`Dummy data for ${filename}`], {type: 'text/plain'});
+    element.href = URL.createObjectURL(file);
+    element.download = filename;
+    document.body.appendChild(element);
+    element.click();
+    document.body.removeChild(element);
+    toast.success(`Downloaded ${filename}`);
+  };
+
+  const handleGenerateReport = () => {
+    setIsGenerating(true);
+    // Simulate API delay
+    setTimeout(() => {
+      const ext = selectedFormat === 'Excel' ? 'xlsx' : selectedFormat === 'PDF' ? 'pdf' : selectedFormat.toLowerCase();
+      const newReport = {
+        id: Date.now(),
+        name: `${selectedCategory.replace(/\s+/g, '_')}_Report.${ext}`,
+        date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+        user: 'Current User',
+        size: Math.floor(Math.random() * 900 + 100) + ' KB'
+      };
+      setExportsList([newReport, ...exportsList]);
+      setIsGenerating(false);
+      toast.success('Report successfully generated');
+    }, 1500);
+  };
   const reportCards = [
     { name: 'Financials', icon: Wallet, color: 'emerald', stats: '₹12.4Cr' },
     { name: 'Sales', icon: TrendingUp, color: 'indigo', stats: '2,450 Policies' },
@@ -27,7 +66,7 @@ const Reports: React.FC = () => {
         </div>
         <div className="flex gap-2 w-full md:w-auto">
            <button className="flex-1 md:flex-none px-5 py-2.5 bg-white border border-slate-200 rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-50 transition-all">Period</button>
-           <button className="flex-1 md:flex-none px-6 py-2.5 bg-indigo-600 text-white rounded-xl text-xs font-bold hover:bg-indigo-700 shadow-lg shadow-indigo-100 transition-all flex items-center justify-center gap-2">
+           <button onClick={() => handleDownload('Global_Platform_Export.zip')} className="flex-1 md:flex-none px-6 py-2.5 bg-indigo-600 text-white rounded-xl text-xs font-bold hover:bg-indigo-700 shadow-lg shadow-indigo-100 transition-all flex items-center justify-center gap-2">
               <Download className="w-4 h-4" /> Global Export
            </button>
         </div>
@@ -59,12 +98,8 @@ const Reports: React.FC = () => {
                <h3 className="text-base font-bold text-slate-900">Recent Exports</h3>
             </div>
             <div className="divide-y divide-slate-50">
-               {[
-                 { name: 'Revenue_Reconciliation.xlsx', date: 'Oct 24', user: 'Admin Hub', size: '2.4 MB' },
-                 { name: 'Commission_Payable.pdf', date: 'Oct 22', user: 'Finance', size: '1.1 MB' },
-                 { name: 'Claims_Audit.csv', date: 'Oct 20', user: 'System', size: '840 KB' },
-               ].map((log, i) => (
-                 <div key={i} className="p-5 flex items-center justify-between hover:bg-slate-50 transition-all">
+               {exportsList.map((log) => (
+                 <div key={log.id} className="p-5 flex items-center justify-between hover:bg-slate-50 transition-all">
                     <div className="flex items-center gap-3">
                        <FileSpreadsheet className="w-5 h-5 text-slate-400" />
                        <div>
@@ -72,7 +107,7 @@ const Reports: React.FC = () => {
                           <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{log.user} • {log.date}</p>
                        </div>
                     </div>
-                    <button className="p-2 text-slate-400 hover:text-indigo-600 transition-colors"><Download className="w-4 h-4" /></button>
+                    <button onClick={() => handleDownload(log.name)} className="p-2 text-slate-400 hover:text-indigo-600 transition-colors"><Download className="w-4 h-4" /></button>
                  </div>
                ))}
             </div>
@@ -86,21 +121,32 @@ const Reports: React.FC = () => {
             <div className="space-y-5">
                <div className="space-y-2">
                   <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Category</label>
-                  <select className="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-sm font-bold outline-none focus:border-indigo-500">
-                     <option className="bg-slate-900">Financial Performance</option>
-                     <option className="bg-slate-900">Operational Audit</option>
+                  <select value={selectedCategory} onChange={(e) => setSelectedCategory(e.target.value)} className="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-sm font-bold outline-none focus:border-indigo-500 text-white">
+                     <option value="Financial Performance" className="bg-slate-900">Financial Performance</option>
+                     <option value="Operational Audit" className="bg-slate-900">Operational Audit</option>
+                     <option value="Sales Trajectory" className="bg-slate-900">Sales Trajectory</option>
                   </select>
                </div>
                <div className="space-y-2">
                   <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Format</label>
                   <div className="grid grid-cols-2 gap-2">
                      {['Excel', 'PDF', 'CSV', 'JSON'].map(f => (
-                       <button key={f} className="py-2.5 bg-white/5 border border-white/10 rounded-lg text-xs font-bold hover:bg-indigo-600 transition-all">{f}</button>
+                       <button 
+                         key={f} 
+                         onClick={() => setSelectedFormat(f)}
+                         className={`py-2.5 border rounded-lg text-xs font-bold transition-all ${selectedFormat === f ? 'bg-indigo-600 border-indigo-500 text-white' : 'bg-white/5 border-white/10 hover:bg-white/10'}`}
+                       >
+                         {f}
+                       </button>
                      ))}
                   </div>
                </div>
-               <button className="w-full mt-4 py-3.5 bg-indigo-600 text-white rounded-xl text-xs font-bold uppercase tracking-widest hover:bg-indigo-500 transition-all">
-                  Generate Report
+               <button 
+                 onClick={handleGenerateReport} 
+                 disabled={isGenerating}
+                 className="w-full mt-4 py-3.5 bg-indigo-600 text-white rounded-xl text-xs font-bold uppercase tracking-widest hover:bg-indigo-500 disabled:opacity-50 transition-all flex justify-center items-center gap-2"
+               >
+                  {isGenerating ? <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div> : 'Generate Report'}
                </button>
             </div>
          </div>
