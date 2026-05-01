@@ -28,6 +28,9 @@ const AgentDashboard: React.FC = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = React.useRef<HTMLDivElement>(null);
 
+  // For 360 View Redirection
+  const [selectedCustomer, setSelectedCustomer] = useState<any>(null);
+
   React.useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
@@ -52,16 +55,21 @@ const AgentDashboard: React.FC = () => {
     { id: 'Profile', icon: User, label: 'My Profile' },
   ];
 
+  const handleViewProfile = (customer: any) => {
+    setSelectedCustomer(customer);
+    setActiveSection('360');
+  };
+
   const renderSection = () => {
     switch (activeSection) {
       case 'Leads': return <LeadsManagement />;
-      case 'Customers': return <CustomerPolicies />;
+      case 'Customers': return <CustomerPolicies onViewProfile={handleViewProfile} />;
       case 'Quotes': return <QuoteProposalTool />;
       case 'Tasks': return <TasksCalendar />;
       case 'Commission': return <CommissionStatement />;
       case 'Activity': return <ActivityLog />;
       case 'Performance': return <PerformanceKPIs />;
-      case '360': return <Customer360 />;
+      case '360': return <Customer360 customerData={selectedCustomer} />;
       case 'Profile': return <AgentProfile />;
       case 'Support': return <AgentSupport />;
       case 'Overview':
@@ -100,12 +108,12 @@ const AgentDashboard: React.FC = () => {
                 key={item.id}
                 onClick={() => setActiveSection(item.id)}
                 className={`w-full flex items-center gap-3 px-5 py-4 rounded-2xl text-sm font-semibold transition-all group ${
-                  activeSection === item.id 
+                  activeSection === item.id || (activeSection === '360' && item.id === 'Customers')
                   ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/20' 
                   : 'text-slate-400 hover:bg-white/5 hover:text-white'
                 }`}
               >
-                <item.icon size={20} className={activeSection === item.id ? 'text-white' : 'text-slate-500 group-hover:text-indigo-400'} />
+                <item.icon size={20} className={activeSection === item.id || (activeSection === '360' && item.id === 'Customers') ? 'text-white' : 'text-slate-500 group-hover:text-indigo-400'} />
                 {item.label}
               </button>
             ))}
@@ -160,7 +168,7 @@ const AgentDashboard: React.FC = () => {
               {isSidebarOpen ? <X size={20} /> : <Menu size={20} />}
             </button>
             <div>
-              <h2 className="text-2xl font-black text-slate-800 tracking-tight">{activeSection}</h2>
+              <h2 className="text-2xl font-black text-slate-800 tracking-tight">{activeSection === '360' ? 'Customer 360' : activeSection}</h2>
               <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-0.5">Insurance Advisor Dashboard • 2026</p>
             </div>
           </div>

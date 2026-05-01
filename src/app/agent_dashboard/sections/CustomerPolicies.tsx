@@ -1,11 +1,16 @@
 /* src/app/agent_dashboard/sections/CustomerPolicies.tsx */
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { 
   ShieldCheck, AlertCircle, Download, ChevronDown, 
-  User, Mail, Phone, ExternalLink, Calendar, Plus, Filter, Search, X
+  User, Mail, Phone, ExternalLink, Calendar, Plus, Filter, Search, X, Check
 } from 'lucide-react';
 import { Card, Button } from '../../../components/agent/UI';
 import toast from 'react-hot-toast';
+import { jsPDF } from 'jspdf';
+
+interface CustomerPoliciesProps {
+  onViewProfile?: (customer: any) => void;
+}
 
 const initialPolicies = [
   { 
@@ -49,26 +54,84 @@ const initialPolicies = [
   },
 ];
 
-const CustomerPolicies: React.FC = () => {
+const CustomerPolicies: React.FC<CustomerPoliciesProps> = ({ onViewProfile }) => {
   const [policies, setPolicies] = useState(initialPolicies);
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
+  const [filterStatus, setFilterStatus] = useState('All');
+  const [isFilterMenuOpen, setIsFilterMenuOpen] = useState(false);
   
   const [isIssueModalOpen, setIsIssueModalOpen] = useState(false);
   const [newPolicy, setNewPolicy] = useState({
     customer: '', type: 'Term Life Insurance', premium: '', insurer: '', sumAssured: '', phone: '', email: ''
   });
 
-  const filteredPolicies = policies.filter(p => 
-    p.customer.toLowerCase().includes(searchTerm.toLowerCase()) || 
-    p.policyNo.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredPolicies = useMemo(() => {
+    return policies.filter(p => {
+      const matchesSearch = p.customer.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                          p.policyNo.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesStatus = filterStatus === 'All' || p.status === filterStatus;
+      return matchesSearch && matchesStatus;
+    });
+  }, [policies, searchTerm, filterStatus]);
 
-  const handleDownload = (policyNo: string) => {
-    toast.loading('Generating Policy Document...', { duration: 1500 });
-    setTimeout(() => {
-      toast.success(`Policy ${policyNo} downloaded successfully!`);
-    }, 1500);
+  const handleDownload = (policy: any) => {
+    try {
+      const doc = new jsPDF();
+      
+      // Branding
+      doc.setFontSize(22);
+      doc.setTextColor(99, 102, 241);
+      doc.text("INSURANCE ADVISOR", 105, 20, { align: 'center' });
+      
+      doc.setFontSize(10);
+      doc.setTextColor(100, 116, 139);
+      doc.text("Official Policy Schedule & Certificate", 105, 28, { align: 'center' });
+      
+      doc.setDrawColor(226, 232, 240);
+      doc.line(20, 35, 190, 35);
+      
+      doc.setFontSize(12);
+      doc.setTextColor(30, 41, 59);
+      
+      let currentY = 50;
+      const addField = (label: string, value: string) => {
+        doc.setFont("helvetica", "bold");
+        doc.text(`${label}:`, 30, currentY);
+        doc.setFont("helvetica", "normal");
+        doc.text(value, 80, currentY);
+        currentY += 12;
+      };
+
+      addField("Policy Number", policy.policyNo);
+      addField("Policy Holder", policy.customer);
+      addField("Policy Type", policy.type);
+      addField("Insurer Name", policy.insurer);
+      addField("Sum Assured", policy.sumAssured);
+      addField("Premium Amount", policy.premium);
+      addField("Renewal Date", policy.renewal);
+      addField("Status", policy.status.toUpperCase());
+      
+      currentY += 10;
+      doc.setFillColor(248, 250, 252);
+      doc.roundedRect(25, currentY - 8, 160, 25, 3, 3, 'F');
+      
+      doc.setFontSize(14);
+      doc.setFont("helvetica", "bold");
+      doc.text("Digital Verification Code:", 35, currentY + 8);
+      doc.setTextColor(99, 102, 241);
+      doc.text(`IA-${policy.policyNo.split('-')[1]}`, 140, currentY + 8);
+      
+      doc.setFontSize(9);
+      doc.setTextColor(148, 163, 184);
+      doc.text("This document is a system-generated policy schedule. Valid across all regulatory authorities.", 105, 160, { align: 'center' });
+      doc.text(`Authenticated by Agent Pro on ${new Date().toLocaleString()}`, 105, 166, { align: 'center' });
+
+      doc.save(`Policy_${policy.policyNo}.pdf`);
+      toast.success(`PDF for ${policy.policyNo} downloaded`);
+    } catch (error) {
+      toast.error('Failed to generate PDF');
+    }
   };
 
   const handleIssuePolicy = (e: React.FormEvent) => {
@@ -79,7 +142,7 @@ const CustomerPolicies: React.FC = () => {
       policyNo: `NEW-${Math.floor(10000000 + Math.random() * 90000000)}`,
       renewal: '2027-05-01',
       status: 'Active'
-    };
+    } as any;
     setPolicies([policy, ...policies]);
     setIsIssueModalOpen(false);
     toast.success('Policy issued successfully');
@@ -130,12 +193,33 @@ const CustomerPolicies: React.FC = () => {
           <input 
             type="text" 
             placeholder="Search by customer name or policy number..." 
-            className="w-full pl-12 pr-6 py-3.5 bg-white border border-slate-100 rounded-[20px] text-sm font-medium outline-none focus:ring-4 focus:ring-indigo-500/5 focus:border-indigo-500 transition-all shadow-sm"
+            className="w-full pl-12 pr-6 py-3.5 bg-white border border-slate-100 rounded-[20px] text-sm font-medium outline-none focus:ring-4 focus:ring-indigo-50/5 focus:border-indigo-500 transition-all shadow-sm"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
-        <Button variant="outline" icon={<Filter size={18} />}>Filters</Button>
+        
+        <div className="relative">
+           <Button variant="outline" icon={<Filter size={18} />} onClick={() => setIsFilterMenuOpen(!isFilterMenuOpen)}>
+             Filters {filterStatus !== 'All' && <span className="ml-1 w-2 h-2 bg-indigo-500 rounded-full"></span>}
+           </Button>
+           
+           {isFilterMenuOpen && (
+             <div className="absolute right-0 mt-2 w-48 bg-white rounded-2xl shadow-xl border border-slate-100 py-2 z-50 animate-in fade-in slide-in-from-top-2">
+                <p className="px-4 py-2 text-[9px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-50 mb-1">Status Filter</p>
+                {['All', 'Active', 'Renewal Due'].map(status => (
+                  <button 
+                    key={status}
+                    onClick={() => { setFilterStatus(status); setIsFilterMenuOpen(false); }}
+                    className={`w-full px-4 py-2.5 text-xs font-bold text-left flex items-center justify-between hover:bg-slate-50 transition-colors ${filterStatus === status ? 'text-indigo-600 bg-indigo-50/50' : 'text-slate-600'}`}
+                  >
+                    {status}
+                    {filterStatus === status && <Check size={14} />}
+                  </button>
+                ))}
+             </div>
+           )}
+        </div>
       </div>
 
       {/* Policies List */}
@@ -214,8 +298,8 @@ const CustomerPolicies: React.FC = () => {
                 </div>
 
                 <div className="flex flex-col justify-end gap-3">
-                   <Button variant="primary" size="sm" icon={<Download size={14} />} onClick={() => handleDownload(item.policyNo)}>Download PDF</Button>
-                   <Button variant="outline" size="sm" icon={<ExternalLink size={14} />}>View Profile</Button>
+                   <Button variant="primary" size="sm" icon={<Download size={14} />} onClick={() => handleDownload(item)}>Download PDF</Button>
+                   <Button variant="outline" size="sm" icon={<ExternalLink size={14} />} onClick={() => onViewProfile && onViewProfile(item)}>View Profile</Button>
                 </div>
               </div>
             )}

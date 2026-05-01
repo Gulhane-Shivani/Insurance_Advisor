@@ -20,8 +20,9 @@ const LeadsManagement: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState('All');
 
-  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-  const [newLead, setNewLead] = useState({
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingLead, setEditingLead] = useState<any>(null);
+  const [formData, setFormData] = useState({
     name: '', type: 'Life Insurance', phone: '', email: '', status: 'Hot' as 'Hot' | 'Warm' | 'Cold', score: 50
   });
 
@@ -36,18 +37,40 @@ const LeadsManagement: React.FC = () => {
     toast.success('Lead removed from pipeline');
   };
 
-  const handleAddLead = (e: React.FormEvent) => {
+  const handleOpenModal = (lead?: any) => {
+    if (lead) {
+      setEditingLead(lead);
+      setFormData({
+        name: lead.name,
+        type: lead.type,
+        phone: lead.phone,
+        email: lead.email,
+        status: lead.status,
+        score: lead.score
+      });
+    } else {
+      setEditingLead(null);
+      setFormData({ name: '', type: 'Life Insurance', phone: '', email: '', status: 'Hot', score: 50 });
+    }
+    setIsModalOpen(true);
+  };
+
+  const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const lead = {
-      ...newLead,
-      id: Date.now().toString(),
-      lastContact: 'Just now',
-      nextFollowUp: 'Tomorrow'
-    };
-    setLeads([lead, ...leads]);
-    setIsAddModalOpen(false);
-    toast.success('New lead added successfully');
-    setNewLead({ name: '', type: 'Life Insurance', phone: '', email: '', status: 'Hot', score: 50 });
+    if (editingLead) {
+      setLeads(leads.map(l => l.id === editingLead.id ? { ...l, ...formData } : l));
+      toast.success('Lead updated successfully');
+    } else {
+      const lead = {
+        ...formData,
+        id: Date.now().toString(),
+        lastContact: 'Just now',
+        nextFollowUp: 'Tomorrow'
+      };
+      setLeads([lead, ...leads]);
+      toast.success('New lead added to pipeline');
+    }
+    setIsModalOpen(false);
   };
 
   return (
@@ -75,7 +98,7 @@ const LeadsManagement: React.FC = () => {
               </button>
             ))}
           </div>
-          <Button variant="primary" icon={<UserPlus size={18} />} onClick={() => setIsAddModalOpen(true)}>Add New Lead</Button>
+          <Button variant="primary" icon={<UserPlus size={18} />} onClick={() => handleOpenModal()}>Add New Lead</Button>
         </div>
       </div>
 
@@ -83,7 +106,12 @@ const LeadsManagement: React.FC = () => {
         {filteredLeads.map(lead => (
           <Card key={lead.id} className="p-6 border-none shadow-xl shadow-slate-200/40 hover:shadow-indigo-500/10 transition-all group relative overflow-hidden">
              <div className="absolute top-0 right-0 p-6 opacity-0 group-hover:opacity-100 transition-opacity flex gap-2">
-                <button className="p-2 bg-indigo-50 text-indigo-600 rounded-xl hover:bg-indigo-100 transition-colors"><Edit2 size={16} /></button>
+                <button 
+                  onClick={() => handleOpenModal(lead)}
+                  className="p-2 bg-indigo-50 text-indigo-600 rounded-xl hover:bg-indigo-100 transition-colors"
+                >
+                   <Edit2 size={16} />
+                </button>
                 <button onClick={() => handleDelete(lead.id)} className="p-2 bg-red-50 text-red-600 rounded-xl hover:bg-red-100 transition-colors"><Trash2 size={16} /></button>
              </div>
 
@@ -134,53 +162,59 @@ const LeadsManagement: React.FC = () => {
         ))}
       </div>
 
-      {/* Add Lead Modal */}
-      {isAddModalOpen && (
+      {/* Lead Modal (Add/Edit) */}
+      {isModalOpen && (
         <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
           <div className="bg-white rounded-[32px] w-full max-w-lg shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200">
             <div className="p-6 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
-              <h3 className="text-xl font-black text-slate-800 tracking-tight">Add New Lead</h3>
-              <button onClick={() => setIsAddModalOpen(false)} className="p-2 text-slate-400 hover:text-slate-600 bg-white rounded-xl shadow-sm"><X size={20} /></button>
+              <h3 className="text-xl font-black text-slate-800 tracking-tight">{editingLead ? 'Update Lead Details' : 'Add New Lead'}</h3>
+              <button onClick={() => setIsModalOpen(false)} className="p-2 text-slate-400 hover:text-slate-600 bg-white rounded-xl shadow-sm"><X size={20} /></button>
             </div>
-            <form onSubmit={handleAddLead} className="p-6 space-y-5">
+            <form onSubmit={handleFormSubmit} className="p-6 space-y-5">
               <div className="space-y-4">
                 <div>
-                  <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Full Name</label>
-                  <input required type="text" className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold focus:border-indigo-500 outline-none" value={newLead.name} onChange={e => setNewLead({...newLead, name: e.target.value})} placeholder="e.g. John Doe" />
+                   <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Full Name</label>
+                   <input required type="text" className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold focus:border-indigo-500 outline-none" value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} placeholder="e.g. John Doe" />
                 </div>
                 <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Phone</label>
-                    <input required type="tel" className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold focus:border-indigo-500 outline-none" value={newLead.phone} onChange={e => setNewLead({...newLead, phone: e.target.value})} placeholder="+91..." />
-                  </div>
-                  <div>
-                    <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Email</label>
-                    <input required type="email" className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold focus:border-indigo-500 outline-none" value={newLead.email} onChange={e => setNewLead({...newLead, email: e.target.value})} placeholder="john@email.com" />
-                  </div>
+                   <div>
+                      <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Phone</label>
+                      <input required type="tel" className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold focus:border-indigo-500 outline-none" value={formData.phone} onChange={e => setFormData({...formData, phone: e.target.value})} placeholder="+91..." />
+                   </div>
+                   <div>
+                      <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Email</label>
+                      <input required type="email" className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold focus:border-indigo-500 outline-none" value={formData.email} onChange={e => setFormData({...formData, email: e.target.value})} placeholder="john@email.com" />
+                   </div>
                 </div>
                 <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Insurance Type</label>
-                    <select className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold focus:border-indigo-500 outline-none" value={newLead.type} onChange={e => setNewLead({...newLead, type: e.target.value})}>
-                      <option>Life Insurance</option>
-                      <option>Health Insurance</option>
-                      <option>Car Insurance</option>
-                      <option>Business Insurance</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Status</label>
-                    <select className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold focus:border-indigo-500 outline-none" value={newLead.status} onChange={e => setNewLead({...newLead, status: e.target.value as any})}>
-                      <option value="Hot">Hot Lead</option>
-                      <option value="Warm">Warm Lead</option>
-                      <option value="Cold">Cold Lead</option>
-                    </select>
-                  </div>
+                   <div>
+                      <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Insurance Type</label>
+                      <select className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold focus:border-indigo-500 outline-none" value={formData.type} onChange={e => setFormData({...formData, type: e.target.value})}>
+                         <option>Life Insurance</option>
+                         <option>Health Insurance</option>
+                         <option>Car Insurance</option>
+                         <option>Business Insurance</option>
+                      </select>
+                   </div>
+                   <div>
+                      <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Status</label>
+                      <select className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold focus:border-indigo-500 outline-none" value={formData.status} onChange={e => setFormData({...formData, status: e.target.value as any})}>
+                         <option value="Hot">Hot Lead</option>
+                         <option value="Warm">Warm Lead</option>
+                         <option value="Cold">Cold Lead</option>
+                      </select>
+                   </div>
+                </div>
+                <div>
+                   <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Lead Score ({formData.score}%)</label>
+                   <input type="range" className="w-full h-2 bg-slate-100 rounded-lg appearance-none cursor-pointer accent-indigo-600" value={formData.score} onChange={e => setFormData({...formData, score: parseInt(e.target.value)})} />
                 </div>
               </div>
               <div className="pt-4 flex gap-3">
-                <button type="button" onClick={() => setIsAddModalOpen(false)} className="flex-1 py-3.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-sm font-bold transition-all">Cancel</button>
-                <button type="submit" className="flex-1 py-3.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-sm font-bold transition-all shadow-lg shadow-indigo-200">Create Lead</button>
+                 <button type="button" onClick={() => setIsModalOpen(false)} className="flex-1 py-3.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-sm font-bold transition-all">Discard</button>
+                 <button type="submit" className="flex-1 py-3.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-sm font-bold transition-all shadow-lg shadow-indigo-200">
+                    {editingLead ? 'Update Lead' : 'Create Lead'}
+                 </button>
               </div>
             </form>
           </div>
