@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { CreditCard, History, Clock, Download, ChevronRight, Wallet, CheckCircle2, X, Plus, ShieldCheck, Zap, Lock, ArrowRight, Shield } from 'lucide-react';
+import { CreditCard, History, Clock, Download, ChevronRight, Wallet, CheckCircle2, X, Plus, ShieldCheck, Zap, Lock } from 'lucide-react';
+
 import toast from 'react-hot-toast';
 import { jsPDF } from 'jspdf';
 
@@ -27,10 +28,6 @@ const Payments: React.FC = () => {
 
   const handlePayNow = (policy: any) => {
     setShowGateway({ active: true, policy, step: 'details' });
-  };
-
-  const handleConfirmPay = () => {
-    // This will now be handled by handlePinSubmit directly or similar
   };
 
   const handlePinSubmit = (e: React.FormEvent) => {

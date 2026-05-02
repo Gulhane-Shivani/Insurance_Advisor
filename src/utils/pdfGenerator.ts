@@ -235,7 +235,7 @@ export const generateGenericExportPDF = (title: string, data: any[]) => {
   
   doc.setFontSize(10);
   let y = 40;
-  data.forEach((item, index) => {
+  data.forEach((item) => {
     if (y > 270) {
       doc.addPage();
       y = 20;
