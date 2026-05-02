@@ -107,12 +107,7 @@ const OperationsReports: React.FC = () => {
       setIsCompiling(false);
       toast.dismiss(loadingToast);
       
-      if (success) {
-        toast.success(`Report compiled and sent to administrator email!`, {
-          icon: '📧',
-          duration: 4000
-        });
-      } else {
+      if (!success) {
         toast.error('Failed to compile report. Please check parameters.');
       }
     }, 2500);
@@ -193,7 +188,7 @@ const OperationsReports: React.FC = () => {
                   <h4 className="text-sm font-black text-slate-800 mb-1">{cat.title}</h4>
                   <p className="text-[10px] text-slate-500 font-medium leading-relaxed mb-5">{cat.desc}</p>
                   <button 
-                    onClick={() => { handleExportPDF(cat.title); toast.success(`${cat.title} PDF downloaded`); }}
+                    onClick={() => { handleExportPDF(cat.title); }}
                     className="w-full py-2.5 bg-slate-50 text-slate-600 rounded-xl text-[9px] font-black uppercase tracking-widest hover:bg-indigo-600 hover:text-white transition-all flex items-center justify-center gap-2"
                   >
                     <Download className="w-3.5 h-3.5" /> Direct Export

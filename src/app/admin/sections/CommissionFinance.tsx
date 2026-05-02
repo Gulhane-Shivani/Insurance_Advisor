@@ -52,7 +52,6 @@ const CommissionFinance: React.FC = () => {
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
-      toast.success('Financial report exported successfully');
     } catch (error) {
       toast.error('Failed to export report');
     }
@@ -113,7 +112,6 @@ const CommissionFinance: React.FC = () => {
       doc.text(`Generated on ${new Date().toLocaleString()}`, 105, 146, { align: 'center' });
 
       doc.save(`Receipt_${payout.id}.pdf`);
-      toast.success(`PDF Receipt downloaded`);
     } catch (error) {
       toast.error('Failed to generate PDF receipt');
     }

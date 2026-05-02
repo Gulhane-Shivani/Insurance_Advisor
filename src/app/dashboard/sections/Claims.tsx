@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
-import { FileText, Plus, CheckCircle2, ChevronRight, Upload, Activity } from 'lucide-react';
+import { FileText, Plus, CheckCircle2, ChevronRight, Upload, Activity, Download, X } from 'lucide-react';
 import toast from 'react-hot-toast';
+import { generateClaimPDF } from '../../../utils/pdfGenerator';
 
 const Claims: React.FC = () => {
   const [showFileForm, setShowFileForm] = useState(false);
+  const [selectedClaim, setSelectedClaim] = useState<any>(null);
   const [claims, setClaims] = useState([
     {
       id: 'CLM-90210',
@@ -145,7 +147,7 @@ const Claims: React.FC = () => {
                          </div>
                       </div>
                       <button 
-                        onClick={() => toast.success('Viewing details for ' + claim.id)}
+                        onClick={() => setSelectedClaim(claim)}
                         className="w-full sm:w-auto px-6 py-3 bg-slate-50 hover:bg-slate-100 text-slate-900 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-2"
                       >
                          Details <ChevronRight className="w-3.5 h-3.5" />
@@ -168,11 +170,12 @@ const Claims: React.FC = () => {
                           <th className="px-7 py-4 text-[9px] font-black text-slate-400 uppercase tracking-widest">Policy</th>
                           <th className="px-7 py-4 text-[9px] font-black text-slate-400 uppercase tracking-widest text-center">Status</th>
                           <th className="px-7 py-4 text-[9px] font-black text-slate-400 uppercase tracking-widest text-right">Settlement</th>
+                           <th className="px-7 py-4 text-[9px] font-black text-slate-400 uppercase tracking-widest text-right">Action</th>
                        </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-50">
                        {claims.map((claim) => (
-                         <tr key={claim.id} className="hover:bg-slate-50/50 transition-colors cursor-pointer" onClick={() => toast.success('Viewing updates for ' + claim.id)}>
+                         <tr key={claim.id} className="hover:bg-slate-50/50 transition-colors cursor-pointer" onClick={() => setSelectedClaim(claim)}>
                             <td className="px-7 py-5 text-[11px] font-bold text-slate-500">#{claim.id}</td>
                             <td className="px-7 py-5">
                                <p className="text-[12px] font-bold text-slate-900">{claim.policy}</p>
@@ -187,7 +190,15 @@ const Claims: React.FC = () => {
                             </td>
                             <td className="px-7 py-5 text-right">
                                <p className="text-[12px] font-black text-slate-900">{claim.amount}</p>
-                            </td>
+                             </td>
+                             <td className="px-7 py-5 text-right">
+                                <button 
+                                   onClick={() => setSelectedClaim(claim)}
+                                   className="text-[10px] font-black text-blue-600 uppercase tracking-widest hover:underline"
+                                >
+                                   Details
+                                </button>
+                             </td>
                          </tr>
                        ))}
                     </tbody>
@@ -241,9 +252,81 @@ const Claims: React.FC = () => {
         </div>
       </div>
 
+      {/* Claim Detail Modal */}
+      {selectedClaim && (
+        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+           <div className="bg-white rounded-[40px] w-full max-w-2xl animate-in zoom-in-95 duration-300 overflow-hidden shadow-2xl">
+              <div className="p-10">
+                 <div className="flex justify-between items-center mb-8">
+                    <div>
+                       <div className="flex items-center gap-2 mb-1">
+                          <span className="text-[10px] font-black text-blue-600 uppercase tracking-widest">{selectedClaim.id}</span>
+                       </div>
+                       <h2 className="text-2xl font-black text-slate-900">{selectedClaim.type}</h2>
+                    </div>
+                    <button onClick={() => setSelectedClaim(null)} className="p-2 hover:bg-slate-50 rounded-full transition-colors">
+                       <X className="w-6 h-6 text-slate-400" />
+                    </button>
+                 </div>
+
+                 <div className="grid grid-cols-2 gap-8 mb-10">
+                    <div className="space-y-1">
+                       <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Policy Name</p>
+                       <p className="text-sm font-bold text-slate-800">{selectedClaim.policy}</p>
+                    </div>
+                    <div className="space-y-1 text-right">
+                       <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Date Filed</p>
+                       <p className="text-sm font-bold text-slate-800">{selectedClaim.date}</p>
+                    </div>
+                    <div className="space-y-1">
+                       <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Insurer</p>
+                       <p className="text-sm font-bold text-slate-800">{selectedClaim.insurer}</p>
+                    </div>
+                    <div className="space-y-1 text-right">
+                       <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Claim Amount</p>
+                       <p className="text-xl font-black text-slate-900">{selectedClaim.amount}</p>
+                    </div>
+                 </div>
+
+                 <div className="bg-slate-50 rounded-3xl p-8 mb-10">
+                    <h3 className="text-xs font-black text-slate-900 uppercase tracking-widest mb-6">Processing Timeline</h3>
+                    <div className="space-y-6">
+                       {['Claim Submitted', 'Document Verification', 'Underwriting Review', 'Final Settlement'].map((step, i) => {
+                          const isActive = i + 1 <= selectedClaim.stage;
+                          return (
+                             <div key={i} className="flex items-center gap-4">
+                                <div className={`w-6 h-6 rounded-full flex items-center justify-center shrink-0 ${isActive ? 'bg-blue-600 text-white' : 'bg-slate-200 text-slate-400'}`}>
+                                   {isActive ? <CheckCircle2 className="w-3.5 h-3.5" /> : <span className="text-[10px] font-black">{i + 1}</span>}
+                                </div>
+                                <span className={`text-[11px] font-black uppercase tracking-widest ${isActive ? 'text-slate-900' : 'text-slate-400'}`}>{step}</span>
+                             </div>
+                          );
+                       })}
+                    </div>
+                 </div>
+
+                 <div className="flex gap-4">
+                    <button 
+                       onClick={() => setSelectedClaim(null)}
+                       className="flex-1 py-4 border border-slate-200 rounded-2xl text-[10px] font-black uppercase tracking-widest text-slate-500 hover:bg-slate-50 transition-all"
+                    >
+                       Close View
+                    </button>
+                    <button 
+                       onClick={() => generateClaimPDF(selectedClaim)}
+                       className="flex-1 py-4 bg-slate-900 text-white rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-slate-800 shadow-xl shadow-slate-200 transition-all flex items-center justify-center gap-2"
+                    >
+                       <Download className="w-4 h-4" /> Download Status PDF
+                    </button>
+                 </div>
+              </div>
+           </div>
+        </div>
+      )}
+
       {showFileForm && (
         <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-           <div className="bg-white rounded-[40px] w-full max-w-2xl max-h-[90vh] overflow-y-auto animate-in zoom-in-95 duration-300">
+           <div className="bg-white rounded-[40px] w-full max-w-2xl max-h-[90vh] overflow-y-auto animate-in zoom-in-95 duration-300 shadow-2xl">
               <div className="p-10">
                  <div className="flex justify-between items-center mb-8">
                     <h2 className="text-2xl font-black text-slate-900">File New Claim</h2>

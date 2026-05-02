@@ -1,5 +1,5 @@
 import React from 'react';
-import { Shield, Clock, AlertCircle, CreditCard, FileText, Phone, ChevronRight, Activity, Zap } from 'lucide-react';
+import { Shield, Clock, AlertCircle, CreditCard, FileText, Phone, ChevronRight, Activity, Zap, User } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 interface OverviewProps {
@@ -114,7 +114,7 @@ const Overview: React.FC<OverviewProps> = ({ user, onNavigate }) => {
         {/* Action Grid */}
         <div className="md:col-span-4 grid grid-cols-2 gap-4">
            {[
-             { label: 'Pay Now', icon: CreditCard, color: 'bg-emerald-50 text-emerald-600', target: 'payments' },
+             { label: 'Profile', icon: User, color: 'bg-indigo-50 text-indigo-600', target: 'profile' },
              { label: 'Policies', icon: Shield, color: 'bg-blue-50 text-blue-600', target: 'policies' },
              { label: 'Claims', icon: FileText, color: 'bg-orange-50 text-orange-600', target: 'claims' },
              { label: 'Support', icon: Phone, color: 'bg-purple-50 text-purple-600', target: 'support' },
@@ -158,7 +158,7 @@ const Overview: React.FC<OverviewProps> = ({ user, onNavigate }) => {
                    </div>
                    <div className="text-right">
                       <p className="text-base font-black text-slate-900">{renewal.amount}</p>
-                      <button className="text-[9px] font-black text-blue-600 uppercase tracking-widest hover:underline">Pay</button>
+                      
                    </div>
                 </div>
               ))}

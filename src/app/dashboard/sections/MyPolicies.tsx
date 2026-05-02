@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Shield, Download, CreditCard, RefreshCw, ChevronRight, MoreHorizontal, Calendar, Info, ArrowLeft, CheckCircle2, AlertCircle, FileText, PieChart, Activity, MapPin, Phone, Mail } from 'lucide-react';
 import toast from 'react-hot-toast';
+import { generatePolicyPDF, generateGenericExportPDF } from '../../../utils/pdfGenerator';
 
 interface MyPoliciesProps {
   newlyBoughtPolicy?: any;
@@ -106,27 +107,14 @@ const MyPolicies: React.FC<MyPoliciesProps> = ({ newlyBoughtPolicy }) => {
   }, [newlyBoughtPolicy]);
 
   const handleExport = () => {
-    const data = JSON.stringify(policyList, null, 2);
-    const blob = new Blob([data], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = 'policy_portfolio_export.json';
-    link.click();
-    URL.revokeObjectURL(url);
-    toast.success('Portfolio exported successfully');
+    generateGenericExportPDF('Policy Portfolio', policyList);
   };
 
   const handleDownloadPDF = (id: string) => {
-    const content = `Policy Document for ${id}\nGenerated on: ${new Date().toLocaleDateString()}\nStatus: Active\nCoverage: Premium Plus`;
-    const blob = new Blob([content], { type: 'text/plain' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = `${id}_document.txt`;
-    link.click();
-    URL.revokeObjectURL(url);
-    toast.success(`Document ${id} downloaded`);
+    const policy = policyList.find(p => p.id === id);
+    if (policy) {
+      generatePolicyPDF(policy);
+    }
   };
 
   const handlePayNow = (amount: string) => {
@@ -214,12 +202,7 @@ const MyPolicies: React.FC<MyPoliciesProps> = ({ newlyBoughtPolicy }) => {
              >
                 <Download className="w-4 h-4" /> Download PDF
              </button>
-             <button 
-               onClick={() => handlePayNow(selectedPolicy.premium)}
-               className="flex-1 md:flex-none px-8 py-3 bg-blue-600 text-white rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-blue-700 shadow-xl shadow-blue-200 transition-all active:scale-95"
-             >
-                {selectedPolicy.status === 'Expiring Soon' ? 'Renew Now' : 'Pay Premium'}
-             </button>
+            
           </div>
         </div>
 
@@ -325,7 +308,7 @@ const MyPolicies: React.FC<MyPoliciesProps> = ({ newlyBoughtPolicy }) => {
                       onClick={() => handlePayNow(selectedPolicy.premium)}
                       className="w-full py-3.5 bg-white text-slate-900 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-blue-50 transition-all active:scale-95 shadow-xl shadow-slate-900/40"
                     >
-                       Pay Now
+                       Pay later
                     </button>
                  </div>
                  <div className="mt-8 flex items-center gap-3 relative z-10">

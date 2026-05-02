@@ -21,16 +21,16 @@ const Payments: React.FC = () => {
   ]);
 
   const [showAddMethod, setShowAddMethod] = useState(false);
-  const [showGateway, setShowGateway] = useState<{ active: boolean, policy: any | null, step: 'select' | 'pin' | 'success' }>({ active: false, policy: null, step: 'select' });
+  const [showGateway, setShowGateway] = useState<{ active: boolean, policy: any | null, step: 'details' | 'success' }>({ active: false, policy: null, step: 'details' });
   const [isProcessing, setIsProcessing] = useState(false);
   const [pin, setPin] = useState(['', '', '', '']);
 
   const handlePayNow = (policy: any) => {
-    setShowGateway({ active: true, policy, step: 'select' });
+    setShowGateway({ active: true, policy, step: 'details' });
   };
 
   const handleConfirmPay = () => {
-    setShowGateway(prev => ({ ...prev, step: 'pin' }));
+    // This will now be handled by handlePinSubmit directly or similar
   };
 
   const handlePinSubmit = (e: React.FormEvent) => {
@@ -124,14 +124,13 @@ const Payments: React.FC = () => {
       doc.text(`Generated securely on ${new Date().toLocaleString()}`, 105, 146, { align: 'center' });
 
       doc.save(`Premium_Receipt_${txn.id}.pdf`);
-      toast.success('PDF Receipt downloaded');
     } catch (error) {
       toast.error('Failed to generate PDF');
     }
   };
 
   const closeGateway = () => {
-    setShowGateway({ active: false, policy: null, step: 'select' });
+    setShowGateway({ active: false, policy: null, step: 'details' });
     setPin(['', '', '', '']);
   };
 
@@ -312,8 +311,6 @@ const Payments: React.FC = () => {
            </div>
         </div>
       </div>
-
-      {/* Payment Gateway Modal */}
       {showGateway.active && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-slate-900/70 backdrop-blur-md animate-in fade-in duration-300">
            <div className="bg-white w-full max-w-md rounded-[40px] shadow-2xl overflow-hidden relative animate-in zoom-in-95 duration-300">
@@ -349,9 +346,7 @@ const Payments: React.FC = () => {
                              <Lock className="w-4 h-4" />
                           </div>
                           <div>
-                             <h2 className="text-lg font-black tracking-tight leading-none mb-1">
-                                {showGateway.step === 'pin' ? 'Security PIN' : 'Checkout'}
-                             </h2>
+                             <h2 className="text-lg font-black tracking-tight leading-none mb-1">Gateway</h2>
                              <p className="text-[8px] font-black text-white/40 uppercase tracking-widest">Bank Grade Security</p>
                           </div>
                        </div>
@@ -359,84 +354,67 @@ const Payments: React.FC = () => {
                     </div>
 
                     <div className="p-8 space-y-6">
-                       {showGateway.step === 'select' && (
-                          <>
-                             <div className="p-6 bg-slate-50 rounded-[28px] border border-slate-100 flex justify-between items-center">
-                                <div>
-                                   <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Renewal</p>
-                                   <p className="text-[13px] font-black text-slate-900">{showGateway.policy?.policy}</p>
-                                </div>
-                                <div className="text-right">
-                                   <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Payable</p>
-                                   <p className="text-2xl font-black text-blue-600">{showGateway.policy?.amount}</p>
-                                </div>
-                             </div>
-
-                             <div className="space-y-4">
-                                <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest ml-2">Payment Method</p>
-                                <div className="p-4 bg-white border-2 border-blue-600 rounded-[28px] flex items-center justify-between cursor-pointer shadow-lg shadow-blue-50/50">
-                                   <div className="flex items-center gap-4">
-                                      <div className="w-12 h-8 bg-slate-900 rounded-lg flex items-center justify-center p-2">
-                                         <span className="text-[7px] italic font-black text-white tracking-widest">VISA</span>
-                                      </div>
-                                      <div>
-                                         <p className="text-xs font-black text-slate-900">Visa Debit</p>
-                                         <p className="text-[9px] font-bold text-slate-400">•••• 4242</p>
-                                      </div>
-                                   </div>
-                                   <div className="w-4 h-4 rounded-full border-4 border-blue-600 bg-white"></div>
-                                </div>
-                             </div>
-
-                             <button 
-                               onClick={handleConfirmPay}
-                               className="w-full py-4 bg-blue-600 text-white rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-blue-700 shadow-xl transition-all flex items-center justify-center gap-2"
-                             >
-                                Confirm Payment
-                                <ArrowRight className="w-4 h-4" />
-                             </button>
-                          </>
-                       )}
-
-                       {showGateway.step === 'pin' && (
-                          <div className="text-center py-4">
-                             <Shield className="w-10 h-10 text-blue-600 mx-auto mb-6" />
-                             <h3 className="text-xl font-black text-slate-900 mb-2">Enter PIN</h3>
-                             <p className="text-slate-400 text-[10px] font-medium mb-8">Please enter your 4-digit transaction PIN.</p>
-                             
-                             <form onSubmit={handlePinSubmit} className="space-y-8">
-                                <div className="flex justify-center gap-3">
-                                   {pin.map((digit, i) => (
-                                      <input
-                                         key={i}
-                                         type="password"
-                                         maxLength={1}
-                                         value={digit}
-                                         onChange={(e) => {
-                                            const newPin = [...pin];
-                                            newPin[i] = e.target.value;
-                                            setPin(newPin);
-                                            if (e.target.value && i < 3) {
-                                               const next = (e.target as any).nextElementSibling;
-                                               next?.focus();
-                                            }
-                                         }}
-                                         className="w-12 h-14 bg-slate-50 border border-slate-100 rounded-2xl text-center text-xl font-black focus:ring-4 focus:ring-blue-50 outline-none"
-                                         required
-                                      />
-                                   ))}
-                                </div>
-                                
-                                <button 
-                                  type="submit"
-                                  disabled={isProcessing || pin.some(d => !d)}
-                                  className="w-full py-4 bg-slate-900 text-white rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-blue-600 shadow-xl transition-all disabled:opacity-50"
-                                >
-                                   {isProcessing ? 'Verifying...' : 'Submit PIN'}
-                                </button>
-                             </form>
+                       <div className="p-5 bg-slate-50 rounded-[28px] border border-slate-100 flex justify-between items-center">
+                          <div>
+                             <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Renewal</p>
+                             <p className="text-[13px] font-black text-slate-900">{showGateway.policy?.policy}</p>
                           </div>
-                       )}
+                          <div className="text-right">
+                             <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Payable</p>
+                             <p className="text-2xl font-black text-blue-600">{showGateway.policy?.amount}</p>
+                          </div>
+                       </div>
+
+                       <form onSubmit={handlePinSubmit} className="space-y-5">
+                          <div className="space-y-1">
+                             <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest ml-1">Card Number</label>
+                             <input type="text" placeholder="XXXX XXXX XXXX XXXX" className="w-full px-5 py-3 bg-slate-50 border border-slate-100 rounded-2xl text-xs font-bold focus:ring-4 focus:ring-blue-50 outline-none" required />
+                          </div>
+                          
+                          <div className="grid grid-cols-2 gap-4">
+                             <div className="space-y-1">
+                                <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest ml-1">Expiry</label>
+                                <input type="text" placeholder="MM/YY" className="w-full px-5 py-3 bg-slate-50 border border-slate-100 rounded-2xl text-xs font-bold focus:ring-4 focus:ring-blue-50 outline-none" required />
+                             </div>
+                             <div className="space-y-1">
+                                <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest ml-1">CVV</label>
+                                <input type="password" placeholder="***" className="w-full px-5 py-3 bg-slate-50 border border-slate-100 rounded-2xl text-xs font-bold focus:ring-4 focus:ring-blue-50 outline-none" required />
+                             </div>
+                          </div>
+
+                          <div className="space-y-3 pt-2">
+                             <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest text-center">Transaction PIN</p>
+                             <div className="flex justify-center gap-3">
+                                {pin.map((digit, i) => (
+                                   <input
+                                      key={i}
+                                      type="password"
+                                      maxLength={1}
+                                      value={digit}
+                                      onChange={(e) => {
+                                         const newPin = [...pin];
+                                         newPin[i] = e.target.value;
+                                         setPin(newPin);
+                                         if (e.target.value && i < 3) {
+                                            const next = (e.target as any).nextElementSibling;
+                                            next?.focus();
+                                         }
+                                      }}
+                                      className="w-10 h-12 bg-slate-50 border border-slate-100 rounded-xl text-center text-lg font-black focus:ring-4 focus:ring-blue-50 outline-none"
+                                      required
+                                   />
+                                ))}
+                             </div>
+                          </div>
+
+                          <button 
+                            type="submit"
+                            disabled={isProcessing || pin.some(d => !d)}
+                            className="w-full py-4 bg-blue-600 text-white rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-blue-700 shadow-xl transition-all disabled:opacity-50 mt-4"
+                          >
+                             {isProcessing ? 'Authorizing...' : 'Pay Now'}
+                          </button>
+                       </form>
                        
                        <div className="flex items-center justify-center gap-2 opacity-50 border-t border-slate-50 pt-6">
                           <ShieldCheck className="w-3.5 h-3.5" />

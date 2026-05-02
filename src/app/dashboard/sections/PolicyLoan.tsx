@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { Banknote, Info, History, ArrowRight, ShieldCheck, Download, ArrowLeft, Calculator, CheckCircle2, Calendar } from 'lucide-react';
 import toast from 'react-hot-toast';
+import { generateLoanPDF } from '../../../utils/pdfGenerator';
 
 interface PolicyLoanProps {
   userPolicies?: any[];
@@ -69,8 +70,11 @@ const PolicyLoan: React.FC<PolicyLoanProps> = ({ userPolicies = [] }) => {
       }, 2500);
    };
 
-   const handleDownloadStatement = (_id: string) => {
-      toast.success('Statement downloaded');
+   const handleDownloadStatement = (id: string) => {
+      const loan = loanHistory.find(l => l.id === id);
+      if (loan) {
+         generateLoanPDF(loan);
+      }
    };
 
    if (showApplyForm) {

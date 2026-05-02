@@ -71,7 +71,6 @@ const CommissionStatement: React.FC = () => {
       });
       
       doc.save(`Commission_Statement_${filterMonth}_2026.pdf`);
-      toast.success('Statement exported successfully');
     } catch (err) {
       toast.error('Export failed');
     }
