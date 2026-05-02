@@ -23,7 +23,7 @@ const ServiceRequests: React.FC = () => {
     }
   ]);
 
-  const handleNewRequest = (e: React.FormEvent) => {
+  const handleNewRequest = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const policy = formData.get('policy') as string;

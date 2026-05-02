@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { HelpCircle, Search, Phone, MessageSquare, Book, ChevronRight, ExternalLink, MessageCircle, Heart, ArrowRight, ChevronDown, FileText, CheckCircle2 } from 'lucide-react';
+import { HelpCircle, Search, Phone, MessageSquare, Book, ExternalLink, MessageCircle, Heart, ChevronDown } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 const Support: React.FC = () => {

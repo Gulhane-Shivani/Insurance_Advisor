@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { User, Mail, Phone, Calendar, Camera, Shield, Bell, Lock, ShieldCheck, Edit3, Globe, Zap, ArrowLeft, Save, X, PhoneCall, ArrowRight, Eye, EyeOff, Smartphone, LogOut, Laptop, SmartphoneIcon } from 'lucide-react';
+import { User, Mail, Phone, Calendar, Camera, Shield, Bell, Lock, ShieldCheck, Edit3, Globe, Zap, ArrowLeft, Save, X, PhoneCall, Eye, EyeOff, Smartphone, Laptop, SmartphoneIcon } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 interface ProfileProps {

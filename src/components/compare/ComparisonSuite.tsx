@@ -11,12 +11,7 @@ import {
   ClipboardList, 
   ShieldCheck, 
   ArrowRight,
-  Activity,
-  Car,
-  Briefcase,
-  Heart,
   FileText,
-  Shield,
   CreditCard,
   Lock
 } from 'lucide-react';
@@ -42,7 +37,6 @@ const ComparisonSuite: React.FC<ComparisonSuiteProps> = ({
   const [viewingPlan, setViewingPlan] = useState<typeof insurancePlans[0] | null>(null);
   const [purchaseStep, setPurchaseStep] = useState<'details' | 'terms' | 'payment'>('details');
   const [selectedComparePlans, setSelectedComparePlans] = useState<typeof insurancePlans[0][]>([]);
-  const [showCompareTable, setShowCompareTable] = useState(false);
   const [acceptedTerms, setAcceptedTerms] = useState(false);
 
   const filteredPlans = useMemo(() => {
@@ -243,7 +237,7 @@ const ComparisonSuite: React.FC<ComparisonSuiteProps> = ({
               <p className="text-xs font-bold leading-tight">{selectedComparePlans.length} Plans Selected</p>
            </div>
            <div className="flex items-center gap-2 border-l border-white/20 pl-4">
-              <button onClick={() => setShowCompareTable(true)} className="bg-blue-600 hover:bg-blue-500 px-5 py-2 rounded-full text-[10px] font-black uppercase tracking-widest transition-colors shadow-lg">Compare Now</button>
+              <button onClick={() => toast('Comparison table coming soon')} className="bg-blue-600 hover:bg-blue-500 px-5 py-2 rounded-full text-[10px] font-black uppercase tracking-widest transition-colors shadow-lg">Compare Now</button>
               <button onClick={() => setSelectedComparePlans([])} className="text-slate-400 hover:text-white transition-colors w-8 h-8 rounded-full flex items-center justify-center hover:bg-white/10"><X className="w-4 h-4" /></button>
            </div>
         </div>

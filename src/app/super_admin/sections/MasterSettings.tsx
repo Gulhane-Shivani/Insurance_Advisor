@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
 import toast from 'react-hot-toast';
-import { 
-  Settings, 
   Building2, 
   Layers, 
   Briefcase, 
