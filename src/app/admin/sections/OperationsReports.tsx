@@ -1,9 +1,8 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState } from 'react';
 import { 
   FileText, 
   Download, 
   BarChart3, 
-  PieChart, 
   Calendar, 
   ArrowRight,
   TrendingUp,

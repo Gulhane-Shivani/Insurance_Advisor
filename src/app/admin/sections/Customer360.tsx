@@ -10,8 +10,7 @@ import {
   ExternalLink,
   MessageSquare,
   ShieldCheck,
-  ChevronRight,
-  X
+  ChevronRight
 } from 'lucide-react';
 
 const Customer360: React.FC = () => {

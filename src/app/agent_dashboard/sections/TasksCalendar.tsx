@@ -7,7 +7,7 @@ import {
   Users, Phone, AlertCircle, Trash2, Edit2, 
   ChevronRight, ArrowRight, X
 } from 'lucide-react';
-import { Card, Button, Modal } from '../../../components/agent/UI';
+import { Card, Button } from '../../../components/agent/UI';
 import toast from 'react-hot-toast';
 
 const initialTasks = [

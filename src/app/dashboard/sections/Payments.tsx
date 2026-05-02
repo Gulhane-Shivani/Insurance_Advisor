@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { CreditCard, History, Clock, Download, ChevronRight, ArrowUpRight, Wallet, CheckCircle2, X, Plus, ShieldCheck, Zap, Lock, ArrowRight, Shield } from 'lucide-react';
+import { CreditCard, History, Clock, Download, ChevronRight, Wallet, CheckCircle2, X, Plus, ShieldCheck, Zap, Lock, ArrowRight, Shield } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { jsPDF } from 'jspdf';
 

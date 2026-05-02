@@ -4,7 +4,7 @@ import {
   Phone, Mail, Users, FileText, CheckCircle2,
   Zap, Search, Filter, ArrowRight, X, Check
 } from 'lucide-react';
-import { Card, Button } from '../../../components/agent/UI';
+import { Card } from '../../../components/agent/UI';
 import toast from 'react-hot-toast';
 
 const initialActivities = [

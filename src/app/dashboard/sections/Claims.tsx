@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
-import { FileText, Plus, CheckCircle2, ChevronRight, Upload, Activity, ArrowLeft, ShieldCheck, AlertCircle } from 'lucide-react';
+import { FileText, Plus, CheckCircle2, ChevronRight, Upload, Activity } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 const Claims: React.FC = () => {
   const [showFileForm, setShowFileForm] = useState(false);
-  const [selectedClaim, setSelectedClaim] = useState<any>(null);
   const [claims, setClaims] = useState([
     {
       id: 'CLM-90210',
@@ -28,7 +27,7 @@ const Claims: React.FC = () => {
     }
   ]);
 
-  const handleFileClaim = (e: React.FormEvent) => {
+  const handleFileClaim = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const policyFull = formData.get('policy') as string;
@@ -146,7 +145,7 @@ const Claims: React.FC = () => {
                          </div>
                       </div>
                       <button 
-                        onClick={() => setSelectedClaim(claim)}
+                        onClick={() => toast.success('Viewing details for ' + claim.id)}
                         className="w-full sm:w-auto px-6 py-3 bg-slate-50 hover:bg-slate-100 text-slate-900 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-2"
                       >
                          Details <ChevronRight className="w-3.5 h-3.5" />
@@ -173,7 +172,7 @@ const Claims: React.FC = () => {
                     </thead>
                     <tbody className="divide-y divide-slate-50">
                        {claims.map((claim) => (
-                         <tr key={claim.id} className="hover:bg-slate-50/50 transition-colors cursor-pointer" onClick={() => setSelectedClaim(claim)}>
+                         <tr key={claim.id} className="hover:bg-slate-50/50 transition-colors cursor-pointer" onClick={() => toast.success('Viewing updates for ' + claim.id)}>
                             <td className="px-7 py-5 text-[11px] font-bold text-slate-500">#{claim.id}</td>
                             <td className="px-7 py-5">
                                <p className="text-[12px] font-bold text-slate-900">{claim.policy}</p>

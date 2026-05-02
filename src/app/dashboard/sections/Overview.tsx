@@ -1,5 +1,5 @@
 import React from 'react';
-import { Shield, Clock, AlertCircle, CreditCard, Download, FileText, Phone, ChevronRight, Activity, Zap } from 'lucide-react';
+import { Shield, Clock, AlertCircle, CreditCard, FileText, Phone, ChevronRight, Activity, Zap } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 interface OverviewProps {

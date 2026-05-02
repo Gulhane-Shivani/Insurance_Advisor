@@ -2,7 +2,7 @@
 import React, { useState, useMemo } from 'react';
 import { 
   Wallet, Download, 
-  Calendar, ChevronRight, ArrowUpRight, Search, Filter, X, Check
+  Calendar, ChevronRight, ArrowUpRight, Search, Filter, Check
 } from 'lucide-react';
 import { Card, Button } from '../../../components/agent/UI';
 import toast from 'react-hot-toast';

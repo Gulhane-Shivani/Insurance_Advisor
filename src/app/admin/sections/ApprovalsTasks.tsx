@@ -4,7 +4,6 @@ import {
   XCircle, 
   Clock, 
   AlertTriangle, 
-  FileText, 
   ArrowUpRight,
   ShieldAlert,
   Calendar,
@@ -12,7 +11,6 @@ import {
   X,
   History,
   Check,
-  RotateCcw,
   ListFilter
 } from 'lucide-react';
 import toast from 'react-hot-toast';

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Shield, Download, CreditCard, RefreshCw, ChevronRight, MoreHorizontal, Calendar, Info, ArrowLeft, CheckCircle2, AlertCircle, FileText, PieChart, Activity, MapPin, Phone, Mail, X, Check } from 'lucide-react';
+import { Shield, Download, CreditCard, RefreshCw, ChevronRight, MoreHorizontal, Calendar, Info, ArrowLeft, CheckCircle2, AlertCircle, FileText, PieChart, Activity, MapPin, Phone, Mail } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 interface MyPoliciesProps {

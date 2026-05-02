@@ -16,7 +16,8 @@ export const Button: React.FC<{
   type?: 'button' | 'submit';
   size?: 'sm' | 'md';
   isLoading?: boolean;
-}> = ({ children, onClick, variant = 'primary', className = '', icon, type = 'button', size = 'md', isLoading = false }) => {
+  disabled?: boolean;
+}> = ({ children, onClick, variant = 'primary', className = '', icon, type = 'button', size = 'md', isLoading = false, disabled = false }) => {
   const variants = {
     primary: 'bg-indigo-600 text-white hover:bg-indigo-700 shadow-indigo-100',
     secondary: 'bg-slate-900 text-white hover:bg-slate-800',
@@ -27,7 +28,7 @@ export const Button: React.FC<{
     <button 
       type={type} 
       onClick={onClick} 
-      disabled={isLoading}
+      disabled={isLoading || disabled}
       className={`inline-flex items-center justify-center gap-2 font-black uppercase tracking-widest rounded-2xl transition-all active:scale-95 disabled:opacity-50 ${variants[variant]} ${size === 'sm' ? 'px-4 py-2 text-[10px]' : 'px-6 py-3.5 text-xs'} ${className}`}
     >
       {icon} {children}

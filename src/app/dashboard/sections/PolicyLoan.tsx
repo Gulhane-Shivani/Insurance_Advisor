@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { Banknote, Info, History, ArrowRight, ShieldCheck, Clock, Download, ArrowLeft, Wallet, Calculator, CheckCircle2, Calendar } from 'lucide-react';
+import { Banknote, Info, History, ArrowRight, ShieldCheck, Download, ArrowLeft, Calculator, CheckCircle2, Calendar } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 interface PolicyLoanProps {
@@ -69,7 +69,7 @@ const PolicyLoan: React.FC<PolicyLoanProps> = ({ userPolicies = [] }) => {
       }, 2500);
    };
 
-   const handleDownloadStatement = (id: string) => {
+   const handleDownloadStatement = (_id: string) => {
       toast.success('Statement downloaded');
    };
 

@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { 
   User, Phone, MapPin, Award, 
   CreditCard, Lock, Camera,
-  CheckCircle2, Briefcase, Calendar,
+  Briefcase, Calendar,
   Save, FileText, ChevronRight, Mail, Globe, ShieldCheck, X
 } from 'lucide-react';
 import { Card, Button } from '../../../components/agent/UI';
@@ -56,10 +56,6 @@ const AgentProfile: React.FC = () => {
     setTempProfile(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setProfile(prev => ({ ...prev, [name]: value }));
-  };
 
   return (
     <div className="space-y-6 pb-10 animate-fade-in max-w-6xl mx-auto">

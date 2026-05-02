@@ -9,8 +9,7 @@ import {
   CreditCard,
   History,
   CheckCircle2,
-  Clock,
-  FileText
+  Clock
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { jsPDF } from 'jspdf';
