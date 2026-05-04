@@ -2,23 +2,23 @@
 import React, { useState, useMemo } from 'react';
 import { 
   Phone, Mail, Users, FileText, CheckCircle2,
-  Zap, Search, Filter, ArrowRight, X, Check
+  Zap, Search, Filter, ArrowRight, X, Check, ChevronDown
 } from 'lucide-react';
 import { Card } from '../../../components/agent/UI';
-import toast from 'react-hot-toast';
 
 const initialActivities = [
-  { type: 'Call', customer: 'Rajesh Kumar', description: 'Discussed Term Life renewal and premium adjustment.', time: '10:30 AM', date: 'Today', duration: '12m' },
-  { type: 'Email', customer: 'Anjali Sharma', description: 'Sent personalized quote for Silver Shield Plus plan.', time: '09:15 AM', date: 'Today', duration: 'N/A' },
-  { type: 'Meeting', customer: 'Sunil Gupta', description: 'Physical meeting at residence for car collection survey.', time: '04:30 PM', date: 'Yesterday', duration: '1h 15m' },
-  { type: 'Quote', customer: 'Priya Sharma', description: 'Generated comparison quotes for Car Insurance.', time: '11:00 AM', date: 'Yesterday', duration: 'N/A' },
-  { type: 'Task', customer: 'Suresh Gupta', description: 'Followed up on KYC document pending status.', time: '02:45 PM', date: '2 days ago', duration: '5m' },
+  { id: 1, type: 'Call', customer: 'Rajesh Kumar', description: 'Discussed Term Life renewal and premium adjustment.', time: '10:30 AM', date: 'Today', duration: '12m', details: 'Customer expressed concerns about the 15% premium hike. Explained the new coverage benefits added this year. Rajesh agreed to think about it and requested a follow-up call tomorrow.' },
+  { id: 2, type: 'Email', customer: 'Anjali Sharma', description: 'Sent personalized quote for Silver Shield Plus plan.', time: '09:15 AM', date: 'Today', duration: 'N/A', details: 'Generated 3 variations of the Silver Shield Plus plan with different deductible options. Sent via email with a tracking link. Customer opened the email at 10:05 AM.' },
+  { id: 3, type: 'Meeting', customer: 'Sunil Gupta', description: 'Physical meeting at residence for car collection survey.', time: '04:30 PM', date: 'Yesterday', duration: '1h 15m', details: 'Survey completed successfully. Noted minor scratches on the rear bumper. Took 15 photographs for the record. Sunil provided all necessary original documents for scanning.' },
+  { id: 4, type: 'Quote', customer: 'Priya Sharma', description: 'Generated comparison quotes for Car Insurance.', time: '11:00 AM', date: 'Yesterday', duration: 'N/A', details: 'Compared Tata AIG, ICICI Lombard, and HDFC Ergo. Priya prefers the ICICI Lombard quote due to cashless garage proximity. Awaiting final confirmation.' },
+  { id: 5, type: 'Task', customer: 'Suresh Gupta', description: 'Followed up on KYC document pending status.', time: '02:45 PM', date: '2 days ago', duration: '5m', details: 'Called Suresh regarding the rejected PAN card scan. The previous scan was blurry. He promised to upload a clear picture via the customer portal by evening.' },
 ];
 
 const ActivityLog: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [filterType, setFilterType] = useState('All');
   const [isFilterMenuOpen, setIsFilterMenuOpen] = useState(false);
+  const [expandedActivity, setExpandedActivity] = useState<number | null>(null);
 
   const filteredActivities = useMemo(() => {
     return initialActivities.filter(act => {
@@ -102,8 +102,8 @@ const ActivityLog: React.FC = () => {
         <div className="absolute left-[27px] top-4 bottom-0 w-0.5 bg-slate-100 -z-0"></div>
 
         <div className="space-y-10">
-          {filteredActivities.map((activity, idx) => (
-            <div key={idx} className="flex gap-8 group relative z-10">
+          {filteredActivities.map((activity) => (
+            <div key={activity.id} className="flex gap-8 group relative z-10">
               <div className="hidden lg:block w-24 text-right pt-4">
                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{activity.date}</p>
                  <p className="text-[11px] font-bold text-slate-300 mt-1">{activity.time}</p>
@@ -119,12 +119,9 @@ const ActivityLog: React.FC = () => {
                       <div className="flex-1">
                         <div className="flex flex-wrap items-center gap-3 mb-2">
                           <span className="px-2 py-0.5 bg-white border border-slate-100 text-[9px] font-black text-slate-500 uppercase tracking-widest rounded shadow-sm">{activity.type}</span>
-                          <button 
-                            onClick={() => toast.success(`Deep-diving into ${activity.customer}'s unified audit timeline...`)}
-                            className="text-xs font-black text-indigo-600 flex items-center gap-1.5 bg-indigo-50 px-3 py-1 rounded-full hover:bg-indigo-100 transition-colors"
-                          >
+                          <span className="text-xs font-black text-indigo-600 flex items-center gap-1.5 bg-indigo-50 px-3 py-1 rounded-full cursor-default border border-indigo-100/50">
                             <Users size={12} /> {activity.customer}
-                          </button>
+                          </span>
                         </div>
                         <h4 className="text-sm font-bold text-slate-800 leading-relaxed max-w-2xl">
                           {activity.description}
@@ -136,11 +133,22 @@ const ActivityLog: React.FC = () => {
                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Duration</p>
                            <p className="text-xs font-black text-slate-700">{activity.duration}</p>
                         </div>
-                        <button className="text-[10px] font-black text-indigo-500 hover:text-indigo-700 flex items-center gap-1 transition-colors uppercase tracking-widest mt-4">
-                          Activity Details <ArrowRight size={14} />
+                        <button 
+                          onClick={() => setExpandedActivity(expandedActivity === activity.id ? null : activity.id)}
+                          className="text-[10px] font-black text-indigo-500 hover:text-indigo-700 flex items-center gap-1 transition-colors uppercase tracking-widest mt-4">
+                          Activity Details <ChevronDown size={14} className={`transition-transform duration-300 ${expandedActivity === activity.id ? 'rotate-180' : ''}`} />
                         </button>
                       </div>
                    </div>
+                   
+                   {expandedActivity === activity.id && (
+                     <div className="mt-4 pt-4 border-t border-slate-100 animate-in fade-in slide-in-from-top-2">
+                       <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Detailed Notes</p>
+                       <p className="text-sm text-slate-600 leading-relaxed bg-slate-50 p-4 rounded-xl border border-slate-100 shadow-inner">
+                         {activity.details}
+                       </p>
+                     </div>
+                   )}
                 </div>
               </Card>
             </div>
