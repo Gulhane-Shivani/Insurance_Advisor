@@ -1,7 +1,7 @@
 /* src/app/agent_dashboard/page.tsx */
 import React, { useState, useEffect, useRef } from 'react';
-import { 
-  LayoutDashboard, UserPlus, Users, Zap, Calendar, 
+import {
+  LayoutDashboard, UserPlus, Users, Zap, Calendar,
   DollarSign, Activity, Settings, LogOut, Menu, X, Bell, Search, User, ChevronRight, ChevronDown, FileText
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
@@ -113,7 +113,7 @@ const AgentDashboard: React.FC = () => {
     <div className="flex h-screen bg-[#F8FAFC] overflow-hidden font-sans relative">
       {/* Mobile Sidebar Backdrop */}
       {isSidebarOpen && (
-        <div 
+        <div
           className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-40 lg:hidden"
           onClick={() => setIsSidebarOpen(false)}
         />
@@ -139,11 +139,10 @@ const AgentDashboard: React.FC = () => {
               <button
                 key={item.id}
                 onClick={() => setActiveSection(item.id)}
-                className={`w-full flex items-center gap-3 px-5 py-4 rounded-2xl text-sm font-semibold transition-all group ${
-                  activeSection === item.id || (activeSection === '360' && item.id === 'Customers')
-                  ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/20' 
-                  : 'text-slate-400 hover:bg-white/5 hover:text-white'
-                }`}
+                className={`w-full flex items-center gap-3 px-5 py-4 rounded-2xl text-sm font-semibold transition-all group ${activeSection === item.id || (activeSection === '360' && item.id === 'Customers')
+                    ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/20'
+                    : 'text-slate-400 hover:bg-white/5 hover:text-white'
+                  }`}
               >
                 <item.icon size={20} className={activeSection === item.id || (activeSection === '360' && item.id === 'Customers') ? 'text-white' : 'text-slate-500 group-hover:text-indigo-400'} />
                 {item.label}
@@ -166,13 +165,12 @@ const AgentDashboard: React.FC = () => {
 
             {/* Support & Actions */}
             <div className="space-y-3">
-              <button 
+              <button
                 onClick={() => setActiveSection('Support')}
-                className={`w-full flex items-center justify-between gap-3 px-5 py-4 rounded-2xl text-sm font-semibold transition-all group ${
-                  activeSection === 'Support'
-                  ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/20'
-                  : 'bg-indigo-600/10 text-indigo-100 hover:bg-indigo-500 hover:text-white'
-                }`}
+                className={`w-full flex items-center justify-between gap-3 px-5 py-4 rounded-2xl text-sm font-semibold transition-all group ${activeSection === 'Support'
+                    ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/20'
+                    : 'bg-indigo-600/10 text-indigo-100 hover:bg-indigo-500 hover:text-white'
+                  }`}
               >
                 <div className="flex items-center gap-3">
                   <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors ${activeSection === 'Support' ? 'border-white/30' : 'border-indigo-400/30'}`}>
@@ -185,7 +183,7 @@ const AgentDashboard: React.FC = () => {
             </div>
 
             <div className="flex justify-center">
-               <p className="text-[9px] text-slate-600 font-bold tracking-[0.2em]">V1.2.0 STABLE</p>
+              <p className="text-[9px] text-slate-600 font-bold tracking-[0.2em]">V1.2.0 STABLE</p>
             </div>
           </div>
         </div>
@@ -209,9 +207,9 @@ const AgentDashboard: React.FC = () => {
             <div className="hidden md:flex relative group" ref={searchRef}>
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-indigo-500 transition-colors" size={18} />
               <form onSubmit={handleGlobalSearchSubmit}>
-                <input 
-                  type="text" 
-                  placeholder="Search leads, policies, or clients..." 
+                <input
+                  type="text"
+                  placeholder="Search leads, policies, or clients..."
                   className="pl-12 pr-6 py-3.5 bg-slate-50 border border-slate-100 rounded-[20px] text-sm font-medium w-80 outline-none focus:bg-white focus:ring-4 focus:ring-indigo-500/5 focus:border-indigo-500 transition-all shadow-sm"
                   value={globalSearchTerm}
                   onChange={(e) => { setGlobalSearchTerm(e.target.value); setShowSearchResults(true); }}
@@ -222,36 +220,36 @@ const AgentDashboard: React.FC = () => {
               {/* Search Results Pop-up */}
               {showSearchResults && globalSearchTerm.length > 0 && (
                 <div className="absolute top-[calc(100%+12px)] left-0 w-full bg-white rounded-[24px] shadow-2xl border border-slate-100 overflow-hidden z-50 animate-in fade-in slide-in-from-top-2">
-                   <div className="p-4 bg-slate-50 border-b border-slate-100">
-                      <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Search Results ({searchResults.length})</p>
-                   </div>
-                   <div className="max-h-[350px] overflow-y-auto">
-                      {searchResults.length > 0 ? (
-                        searchResults.map(res => (
-                          <button 
-                            key={res.id}
-                            onClick={() => handleResultClick(res)}
-                            className="w-full flex items-center justify-between gap-4 p-4 hover:bg-indigo-50 transition-colors group text-left"
-                          >
-                             <div className="flex items-center gap-3">
-                                <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center text-slate-400 group-hover:text-indigo-600 transition-colors shadow-sm">
-                                   <res.icon size={18} />
-                                </div>
-                                <div>
-                                   <p className="text-sm font-black text-slate-800">{res.title}</p>
-                                   <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{res.type}</p>
-                                </div>
-                             </div>
-                             <ChevronRight size={14} className="text-slate-300 group-hover:text-indigo-400 transition-transform group-hover:translate-x-1" />
-                          </button>
-                        ))
-                      ) : (
-                        <div className="p-8 text-center">
-                           <Search size={32} className="mx-auto text-slate-200 mb-3" />
-                           <p className="text-xs font-bold text-slate-400">No matches found in your repository</p>
-                        </div>
-                      )}
-                   </div>
+                  <div className="p-4 bg-slate-50 border-b border-slate-100">
+                    <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Search Results ({searchResults.length})</p>
+                  </div>
+                  <div className="max-h-[350px] overflow-y-auto">
+                    {searchResults.length > 0 ? (
+                      searchResults.map(res => (
+                        <button
+                          key={res.id}
+                          onClick={() => handleResultClick(res)}
+                          className="w-full flex items-center justify-between gap-4 p-4 hover:bg-indigo-50 transition-colors group text-left"
+                        >
+                          <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center text-slate-400 group-hover:text-indigo-600 transition-colors shadow-sm">
+                              <res.icon size={18} />
+                            </div>
+                            <div>
+                              <p className="text-sm font-black text-slate-800">{res.title}</p>
+                              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{res.type}</p>
+                            </div>
+                          </div>
+                          <ChevronRight size={14} className="text-slate-300 group-hover:text-indigo-400 transition-transform group-hover:translate-x-1" />
+                        </button>
+                      ))
+                    ) : (
+                      <div className="p-8 text-center">
+                        <Search size={32} className="mx-auto text-slate-200 mb-3" />
+                        <p className="text-xs font-bold text-slate-400">No matches found in your repository</p>
+                      </div>
+                    )}
+                  </div>
                 </div>
               )}
             </div>
@@ -261,14 +259,14 @@ const AgentDashboard: React.FC = () => {
                 <Bell size={20} />
                 <span className="absolute top-2.5 right-2.5 w-2 h-2 bg-red-500 rounded-full border-2 border-white animate-pulse"></span>
               </button>
-              <button 
+              <button
                 onClick={() => setActiveSection('Profile')}
                 className="p-3 bg-slate-50 hover:bg-slate-100 rounded-xl text-slate-600 transition-all"
               >
                 <Settings size={20} />
               </button>
               <div className="w-px h-6 bg-slate-200 mx-1"></div>
-              
+
               {/* Profile Dropdown */}
               <div className="relative" ref={dropdownRef}>
                 <button
@@ -289,7 +287,7 @@ const AgentDashboard: React.FC = () => {
                       <p className="text-[10px] text-slate-500 truncate">{user?.role || 'Elite Producer'}</p>
                     </div>
 
-                    <button 
+                    <button
                       onClick={() => { setActiveSection('Profile'); setDropdownOpen(false); }}
                       className="w-full text-left px-4 py-2 text-[11px] font-bold text-slate-700 hover:bg-slate-50 flex items-center"
                     >

@@ -1,16 +1,16 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import { 
-  LayoutDashboard, 
-  Users, 
-  Settings, 
-  BarChart3, 
-  FileStack, 
-  Globe, 
-  ShieldAlert, 
-  LogOut, 
-  Menu, 
+import {
+  LayoutDashboard,
+  Users,
+  Settings,
+  BarChart3,
+  FileStack,
+  Globe,
+  ShieldAlert,
+  LogOut,
+  Menu,
   X,
   ExternalLink,
   ChevronDown,
@@ -104,7 +104,7 @@ const SuperAdminDashboard: React.FC = () => {
             <X size={20} />
           </button>
         </div>
-        
+
         <nav className="flex-1 px-4 py-6 space-y-2 overflow-y-auto scrollbar-hide">
           <div className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-6 px-4">Master Console</div>
           {adminMenuItems.map((item) => {
@@ -114,11 +114,10 @@ const SuperAdminDashboard: React.FC = () => {
               <button
                 key={item.id}
                 onClick={() => { setActiveSection(item.id); setIsSidebarOpen(false); }}
-                className={`w-full flex items-center px-4 py-3 text-sm font-bold rounded-xl transition-all duration-200 ${
-                  isActive
+                className={`w-full flex items-center px-4 py-3 text-sm font-bold rounded-xl transition-all duration-200 ${isActive
                     ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-900/50'
                     : 'text-slate-400 hover:bg-slate-800 hover:text-white'
-                }`}
+                  }`}
               >
                 <Icon className={`mr-3 h-5 w-5 ${isActive ? 'text-white' : 'text-slate-500'}`} />
                 {item.label}
@@ -127,25 +126,25 @@ const SuperAdminDashboard: React.FC = () => {
           })}
 
           <div className="pt-8 mt-8 border-t border-slate-800">
-             <div className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-4 px-4">Root Access</div>
-             <button onClick={() => { setActiveSection('audit'); setIsSidebarOpen(false); }} className={`w-full flex items-center px-4 py-3 text-sm font-bold rounded-xl transition-all duration-200 ${activeSection === 'audit' ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-900/50' : 'text-slate-400 hover:bg-slate-800 hover:text-white'}`}>
-                <History className={`mr-3 h-5 w-5 ${activeSection === 'audit' ? 'text-white' : 'text-slate-500'}`} /> Audit Logs
-             </button>
-             <button onClick={() => { setActiveSection('stats'); setIsSidebarOpen(false); }} className={`w-full flex items-center px-4 py-3 text-sm font-bold rounded-xl transition-all duration-200 ${activeSection === 'stats' ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-900/50' : 'text-slate-400 hover:bg-slate-800 hover:text-white'}`}>
-                <Activity className={`mr-3 h-5 w-5 ${activeSection === 'stats' ? 'text-white' : 'text-slate-500'}`} /> System Stats
-             </button>
+            <div className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-4 px-4">Root Access</div>
+            <button onClick={() => { setActiveSection('audit'); setIsSidebarOpen(false); }} className={`w-full flex items-center px-4 py-3 text-sm font-bold rounded-xl transition-all duration-200 ${activeSection === 'audit' ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-900/50' : 'text-slate-400 hover:bg-slate-800 hover:text-white'}`}>
+              <History className={`mr-3 h-5 w-5 ${activeSection === 'audit' ? 'text-white' : 'text-slate-500'}`} /> Audit Logs
+            </button>
+            <button onClick={() => { setActiveSection('stats'); setIsSidebarOpen(false); }} className={`w-full flex items-center px-4 py-3 text-sm font-bold rounded-xl transition-all duration-200 ${activeSection === 'stats' ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-900/50' : 'text-slate-400 hover:bg-slate-800 hover:text-white'}`}>
+              <Activity className={`mr-3 h-5 w-5 ${activeSection === 'stats' ? 'text-white' : 'text-slate-500'}`} /> System Stats
+            </button>
           </div>
         </nav>
 
         <div className="p-4 border-t border-slate-800">
           <div className="bg-slate-800 rounded-xl p-4 flex items-center gap-3 cursor-pointer hover:bg-slate-700 transition-colors">
-             <div className="w-10 h-10 rounded-full bg-slate-700 flex items-center justify-center flex-shrink-0 text-white font-bold border border-slate-600">
-               SA
-             </div>
-             <div className="overflow-hidden">
-               <p className="text-sm font-bold text-white truncate">Super Administrator</p>
-               <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Master Authority</p>
-             </div>
+            <div className="w-10 h-10 rounded-full bg-slate-700 flex items-center justify-center flex-shrink-0 text-white font-bold border border-slate-600">
+              SA
+            </div>
+            <div className="overflow-hidden">
+              <p className="text-sm font-bold text-white truncate">Super Administrator</p>
+              <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Master Authority</p>
+            </div>
           </div>
         </div>
       </aside>
@@ -160,9 +159,9 @@ const SuperAdminDashboard: React.FC = () => {
             </button>
             <h1 className="text-2xl font-black text-slate-800 tracking-tight">{getPageTitle()}</h1>
           </div>
-          
+
           <div className="flex items-center gap-4">
-            <button 
+            <button
               onClick={() => navigate('/')}
               className="hidden sm:flex items-center gap-2 px-4 py-2 text-[10px] font-black uppercase tracking-widest text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-xl transition-colors"
             >
@@ -174,7 +173,7 @@ const SuperAdminDashboard: React.FC = () => {
 
             {/* Profile Dropdown */}
             <div className="relative" ref={dropdownRef}>
-              <button 
+              <button
                 onClick={() => setDropdownOpen(!dropdownOpen)}
                 className="flex items-center gap-3 hover:bg-slate-50 p-1.5 rounded-2xl border border-transparent hover:border-slate-200 transition-all focus:outline-none"
               >
@@ -194,7 +193,7 @@ const SuperAdminDashboard: React.FC = () => {
                     <p className="text-sm font-black text-slate-800">Super Administrator</p>
                     <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Master Authority Hub</p>
                   </div>
-                  
+
                   <button onClick={() => { setActiveSection('users'); setDropdownOpen(false); }} className="w-full text-left px-5 py-3 text-xs font-bold text-slate-600 hover:bg-slate-50 rounded-xl flex items-center gap-3 transition-colors">
                     <UserIcon className="w-4 h-4 text-slate-400" />
                     Console Profile
@@ -203,10 +202,10 @@ const SuperAdminDashboard: React.FC = () => {
                     <Settings className="w-4 h-4 text-slate-400" />
                     Security Settings
                   </button>
-                  
+
                   <div className="h-px bg-slate-100 my-2"></div>
-                  
-                  <button 
+
+                  <button
                     onClick={handleLogout}
                     className="w-full text-left px-5 py-3 text-xs font-bold text-red-600 hover:bg-red-50 rounded-xl flex items-center gap-3 transition-colors"
                   >
@@ -222,8 +221,8 @@ const SuperAdminDashboard: React.FC = () => {
         {/* Page Content */}
         <main className="flex-1 overflow-y-auto bg-slate-50/50 p-6 lg:p-10">
           <div className="max-w-[1600px] mx-auto">
-             {/* Content Area - Rendered directly for a standard view */}
-             {renderSection()}
+            {/* Content Area - Rendered directly for a standard view */}
+            {renderSection()}
           </div>
         </main>
       </div>

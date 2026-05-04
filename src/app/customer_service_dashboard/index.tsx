@@ -1,8 +1,8 @@
 /* src/app/csr_dashboard/page.tsx */
 import React, { useState } from 'react';
-import { 
-  LayoutDashboard, Search, ShieldCheck, 
-  RefreshCw, Ticket, MessageSquare, Settings, 
+import {
+  LayoutDashboard, Search, ShieldCheck,
+  RefreshCw, Ticket, MessageSquare, Settings,
   LogOut, Menu, X, Bell, ChevronRight
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
@@ -71,7 +71,7 @@ const CSRDashboard: React.FC = () => {
     <div className="flex h-screen bg-[#F8FAFC] overflow-hidden font-sans relative">
       {/* Mobile Sidebar Backdrop */}
       {isSidebarOpen && (
-        <div 
+        <div
           className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-40 lg:hidden"
           onClick={() => setIsSidebarOpen(false)}
         />
@@ -95,11 +95,10 @@ const CSRDashboard: React.FC = () => {
                 <button
                   key={item.id}
                   onClick={() => setActiveSection(item.id)}
-                  className={`w-full flex items-center gap-3 px-5 py-4 rounded-2xl text-sm font-semibold transition-all group ${
-                    activeSection === item.id 
-                    ? 'bg-violet-600 text-white shadow-xl shadow-violet-600/20' 
-                    : 'text-slate-400 hover:bg-white/5 hover:text-white'
-                  }`}
+                  className={`w-full flex items-center gap-3 px-5 py-4 rounded-2xl text-sm font-semibold transition-all group ${activeSection === item.id
+                      ? 'bg-violet-600 text-white shadow-xl shadow-violet-600/20'
+                      : 'text-slate-400 hover:bg-white/5 hover:text-white'
+                    }`}
                 >
                   <item.icon size={20} className={activeSection === item.id ? 'text-white' : 'text-slate-500 group-hover:text-violet-400'} />
                   {item.label}
@@ -109,7 +108,7 @@ const CSRDashboard: React.FC = () => {
           </div>
 
           <div className="mt-auto p-8 space-y-4">
-            <button 
+            <button
               onClick={() => setIsSupportModalOpen(true)}
               className="w-full flex items-center justify-between gap-3 px-5 py-4 bg-violet-600 text-white rounded-2xl text-sm font-semibold shadow-xl shadow-violet-600/20 group hover:bg-violet-500 transition-all"
             >
@@ -122,7 +121,7 @@ const CSRDashboard: React.FC = () => {
               <ChevronRight size={16} className="text-white/50 group-hover:translate-x-1 transition-transform" />
             </button>
 
-            <button 
+            <button
               onClick={() => { logout(); navigate('/login'); }}
               className="w-full flex items-center justify-center gap-2 px-5 py-3 border-2 border-white/10 text-white/50 hover:text-red-400 hover:border-red-400/30 text-xs font-semibold rounded-2xl transition-all uppercase tracking-widest"
             >
@@ -179,11 +178,11 @@ const CSRDashboard: React.FC = () => {
               <div className="space-y-4">
                 <div>
                   <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Subject</label>
-                  <input required type="text" className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold focus:border-violet-500 outline-none" value={supportRequest.subject} onChange={e => setSupportRequest({...supportRequest, subject: e.target.value})} placeholder="e.g. System Access Issue" />
+                  <input required type="text" className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold focus:border-violet-500 outline-none" value={supportRequest.subject} onChange={e => setSupportRequest({ ...supportRequest, subject: e.target.value })} placeholder="e.g. System Access Issue" />
                 </div>
                 <div>
                   <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Priority</label>
-                  <select className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold focus:border-violet-500 outline-none" value={supportRequest.priority} onChange={e => setSupportRequest({...supportRequest, priority: e.target.value})}>
+                  <select className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold focus:border-violet-500 outline-none" value={supportRequest.priority} onChange={e => setSupportRequest({ ...supportRequest, priority: e.target.value })}>
                     <option>Low</option>
                     <option>Normal</option>
                     <option>High</option>
@@ -192,7 +191,7 @@ const CSRDashboard: React.FC = () => {
                 </div>
                 <div>
                   <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Description</label>
-                  <textarea required rows={4} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium focus:border-violet-500 outline-none resize-none" value={supportRequest.description} onChange={e => setSupportRequest({...supportRequest, description: e.target.value})} placeholder="Please describe the issue in detail..."></textarea>
+                  <textarea required rows={4} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium focus:border-violet-500 outline-none resize-none" value={supportRequest.description} onChange={e => setSupportRequest({ ...supportRequest, description: e.target.value })} placeholder="Please describe the issue in detail..."></textarea>
                 </div>
               </div>
               <div className="pt-4 flex gap-3 border-t border-slate-100">

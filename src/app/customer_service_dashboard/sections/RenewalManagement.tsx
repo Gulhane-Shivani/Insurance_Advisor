@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import { RefreshCw, Phone, Mail, MessageSquare, Search, ChevronRight, AlertCircle, FileText } from 'lucide-react';
+import { RefreshCw, Phone, Mail, MessageSquare, Search, ChevronRight, AlertCircle, FileText, CheckCheck } from 'lucide-react';
 import { Card } from '../../../components/agent/UI';
-import toast from 'react-hot-toast';
 
 interface Renewal { id: string; customer: string; policy: string; expiry: string; premium: string; status: string; riskReason: string; }
 
@@ -15,20 +14,24 @@ const RenewalManagement: React.FC = () => {
   ]);
   const [selected, setSelected] = useState<Renewal>(renewals[0]);
 
+  const [lastAction, setLastAction] = useState<string | null>(null);
+  const [processing, setProcessing] = useState(false);
+
   const handleAction = (label: string) => {
-    toast.success(`${label} for ${selected.customer}`);
-    setRenewals(prev => prev.map(r => r.id === selected.id ? { ...r, status: 'Follow Up' } : r));
-    setSelected(prev => ({ ...prev, status: 'Follow Up' }));
+    setLastAction(label);
+    setRenewals(prev => prev.map(r => r.id === selected.id ? { ...r, status: 'Follow Up', riskReason: label } : r));
+    setSelected(prev => ({ ...prev, status: 'Follow Up', riskReason: label }));
   };
 
   const handleProcessRenewal = () => {
-    toast.loading(`Processing renewal for ${selected.customer}...`, { duration: 1200 });
+    setProcessing(true);
     setTimeout(() => {
       const remaining = renewals.filter(r => r.id !== selected.id);
       setRenewals(remaining);
-      toast.success(`Renewal for ${selected.customer} processed!`);
+      setProcessing(false);
+      setLastAction(null);
       if (remaining.length > 0) setSelected(remaining[0]);
-    }, 1200);
+    }, 800);
   };
 
   const filtered = renewals.filter(r =>
@@ -106,9 +109,15 @@ const RenewalManagement: React.FC = () => {
                   <p className="text-[10px] font-medium text-slate-300 leading-relaxed">{selected.riskReason}</p>
                 </div>
               </div>
+              {lastAction && (
+                <div className="flex items-center gap-2 p-3 bg-emerald-500/10 border border-emerald-500/20 rounded-xl">
+                  <CheckCheck size={14} className="text-emerald-400" />
+                  <span className="text-[11px] font-bold text-emerald-300">{lastAction}</span>
+                </div>
+              )}
               <div className="space-y-3">
                 <h5 className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Communication</h5>
-                <button onClick={() => handleAction('📞 Call logged')} className="w-full text-left px-4 py-3 bg-white/5 hover:bg-white/10 rounded-xl text-xs font-bold transition-colors flex items-center gap-2">
+                <button onClick={() => handleAction('📞 Outbound call logged')} className="w-full text-left px-4 py-3 bg-white/5 hover:bg-white/10 rounded-xl text-xs font-bold transition-colors flex items-center gap-2">
                   <Phone size={14} className="text-violet-400" /> Log Outbound Call
                 </button>
                 <button onClick={() => handleAction('💬 WhatsApp reminder sent')} className="w-full text-left px-4 py-3 bg-white/5 hover:bg-white/10 rounded-xl text-xs font-bold transition-colors flex items-center gap-2">
@@ -117,8 +126,8 @@ const RenewalManagement: React.FC = () => {
                 <button onClick={() => handleAction('📧 Payment link emailed')} className="w-full text-left px-4 py-3 bg-white/5 hover:bg-white/10 rounded-xl text-xs font-bold transition-colors flex items-center gap-2">
                   <Mail size={14} className="text-violet-400" /> Email Payment Link
                 </button>
-                <button onClick={handleProcessRenewal} className="w-full text-left px-4 py-3 bg-violet-600 hover:bg-violet-500 rounded-xl text-xs font-bold transition-colors flex items-center gap-2 text-white shadow-lg shadow-violet-600/20">
-                  <FileText size={14} /> Process Manual Renewal
+                <button onClick={handleProcessRenewal} disabled={processing} className="w-full text-left px-4 py-3 bg-violet-600 hover:bg-violet-500 disabled:opacity-60 rounded-xl text-xs font-bold transition-colors flex items-center gap-2 text-white shadow-lg shadow-violet-600/20">
+                  <FileText size={14} /> {processing ? 'Processing...' : 'Process Manual Renewal'}
                 </button>
               </div>
             </div>

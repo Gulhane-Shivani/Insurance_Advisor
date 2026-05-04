@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import { MessageSquare, Phone, Mail, CheckCircle2, X } from 'lucide-react';
+import { MessageSquare, Phone, Mail, CheckCircle2, X, ChevronDown } from 'lucide-react';
 import { Card } from '../../../components/agent/UI';
-import toast from 'react-hot-toast';
 
 const CSRCommunications: React.FC = () => {
   const [comms, setComms] = useState([
@@ -12,6 +11,8 @@ const CSRCommunications: React.FC = () => {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newMessage, setNewMessage] = useState({ type: 'SMS', to: '', content: '' });
+  const [sentBanner, setSentBanner] = useState('');
+  const [expanded, setExpanded] = useState<number | null>(null);
 
   const handleSendMessage = (e: React.FormEvent) => {
     e.preventDefault();
@@ -22,7 +23,8 @@ const CSRCommunications: React.FC = () => {
     };
     setComms([message, ...comms]);
     setIsModalOpen(false);
-    toast.success(`${newMessage.type} successfully ${newMessage.type === 'Call' ? 'logged' : 'sent'}`);
+    setSentBanner(`${newMessage.type} ${newMessage.type === 'Call' ? 'logged' : 'sent'} successfully to ${newMessage.to}`);
+    setTimeout(() => setSentBanner(''), 3000);
     setNewMessage({ type: 'SMS', to: '', content: '' });
   };
 
@@ -39,26 +41,56 @@ const CSRCommunications: React.FC = () => {
           </button>
         </div>
 
+        {sentBanner && (
+          <div className="mb-4 flex items-center gap-2 p-3 bg-emerald-50 border border-emerald-200 rounded-xl">
+            <CheckCircle2 size={14} className="text-emerald-600" />
+            <span className="text-xs font-bold text-emerald-700">{sentBanner}</span>
+          </div>
+        )}
         <div className="space-y-4">
           {comms.map((comm, i) => (
-            <div key={i} className="p-5 border border-slate-100 rounded-2xl flex items-start gap-4 hover:border-violet-200 transition-colors bg-slate-50 cursor-pointer group"
-              onClick={() => toast.success(`Opening ${comm.type} thread with ${comm.to}`)}>
-              <div className={`p-3 rounded-xl flex-shrink-0 ${comm.type === 'SMS' ? 'bg-indigo-50 text-indigo-600' : comm.type === 'Email' ? 'bg-amber-50 text-amber-600' : 'bg-emerald-50 text-emerald-600'}`}>
-                {comm.type === 'SMS' ? <MessageSquare size={16} /> : comm.type === 'Email' ? <Mail size={16} /> : <Phone size={16} />}
-              </div>
-              <div className="flex-1">
-                <div className="flex items-center justify-between mb-1">
-                  <div className="flex items-center gap-2">
-                    <span className={`text-[9px] font-black uppercase tracking-widest px-2 py-0.5 rounded ${comm.type === 'SMS' ? 'bg-indigo-100 text-indigo-700' : comm.type === 'Email' ? 'bg-amber-100 text-amber-700' : 'bg-emerald-100 text-emerald-700'}`}>{comm.type}</span>
-                    <p className="text-sm font-bold text-slate-800">{comm.to}</p>
+            <div key={i} className="border border-slate-100 rounded-2xl bg-slate-50 cursor-pointer transition-colors hover:border-violet-200 overflow-hidden"
+              onClick={() => setExpanded(expanded === i ? null : i)}>
+              <div className="p-5 flex items-start gap-4">
+                <div className={`p-3 rounded-xl flex-shrink-0 ${comm.type === 'SMS' ? 'bg-indigo-50 text-indigo-600' : comm.type === 'Email' ? 'bg-amber-50 text-amber-600' : 'bg-emerald-50 text-emerald-600'}`}>
+                  {comm.type === 'SMS' ? <MessageSquare size={16} /> : comm.type === 'Email' ? <Mail size={16} /> : <Phone size={16} />}
+                </div>
+                <div className="flex-1">
+                  <div className="flex items-center justify-between mb-1">
+                    <div className="flex items-center gap-2">
+                      <span className={`text-[9px] font-black uppercase tracking-widest px-2 py-0.5 rounded ${comm.type === 'SMS' ? 'bg-indigo-100 text-indigo-700' : comm.type === 'Email' ? 'bg-amber-100 text-amber-700' : 'bg-emerald-100 text-emerald-700'}`}>{comm.type}</span>
+                      <p className="text-sm font-bold text-slate-800">{comm.to}</p>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{comm.time}</span>
+                      <ChevronDown size={14} className={`text-slate-400 transition-transform duration-200 ${expanded === i ? 'rotate-180' : ''}`} />
+                    </div>
                   </div>
-                  <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{comm.time}</span>
-                </div>
-                <p className="text-xs font-medium text-slate-600 mb-2">{comm.content}</p>
-                <div className="flex items-center gap-1 text-[10px] font-black text-emerald-600 uppercase tracking-widest">
-                  <CheckCircle2 size={12} /> {comm.status}
+                  <p className="text-xs font-medium text-slate-600 mb-2 truncate">{comm.content}</p>
+                  <div className="flex items-center gap-1 text-[10px] font-black text-emerald-600 uppercase tracking-widest">
+                    <CheckCircle2 size={12} /> {comm.status}
+                  </div>
                 </div>
               </div>
+              {expanded === i && (
+                <div className="px-5 pb-5 border-t border-slate-100 pt-4 bg-white" onClick={e => e.stopPropagation()}>
+                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Full Message</p>
+                  <p className="text-sm text-slate-700 leading-relaxed">{comm.content}</p>
+                  <div className="mt-3 flex gap-2">
+                    {comm.type !== 'Call' && (
+                      <a href={comm.type === 'Email' ? `mailto:${comm.to}` : `sms:${comm.to}`}
+                        className="px-3 py-1.5 bg-violet-600 text-white text-[10px] font-black rounded-lg hover:bg-violet-700 transition-colors">
+                        {comm.type === 'Email' ? 'Reply via Email' : 'Reply via SMS'}
+                      </a>
+                    )}
+                    {comm.type === 'Call' && (
+                      <a href={`tel:${comm.to}`} className="px-3 py-1.5 bg-emerald-600 text-white text-[10px] font-black rounded-lg hover:bg-emerald-700 transition-colors">
+                        Call Back
+                      </a>
+                    )}
+                  </div>
+                </div>
+              )}
             </div>
           ))}
         </div>

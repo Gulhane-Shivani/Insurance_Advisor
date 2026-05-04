@@ -80,13 +80,13 @@ const Navbar: React.FC = () => {
                     <span className="text-[10px] opacity-40 group-hover/nav:rotate-180 transition-transform duration-300">▼</span>
                   )}
                 </Link>
-                
+
                 {link.subLinks && (
                   <div className="absolute top-full left-0 pt-2 opacity-0 invisible group-hover/nav:opacity-100 group-hover/nav:visible transition-all duration-300 translate-y-1 group-hover/nav:translate-y-0 z-50">
                     <div className="bg-white rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.1)] border border-slate-100 p-3 min-w-[320px]">
                       <div className="flex flex-col gap-1">
                         {link.subLinks.map((sub) => (
-                          <Link 
+                          <Link
                             key={sub.name}
                             to={sub.path}
                             className="flex items-start gap-4 p-3 rounded-2xl hover:bg-blue-50 transition-all no-underline group/item"
@@ -111,7 +111,7 @@ const Navbar: React.FC = () => {
 
             {user ? (
               <div className="relative flex items-center flex-shrink-0">
-                <button 
+                <button
                   onClick={() => setIsUserDropdownOpen(!isUserDropdownOpen)}
                   className="flex items-center gap-2 text-slate-900 font-bold hover:text-blue-600 transition-colors whitespace-nowrap focus:outline-none bg-transparent border-none p-0 cursor-pointer"
                 >
@@ -121,11 +121,11 @@ const Navbar: React.FC = () => {
                   <span className="hidden lg:inline">{(user.full_name || user.name || 'User').split(' ')[0]}</span>
                   <span className={`text-[10px] opacity-40 transition-transform duration-300 ${isUserDropdownOpen ? 'rotate-180' : ''}`}>▼</span>
                 </button>
-                
+
                 {isUserDropdownOpen && (
                   <>
-                    <div 
-                      className="fixed inset-0 z-40" 
+                    <div
+                      className="fixed inset-0 z-40"
                       onClick={() => setIsUserDropdownOpen(false)}
                     ></div>
                     <div className="absolute top-full right-0 mt-2 z-50 animate-fade-in-down">

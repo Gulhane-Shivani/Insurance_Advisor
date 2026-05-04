@@ -1,10 +1,10 @@
 /* src/app/agent_dashboard/sections/DashboardOverview.tsx */
 import React from 'react';
-import { 
-  FileCheck, RefreshCw, DollarSign, Target, ArrowUpRight, 
+import {
+  FileCheck, RefreshCw, DollarSign, Target, ArrowUpRight,
   ArrowDownRight, Phone, Mail, Users, Zap, UserPlus
 } from 'lucide-react';
-import { 
+import {
   AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
   BarChart, Bar
 } from 'recharts';
@@ -63,34 +63,34 @@ const DashboardOverview: React.FC<{ setSection: (s: string) => void }> = ({ setS
 
       {/* Target Achievement Card */}
       <Card className="p-8 border-none shadow-xl shadow-slate-200/50 bg-slate-900 text-white relative overflow-hidden">
-         <div className="absolute top-0 right-0 p-10 opacity-10 rotate-12">
-            <Target size={160} />
-         </div>
-         <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
-            <div className="space-y-2">
-               <h3 className="text-xl font-black tracking-tight">Monthly Target Achievement</h3>
-               <p className="text-sm text-slate-400 font-medium">You have achieved **75%** of your sales goal for April.</p>
+        <div className="absolute top-0 right-0 p-10 opacity-10 rotate-12">
+          <Target size={160} />
+        </div>
+        <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
+          <div className="space-y-2">
+            <h3 className="text-xl font-black tracking-tight">Monthly Target Achievement</h3>
+            <p className="text-sm text-slate-400 font-medium">You have achieved **75%** of your sales goal for April.</p>
+          </div>
+          <div className="flex items-center gap-6">
+            <div className="w-32 h-32 relative flex items-center justify-center">
+              <svg className="w-full h-full -rotate-90">
+                <circle cx="64" cy="64" r="58" stroke="currentColor" strokeWidth="12" fill="transparent" className="text-white/10" />
+                <circle cx="64" cy="64" r="58" stroke="currentColor" strokeWidth="12" fill="transparent" strokeDasharray="364.4" strokeDashoffset="91.1" className="text-indigo-500" strokeLinecap="round" />
+              </svg>
+              <span className="absolute text-2xl font-black">75%</span>
             </div>
-            <div className="flex items-center gap-6">
-               <div className="w-32 h-32 relative flex items-center justify-center">
-                  <svg className="w-full h-full -rotate-90">
-                     <circle cx="64" cy="64" r="58" stroke="currentColor" strokeWidth="12" fill="transparent" className="text-white/10" />
-                     <circle cx="64" cy="64" r="58" stroke="currentColor" strokeWidth="12" fill="transparent" strokeDasharray="364.4" strokeDashoffset="91.1" className="text-indigo-500" strokeLinecap="round" />
-                  </svg>
-                  <span className="absolute text-2xl font-black">75%</span>
-               </div>
-               <div className="hidden lg:block space-y-4">
-                  <div className="flex items-center gap-3">
-                     <div className="w-3 h-3 rounded-full bg-indigo-500"></div>
-                     <p className="text-[10px] font-black uppercase text-slate-400">₹3,75,000 Achieved</p>
-                  </div>
-                  <div className="flex items-center gap-3">
-                     <div className="w-3 h-3 rounded-full bg-white/10"></div>
-                     <p className="text-[10px] font-black uppercase text-slate-400">₹1,25,000 Pending</p>
-                  </div>
-               </div>
+            <div className="hidden lg:block space-y-4">
+              <div className="flex items-center gap-3">
+                <div className="w-3 h-3 rounded-full bg-indigo-500"></div>
+                <p className="text-[10px] font-black uppercase text-slate-400">₹3,75,000 Achieved</p>
+              </div>
+              <div className="flex items-center gap-3">
+                <div className="w-3 h-3 rounded-full bg-white/10"></div>
+                <p className="text-[10px] font-black uppercase text-slate-400">₹1,25,000 Pending</p>
+              </div>
             </div>
-         </div>
+          </div>
+        </div>
       </Card>
 
       {/* Charts Section */}
@@ -107,13 +107,13 @@ const DashboardOverview: React.FC<{ setSection: (s: string) => void }> = ({ setS
               <AreaChart data={chartData}>
                 <defs>
                   <linearGradient id="colorPolicies" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#6366f1" stopOpacity={0.1}/>
-                    <stop offset="95%" stopColor="#6366f1" stopOpacity={0}/>
+                    <stop offset="5%" stopColor="#6366f1" stopOpacity={0.1} />
+                    <stop offset="95%" stopColor="#6366f1" stopOpacity={0} />
                   </linearGradient>
                 </defs>
                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
-                <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{fill: '#94a3b8', fontSize: 10, fontWeight: 700}} />
-                <YAxis axisLine={false} tickLine={false} tick={{fill: '#94a3b8', fontSize: 10, fontWeight: 700}} />
+                <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: '#94a3b8', fontSize: 10, fontWeight: 700 }} />
+                <YAxis axisLine={false} tickLine={false} tick={{ fill: '#94a3b8', fontSize: 10, fontWeight: 700 }} />
                 <Tooltip contentStyle={{ borderRadius: '16px', border: 'none', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)' }} />
                 <Area type="monotone" dataKey="policies" stroke="#6366f1" strokeWidth={4} fillOpacity={1} fill="url(#colorPolicies)" />
               </AreaChart>
@@ -132,9 +132,9 @@ const DashboardOverview: React.FC<{ setSection: (s: string) => void }> = ({ setS
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={chartData}>
                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
-                <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{fill: '#94a3b8', fontSize: 10, fontWeight: 700}} />
-                <YAxis axisLine={false} tickLine={false} tick={{fill: '#94a3b8', fontSize: 10, fontWeight: 700}} />
-                <Tooltip cursor={{fill: '#f8fafc'}} contentStyle={{ borderRadius: '16px', border: 'none', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)' }} />
+                <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: '#94a3b8', fontSize: 10, fontWeight: 700 }} />
+                <YAxis axisLine={false} tickLine={false} tick={{ fill: '#94a3b8', fontSize: 10, fontWeight: 700 }} />
+                <Tooltip cursor={{ fill: '#f8fafc' }} contentStyle={{ borderRadius: '16px', border: 'none', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)' }} />
                 <Bar dataKey="commission" fill="#0ea5e9" radius={[10, 10, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
@@ -203,11 +203,11 @@ const DashboardOverview: React.FC<{ setSection: (s: string) => void }> = ({ setS
             ].map((rem, i) => (
               <div key={i} className="p-4 bg-white/10 rounded-2xl border border-white/5 hover:bg-white/20 transition-all cursor-pointer">
                 <div className="flex justify-between items-start">
-                   <div>
-                      <p className="text-sm font-black tracking-tight">{rem.title}</p>
-                      <p className="text-[10px] text-indigo-200 font-bold mt-0.5">{rem.sub}</p>
-                   </div>
-                   <span className="text-[10px] font-black bg-white text-indigo-600 px-2 py-0.5 rounded uppercase">{rem.date}</span>
+                  <div>
+                    <p className="text-sm font-black tracking-tight">{rem.title}</p>
+                    <p className="text-[10px] text-indigo-200 font-bold mt-0.5">{rem.sub}</p>
+                  </div>
+                  <span className="text-[10px] font-black bg-white text-indigo-600 px-2 py-0.5 rounded uppercase">{rem.date}</span>
                 </div>
               </div>
             ))}

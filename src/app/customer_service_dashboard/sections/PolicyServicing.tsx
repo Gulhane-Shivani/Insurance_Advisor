@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import { Settings, Search, User, Phone, FileText, Download, ShieldCheck, Edit3, CheckCircle2, CreditCard, Mail } from 'lucide-react';
+import { Settings, Search, User, Phone, FileText, Download, ShieldCheck, Edit3, CheckCircle2, CreditCard, Mail, CheckCheck, Loader2 } from 'lucide-react';
 import { Card } from '../../../components/agent/UI';
-import toast from 'react-hot-toast';
 
 const PolicyServicing: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -14,17 +13,27 @@ const PolicyServicing: React.FC = () => {
     payment: { nextDue: '15 May 2026', amount: '₹14,500' }
   });
 
+  const [searching, setSearching] = useState(false);
+  const [savedBanner, setSavedBanner] = useState(false);
+  const [docStatus, setDocStatus] = useState<Record<string, string>>({});
+  const [paymentSent, setPaymentSent] = useState(false);
+
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (!searchQuery.trim()) return;
-    toast.loading('Fetching policy details...', { duration: 800 });
-    setTimeout(() => { setHasSearched(true); toast.success(`Policy ${searchQuery.trim()} loaded`); }, 800);
+    setSearching(true);
+    setTimeout(() => { setHasSearched(true); setSearching(false); }, 600);
   };
 
-  const handleSave = () => { setIsEditing(false); toast.success('Policy details updated successfully'); };
+  const handleSave = () => {
+    setIsEditing(false);
+    setSavedBanner(true);
+    setTimeout(() => setSavedBanner(false), 2500);
+  };
+
   const handleDoc = (label: string) => {
-    toast.loading(`Generating ${label}...`, { duration: 1200 });
-    setTimeout(() => toast.success(`${label} sent to ${policyData.contact.email}`), 1200);
+    setDocStatus(prev => ({ ...prev, [label]: 'sending' }));
+    setTimeout(() => setDocStatus(prev => ({ ...prev, [label]: 'sent' })), 1200);
   };
 
   return (
@@ -38,7 +47,9 @@ const PolicyServicing: React.FC = () => {
               <input type="text" placeholder="Enter Policy Number (e.g. POL-10293)" value={searchQuery} onChange={e => setSearchQuery(e.target.value)}
                 className="w-full pl-12 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold outline-none focus:border-violet-500 focus:bg-white transition-all shadow-sm" />
             </div>
-            <button type="submit" className="px-5 py-3 bg-violet-600 hover:bg-violet-700 text-white text-xs font-black uppercase tracking-widest rounded-xl transition-all shadow-lg shadow-violet-600/20">Load</button>
+            <button type="submit" disabled={searching} className="px-5 py-3 bg-violet-600 hover:bg-violet-700 disabled:opacity-70 text-white text-xs font-black uppercase tracking-widest rounded-xl transition-all shadow-lg shadow-violet-600/20 flex items-center gap-2">
+              {searching ? <><Loader2 size={14} className="animate-spin" /> Loading...</> : 'Load'}
+            </button>
           </form>
         </div>
       </Card>
@@ -54,7 +65,13 @@ const PolicyServicing: React.FC = () => {
             <Card className="p-0 border-none shadow-xl shadow-slate-200/40 overflow-hidden">
               <div className="p-6 border-b border-slate-100 bg-slate-50/50 flex justify-between items-start">
                 <div>
-                  <div className="flex items-center gap-3 mb-2">
+                  {savedBanner && (
+                  <div className="flex items-center gap-2 mb-3 px-3 py-2 bg-emerald-50 border border-emerald-200 rounded-xl">
+                    <CheckCheck size={14} className="text-emerald-600" />
+                    <span className="text-xs font-bold text-emerald-700">Policy details updated successfully.</span>
+                  </div>
+                )}
+                <div className="flex items-center gap-3 mb-2">
                     <h2 className="text-2xl font-black text-slate-800">{policyData.id}</h2>
                     <span className="px-2.5 py-1 bg-emerald-100 text-emerald-700 text-[10px] font-black uppercase rounded-lg tracking-widest">{policyData.status}</span>
                   </div>
@@ -123,9 +140,14 @@ const PolicyServicing: React.FC = () => {
               <h4 className="text-[10px] font-black uppercase tracking-widest text-violet-400 mb-6">Document Issuance</h4>
               <div className="space-y-3">
                 {[{ label: 'Policy Schedule', icon: FileText, sub: 'Generate & Email PDF' }, { label: 'Health ID Card', icon: ShieldCheck, sub: 'Issue digital cashless card' }, { label: 'Tax Certificate (80D)', icon: Download, sub: 'Download FY 25-26 receipt' }].map(doc => (
-                  <button key={doc.label} onClick={() => handleDoc(doc.label)} className="w-full text-left p-4 bg-white/5 hover:bg-white/10 rounded-2xl transition-colors flex items-start gap-4 group">
-                    <div className="p-2 bg-violet-500/20 text-violet-400 rounded-lg group-hover:bg-violet-500 group-hover:text-white transition-colors"><doc.icon size={18} /></div>
-                    <div><h5 className="text-xs font-bold mb-0.5">{doc.label}</h5><p className="text-[10px] text-slate-400 font-medium">{doc.sub}</p></div>
+                  <button key={doc.label} onClick={() => handleDoc(doc.label)} disabled={docStatus[doc.label] === 'sending'} className="w-full text-left p-4 bg-white/5 hover:bg-white/10 rounded-2xl transition-colors flex items-start gap-4 group">
+                    <div className={`p-2 rounded-lg transition-colors ${docStatus[doc.label] === 'sent' ? 'bg-emerald-500 text-white' : 'bg-violet-500/20 text-violet-400 group-hover:bg-violet-500 group-hover:text-white'}`}>
+                      {docStatus[doc.label] === 'sending' ? <Loader2 size={18} className="animate-spin" /> : docStatus[doc.label] === 'sent' ? <CheckCheck size={18} /> : <doc.icon size={18} />}
+                    </div>
+                    <div>
+                      <h5 className="text-xs font-bold mb-0.5">{doc.label}</h5>
+                      <p className="text-[10px] text-slate-400 font-medium">{docStatus[doc.label] === 'sent' ? `Sent to ${policyData.contact.email}` : docStatus[doc.label] === 'sending' ? 'Generating...' : doc.sub}</p>
+                    </div>
                   </button>
                 ))}
               </div>
@@ -136,9 +158,9 @@ const PolicyServicing: React.FC = () => {
                 <div><p className="text-xs font-bold text-slate-500 mb-1">Next Premium</p><p className="text-lg font-black text-slate-800">{policyData.payment.amount}</p></div>
                 <div className="text-right"><p className="text-xs font-bold text-slate-500 mb-1">Due Date</p><p className="text-sm font-black text-slate-800">{policyData.payment.nextDue}</p></div>
               </div>
-              <button onClick={() => toast.success(`Payment link sent to ${policyData.contact.phone}`)}
-                className="w-full py-3 border-2 border-slate-200 text-slate-600 font-bold rounded-xl hover:border-violet-400 hover:text-violet-700 transition-all text-xs flex items-center justify-center gap-2">
-                <Mail size={14} /> Send Payment Link
+              <button onClick={() => { setPaymentSent(true); setTimeout(() => setPaymentSent(false), 3000); }} disabled={paymentSent}
+                className={`w-full py-3 border-2 font-bold rounded-xl transition-all text-xs flex items-center justify-center gap-2 ${paymentSent ? 'border-emerald-300 text-emerald-600 bg-emerald-50' : 'border-slate-200 text-slate-600 hover:border-violet-400 hover:text-violet-700'}`}>
+                {paymentSent ? <><CheckCheck size={14} /> Payment Link Sent!</> : <><Mail size={14} /> Send Payment Link</>}
               </button>
             </Card>
           </div>

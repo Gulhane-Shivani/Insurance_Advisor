@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import { Search, User, Phone, Mail, ShieldCheck, History, FileText, Download } from 'lucide-react';
+import { Search, User, Phone, Mail, ShieldCheck, History, FileText, Download, CheckCheck, Edit3, X, Loader2 } from 'lucide-react';
 import { Card, Button } from '../../../components/agent/UI';
-import toast from 'react-hot-toast';
 
 const CSRCustomer360: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -21,11 +20,22 @@ const CSRCustomer360: React.FC = () => {
     ],
   };
 
+  const [searching, setSearching] = useState(false);
+  const [editContact, setEditContact] = useState(false);
+  const [contactForm, setContactForm] = useState({ phone: '+91 98765 43210', email: 'rajesh.k@example.com' });
+  const [contactSaved, setContactSaved] = useState(false);
+  const [paymentSent, setPaymentSent] = useState(false);
+  const [showTicketForm, setShowTicketForm] = useState(false);
+  const [ticketDesc, setTicketDesc] = useState('');
+  const [ticketLogged, setTicketLogged] = useState(false);
+  const [policyDetail, setPolicyDetail] = useState<string | null>(null);
+  const [docDownloaded, setDocDownloaded] = useState<Record<string, boolean>>({});
+
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (!searchQuery.trim()) return;
-    toast.loading('Searching CRM database...', { duration: 800 });
-    setTimeout(() => { setHasSearched(true); toast.success('Customer found'); }, 800);
+    setSearching(true);
+    setTimeout(() => { setHasSearched(true); setSearching(false); }, 600);
   };
 
   return (
@@ -41,7 +51,9 @@ const CSRCustomer360: React.FC = () => {
               onChange={e => setSearchQuery(e.target.value)}
               className="w-full pl-12 pr-4 py-4 bg-slate-50 border border-slate-200 rounded-2xl text-sm font-bold outline-none focus:border-violet-500 focus:bg-white transition-all shadow-sm" />
           </div>
-          <Button type="submit" variant="primary" className="py-4 px-8 bg-violet-600 hover:bg-violet-700">Search</Button>
+          <Button type="submit" variant="primary" className="py-4 px-8 bg-violet-600 hover:bg-violet-700" disabled={searching}>
+            {searching ? <span className="flex items-center gap-2"><Loader2 size={14} className="animate-spin" /> Searching...</span> : 'Search'}
+          </Button>
         </form>
       </Card>
 
@@ -74,9 +86,30 @@ const CSRCustomer360: React.FC = () => {
             <Card className="p-6 border-none shadow-xl shadow-slate-200/40">
               <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Quick Actions</h4>
               <div className="space-y-2">
-                <button onClick={() => toast.success('Opening update form...')} className="w-full text-left px-4 py-3 bg-slate-50 hover:bg-violet-50 hover:text-violet-700 rounded-xl text-xs font-bold transition-colors">Update Contact Info</button>
-                <button onClick={() => toast.success(`Payment link sent to ${customerData.email}`)} className="w-full text-left px-4 py-3 bg-slate-50 hover:bg-violet-50 hover:text-violet-700 rounded-xl text-xs font-bold transition-colors">Send Payment Link</button>
-                <button onClick={() => toast.success('Opening ticket creation form...')} className="w-full text-left px-4 py-3 bg-slate-50 hover:bg-violet-50 hover:text-violet-700 rounded-xl text-xs font-bold transition-colors">Log New Ticket</button>
+                <button onClick={() => { setEditContact(e => !e); setContactSaved(false); }} className="w-full text-left px-4 py-3 bg-slate-50 hover:bg-violet-50 hover:text-violet-700 rounded-xl text-xs font-bold transition-colors flex items-center gap-2">
+                  <Edit3 size={13} /> {editContact ? 'Cancel Edit' : 'Update Contact Info'}
+                </button>
+                {editContact && (
+                  <div className="space-y-2 p-3 bg-slate-50 rounded-xl border border-slate-200">
+                    <input type="tel" value={contactForm.phone} onChange={e => setContactForm(f => ({ ...f, phone: e.target.value }))} className="w-full px-3 py-2 text-xs bg-white border border-slate-200 rounded-lg outline-none focus:border-violet-500" placeholder="Phone" />
+                    <input type="email" value={contactForm.email} onChange={e => setContactForm(f => ({ ...f, email: e.target.value }))} className="w-full px-3 py-2 text-xs bg-white border border-slate-200 rounded-lg outline-none focus:border-violet-500" placeholder="Email" />
+                    <button onClick={() => { setEditContact(false); setContactSaved(true); setTimeout(() => setContactSaved(false), 2500); }} className="w-full py-2 bg-violet-600 text-white text-xs font-black rounded-lg">Save Changes</button>
+                    {contactSaved && <p className="text-[10px] text-emerald-600 font-bold flex items-center gap-1"><CheckCheck size={11} /> Contact updated!</p>}
+                  </div>
+                )}
+                <button onClick={() => { setPaymentSent(true); setTimeout(() => setPaymentSent(false), 3000); }} disabled={paymentSent} className={`w-full text-left px-4 py-3 rounded-xl text-xs font-bold transition-colors flex items-center gap-2 ${paymentSent ? 'bg-emerald-50 text-emerald-700' : 'bg-slate-50 hover:bg-violet-50 hover:text-violet-700'}`}>
+                  {paymentSent ? <><CheckCheck size={13} /> Payment Link Sent!</> : <><Mail size={13} /> Send Payment Link</>}
+                </button>
+                <button onClick={() => { setShowTicketForm(f => !f); setTicketLogged(false); }} className="w-full text-left px-4 py-3 bg-slate-50 hover:bg-violet-50 hover:text-violet-700 rounded-xl text-xs font-bold transition-colors flex items-center gap-2">
+                  <FileText size={13} /> {showTicketForm ? 'Cancel' : 'Log New Ticket'}
+                </button>
+                {showTicketForm && !ticketLogged && (
+                  <div className="space-y-2 p-3 bg-slate-50 rounded-xl border border-slate-200">
+                    <textarea rows={3} value={ticketDesc} onChange={e => setTicketDesc(e.target.value)} placeholder="Describe the issue..." className="w-full px-3 py-2 text-xs bg-white border border-slate-200 rounded-lg outline-none focus:border-violet-500 resize-none" />
+                    <button onClick={() => { if (!ticketDesc.trim()) return; setTicketLogged(true); setShowTicketForm(false); setTicketDesc(''); }} className="w-full py-2 bg-violet-600 text-white text-xs font-black rounded-lg">Log Ticket</button>
+                  </div>
+                )}
+                {ticketLogged && <p className="text-[10px] text-emerald-600 font-bold flex items-center gap-1 px-1"><CheckCheck size={11} /> Ticket logged successfully!</p>}
               </div>
             </Card>
           </div>
@@ -101,9 +134,17 @@ const CSRCustomer360: React.FC = () => {
                       <p className="text-sm font-bold text-slate-700">{policy.renewal}</p>
                     </div>
                     <div className="flex gap-2">
-                      <Button onClick={() => toast.success(`Opening details for ${policy.id}`)} variant="outline" size="sm" icon={<FileText size={14} />}>Details</Button>
-                      <Button onClick={() => toast.success('Downloading document...')} variant="outline" size="sm" icon={<Download size={14} />}>Doc</Button>
+                      <Button onClick={() => setPolicyDetail(p => p === policy.id ? null : policy.id)} variant="outline" size="sm" icon={<FileText size={14} />}>Details</Button>
+                      <Button onClick={() => setDocDownloaded(prev => ({ ...prev, [policy.id]: true }))} variant="outline" size="sm" icon={docDownloaded[policy.id] ? <CheckCheck size={14} /> : <Download size={14} />}>{docDownloaded[policy.id] ? 'Saved' : 'Doc'}</Button>
                     </div>
+                    {policyDetail === policy.id && (
+                      <div className="mt-3 p-3 bg-violet-50 border border-violet-100 rounded-xl text-xs text-slate-700">
+                        <p><span className="font-black text-violet-600">ID:</span> {policy.id}</p>
+                        <p><span className="font-black text-violet-600">Premium:</span> {policy.premium}</p>
+                        <p><span className="font-black text-violet-600">Renewal:</span> {policy.renewal}</p>
+                        <p><span className="font-black text-violet-600">Status:</span> {policy.status}</p>
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>
