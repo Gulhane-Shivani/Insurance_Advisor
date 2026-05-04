@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { RefreshCw, Phone, Mail, MessageSquare, Search, ChevronRight, AlertCircle, FileText, CheckCheck } from 'lucide-react';
 import { Card } from '../../../components/agent/UI';
 
@@ -12,32 +12,55 @@ const RenewalManagement: React.FC = () => {
     { id: 'REN-002', customer: 'Meera Reddy', policy: 'Motor Comprehensive', expiry: '12 May 2026', premium: '₹12,200', status: 'Follow Up', riskReason: 'Requested discount' },
     { id: 'REN-003', customer: 'Arjun Singh', policy: 'Term Life Shield', expiry: '20 May 2026', premium: '₹24,000', status: 'Payment Pending', riskReason: 'Link sent' },
   ]);
-  const [selected, setSelected] = useState<Renewal>(renewals[0]);
+  const [selected, setSelected] = useState<Renewal | null>(renewals[0]);
 
   const [lastAction, setLastAction] = useState<string | null>(null);
   const [processing, setProcessing] = useState(false);
 
   const handleAction = (label: string) => {
+    if (!selected) return;
     setLastAction(label);
     setRenewals(prev => prev.map(r => r.id === selected.id ? { ...r, status: 'Follow Up', riskReason: label } : r));
-    setSelected(prev => ({ ...prev, status: 'Follow Up', riskReason: label }));
+    setSelected(prev => prev ? ({ ...prev, status: 'Follow Up', riskReason: label }) : null);
   };
 
   const handleProcessRenewal = () => {
+    if (!selected) return;
     setProcessing(true);
     setTimeout(() => {
       const remaining = renewals.filter(r => r.id !== selected.id);
       setRenewals(remaining);
       setProcessing(false);
       setLastAction(null);
-      if (remaining.length > 0) setSelected(remaining[0]);
     }, 800);
   };
 
-  const filtered = renewals.filter(r =>
-    r.customer.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    r.policy.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filtered = renewals.filter(r => {
+    const searchMatch = r.customer.toLowerCase().includes(searchQuery.toLowerCase()) || r.policy.toLowerCase().includes(searchQuery.toLowerCase());
+    
+    // We parse the expiry date and compare to the app's current context date (e.g. May 4, 2026)
+    const today = new Date('04 May 2026');
+    const expiryDate = new Date(r.expiry);
+    const diffTime = expiryDate.getTime() - today.getTime();
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    
+    let tabMatch = true;
+    if (activeTab === 'Overdue') tabMatch = diffDays < 0;
+    else if (activeTab === 'Upcoming (30 Days)') tabMatch = diffDays >= 0 && diffDays <= 30;
+    else if (activeTab === 'Upcoming (60 Days)') tabMatch = diffDays > 30 && diffDays <= 60;
+
+    return searchMatch && tabMatch;
+  });
+
+  useEffect(() => {
+    if (filtered.length > 0) {
+      if (!selected || !filtered.find(r => r.id === selected.id)) {
+        setSelected(filtered[0]);
+      }
+    } else {
+      setSelected(null);
+    }
+  }, [filtered, selected]);
 
   return (
     <div className="space-y-6 animate-fade-in">
@@ -69,7 +92,7 @@ const RenewalManagement: React.FC = () => {
               )}
               {filtered.map(renewal => (
                 <div key={renewal.id} onClick={() => setSelected(renewal)}
-                  className={`p-5 border rounded-2xl flex flex-col md:flex-row justify-between gap-4 transition-all bg-white group cursor-pointer shadow-sm hover:shadow-md ${selected.id === renewal.id ? 'border-violet-400 ring-2 ring-violet-100' : 'border-slate-100 hover:border-violet-200'}`}>
+                  className={`p-5 border rounded-2xl flex flex-col md:flex-row justify-between gap-4 transition-all bg-white group cursor-pointer shadow-sm hover:shadow-md ${selected?.id === renewal.id ? 'border-violet-400 ring-2 ring-violet-100' : 'border-slate-100 hover:border-violet-200'}`}>
                   <div className="flex gap-4">
                     <div className="w-12 h-12 rounded-xl bg-violet-50 text-violet-600 flex items-center justify-center flex-shrink-0 font-black text-xl">{renewal.customer.charAt(0)}</div>
                     <div>
@@ -95,42 +118,55 @@ const RenewalManagement: React.FC = () => {
         </div>
 
         <div className="lg:w-1/3 space-y-6">
-          <Card className="p-6 border-none shadow-xl shadow-slate-200/40 bg-slate-900 text-white">
+          <Card className="p-6 border-none shadow-xl shadow-slate-200/40 bg-slate-900 text-white min-h-[400px]">
             <h4 className="text-[10px] font-black uppercase tracking-widest text-violet-400 mb-6">Retention Actions</h4>
-            <div className="space-y-6">
-              <div>
-                <h2 className="text-xl font-black mb-1">{selected.customer}</h2>
-                <p className="text-xs font-medium text-slate-400">{selected.policy} • {selected.premium}</p>
-              </div>
-              <div className={`p-4 rounded-2xl flex gap-3 ${selected.status === 'At Risk' ? 'bg-red-500/10 border border-red-500/20' : 'bg-amber-500/10 border border-amber-500/20'}`}>
-                <AlertCircle size={20} className={`flex-shrink-0 ${selected.status === 'At Risk' ? 'text-red-500' : 'text-amber-400'}`} />
+            
+            {selected ? (
+              <div className="space-y-6">
                 <div>
-                  <p className={`text-xs font-black uppercase tracking-widest mb-1 ${selected.status === 'At Risk' ? 'text-red-500' : 'text-amber-400'}`}>{selected.status}</p>
-                  <p className="text-[10px] font-medium text-slate-300 leading-relaxed">{selected.riskReason}</p>
+                  <h2 className="text-xl font-black mb-1">{selected.customer}</h2>
+                  <p className="text-xs font-medium text-slate-400">{selected.policy} • {selected.premium}</p>
+                </div>
+                <div className={`p-4 rounded-2xl flex gap-3 ${selected.status === 'At Risk' ? 'bg-red-500/10 border border-red-500/20' : 'bg-amber-500/10 border border-amber-500/20'}`}>
+                  <AlertCircle size={20} className={`flex-shrink-0 ${selected.status === 'At Risk' ? 'text-red-500' : 'text-amber-400'}`} />
+                  <div>
+                    <p className={`text-xs font-black uppercase tracking-widest mb-1 ${selected.status === 'At Risk' ? 'text-red-500' : 'text-amber-400'}`}>{selected.status}</p>
+                    <p className="text-[10px] font-medium text-slate-300 leading-relaxed">{selected.riskReason}</p>
+                  </div>
+                </div>
+                {lastAction && (
+                  <div className="flex items-center gap-2 p-3 bg-emerald-500/10 border border-emerald-500/20 rounded-xl">
+                    <CheckCheck size={14} className="text-emerald-400" />
+                    <span className="text-[11px] font-bold text-emerald-300">{lastAction}</span>
+                  </div>
+                )}
+                <div className="space-y-3">
+                  <h5 className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Communication</h5>
+                  <button onClick={() => handleAction('📞 Outbound call logged')} className="w-full text-left px-4 py-3 bg-white/5 hover:bg-white/10 rounded-xl text-xs font-bold transition-colors flex items-center gap-2">
+                    <Phone size={14} className="text-violet-400" /> Log Outbound Call
+                  </button>
+                  <button onClick={() => handleAction('💬 WhatsApp reminder sent')} className="w-full text-left px-4 py-3 bg-white/5 hover:bg-white/10 rounded-xl text-xs font-bold transition-colors flex items-center gap-2">
+                    <MessageSquare size={14} className="text-violet-400" /> Send WhatsApp Reminder
+                  </button>
+                  <button onClick={() => handleAction('📧 Payment link emailed')} className="w-full text-left px-4 py-3 bg-white/5 hover:bg-white/10 rounded-xl text-xs font-bold transition-colors flex items-center gap-2">
+                    <Mail size={14} className="text-violet-400" /> Email Payment Link
+                  </button>
+                  <button onClick={handleProcessRenewal} disabled={processing} className="w-full text-left px-4 py-3 bg-violet-600 hover:bg-violet-500 disabled:opacity-60 rounded-xl text-xs font-bold transition-colors flex items-center gap-2 text-white shadow-lg shadow-violet-600/20">
+                    <FileText size={14} /> {processing ? 'Processing...' : 'Process Manual Renewal'}
+                  </button>
                 </div>
               </div>
-              {lastAction && (
-                <div className="flex items-center gap-2 p-3 bg-emerald-500/10 border border-emerald-500/20 rounded-xl">
-                  <CheckCheck size={14} className="text-emerald-400" />
-                  <span className="text-[11px] font-bold text-emerald-300">{lastAction}</span>
+            ) : (
+              <div className="flex flex-col items-center justify-center h-full text-center space-y-3 pt-10">
+                <div className="w-16 h-16 rounded-full bg-slate-800 flex items-center justify-center text-slate-600">
+                  <FileText size={24} />
                 </div>
-              )}
-              <div className="space-y-3">
-                <h5 className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Communication</h5>
-                <button onClick={() => handleAction('📞 Outbound call logged')} className="w-full text-left px-4 py-3 bg-white/5 hover:bg-white/10 rounded-xl text-xs font-bold transition-colors flex items-center gap-2">
-                  <Phone size={14} className="text-violet-400" /> Log Outbound Call
-                </button>
-                <button onClick={() => handleAction('💬 WhatsApp reminder sent')} className="w-full text-left px-4 py-3 bg-white/5 hover:bg-white/10 rounded-xl text-xs font-bold transition-colors flex items-center gap-2">
-                  <MessageSquare size={14} className="text-violet-400" /> Send WhatsApp Reminder
-                </button>
-                <button onClick={() => handleAction('📧 Payment link emailed')} className="w-full text-left px-4 py-3 bg-white/5 hover:bg-white/10 rounded-xl text-xs font-bold transition-colors flex items-center gap-2">
-                  <Mail size={14} className="text-violet-400" /> Email Payment Link
-                </button>
-                <button onClick={handleProcessRenewal} disabled={processing} className="w-full text-left px-4 py-3 bg-violet-600 hover:bg-violet-500 disabled:opacity-60 rounded-xl text-xs font-bold transition-colors flex items-center gap-2 text-white shadow-lg shadow-violet-600/20">
-                  <FileText size={14} /> {processing ? 'Processing...' : 'Process Manual Renewal'}
-                </button>
+                <div>
+                  <p className="text-sm font-bold text-slate-300">No Renewal Selected</p>
+                  <p className="text-[10px] text-slate-500 uppercase tracking-widest mt-1">Select a policy from the desk queue</p>
+                </div>
               </div>
-            </div>
+            )}
           </Card>
         </div>
       </div>

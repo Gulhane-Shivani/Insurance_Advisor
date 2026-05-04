@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Search, User, Phone, Mail, ShieldCheck, History, FileText, Download, CheckCheck, Edit3, X, Loader2 } from 'lucide-react';
+import { Search, User, Phone, Mail, ShieldCheck, History, FileText, Download, CheckCheck, Edit3, Loader2 } from 'lucide-react';
 import { Card, Button } from '../../../components/agent/UI';
 
 const CSRCustomer360: React.FC = () => {
