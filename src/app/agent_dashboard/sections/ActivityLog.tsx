@@ -2,7 +2,7 @@
 import React, { useState, useMemo } from 'react';
 import { 
   Phone, Mail, Users, FileText, CheckCircle2,
-  Zap, Search, Filter, ArrowRight, X, Check, ChevronDown
+  Zap, Search, Filter, X, Check, ChevronDown
 } from 'lucide-react';
 import { Card } from '../../../components/agent/UI';
 
