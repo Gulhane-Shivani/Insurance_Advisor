@@ -17,7 +17,11 @@ import api from '../../../services/api';
 import toast from 'react-hot-toast';
 import UserModal from '../components/UserModal';
 
-const UserManagement: React.FC = () => {
+interface UserManagementProps {
+  viewType?: 'staff' | 'customers' | 'all';
+}
+
+const UserManagement: React.FC<UserManagementProps> = ({ viewType = 'all' }) => {
   const [users, setUsers] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('All Users');
@@ -81,12 +85,24 @@ const UserManagement: React.FC = () => {
     setIsModalOpen(true);
   };
 
-  const filteredUsers = users.filter(user => 
-    user.full_name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    user.email?.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredUsers = users.filter(user => {
+    const matchesSearch = user.full_name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                          user.email?.toLowerCase().includes(searchQuery.toLowerCase());
+    
+    if (!matchesSearch) return false;
 
-  const roles = [
+    if (viewType === 'staff') {
+      return ['SUPER_ADMIN', 'ADMIN', 'AGENT', 'CSR'].includes(user.role);
+    }
+    if (viewType === 'customers') {
+      return user.role === 'USER';
+    }
+    return true;
+  });
+
+  const roles = viewType === 'customers' ? [
+    { name: 'Customers', key: 'USER', icon: Users, color: 'blue' },
+  ] : [
     { name: 'Super Admin', key: 'SUPER_ADMIN', icon: Shield, color: 'red' },
     { name: 'Admin', key: 'ADMIN', icon: Lock, color: 'indigo' },
     { name: 'Agent', key: 'AGENT', icon: Users, color: 'blue' },
@@ -112,14 +128,14 @@ const UserManagement: React.FC = () => {
            onClick={openCreateModal}
            className="w-full sm:w-auto px-6 py-3 bg-indigo-600 text-white rounded-2xl text-sm font-black hover:bg-indigo-700 shadow-lg shadow-indigo-200 transition-all flex items-center justify-center gap-2"
          >
-            <UserPlus className="w-4 h-4" /> Add New Personnel
+            <UserPlus className="w-4 h-4" /> Add New {viewType === 'customers' ? 'Customer' : 'Personnel'}
          </button>
       </div>
 
       {/* Role Summary */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-         {roles.map((role, i) => (
-           <div key={i} className="bg-white p-6 rounded-[24px] border border-slate-200 shadow-sm flex items-center gap-5 hover:border-indigo-200 transition-all group">
+          {roles.map((role, i) => (
+            <div key={i} className={`${viewType === 'customers' ? 'lg:col-span-4' : ''} bg-white p-6 rounded-[24px] border border-slate-200 shadow-sm flex items-center gap-5 hover:border-indigo-200 transition-all group`}>
               <div className={`w-12 h-12 rounded-2xl flex items-center justify-center shadow-inner group-hover:scale-110 transition-transform ${
                 role.color === 'red' ? 'bg-red-50 text-red-600' :
                 role.color === 'indigo' ? 'bg-indigo-50 text-indigo-600' :
@@ -129,10 +145,10 @@ const UserManagement: React.FC = () => {
               </div>
               <div>
                  <h3 className="text-sm font-black text-slate-900">{role.name}</h3>
-                 <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.1em]">{stats[role.key] || 0} Verified Personnel</p>
+                 <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.1em]">{stats[role.key] || 0} Verified {viewType === 'customers' ? 'Customers' : 'Personnel'}</p>
               </div>
-           </div>
-         ))}
+            </div>
+          ))}
       </div>
 
       {/* Table Section */}
@@ -157,7 +173,7 @@ const UserManagement: React.FC = () => {
                   <Search className="w-4 h-4 text-slate-400" />
                   <input 
                     type="text" 
-                    placeholder="Search personnel..." 
+                    placeholder={`Search ${viewType === 'customers' ? 'customers' : 'personnel'}...`} 
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     className="bg-transparent border-none outline-none text-sm font-bold w-full text-slate-700" 
@@ -176,8 +192,8 @@ const UserManagement: React.FC = () => {
             <table className="w-full text-left">
                <thead>
                   <tr className="bg-slate-50/50 border-b border-slate-100">
-                     <th className="px-8 py-4 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Personnel Identity</th>
-                     <th className="px-8 py-4 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Access Level</th>
+                     <th className="px-8 py-4 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">{viewType === 'customers' ? 'Customer' : 'Personnel'} Identity</th>
+                     <th className="px-8 py-4 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">{viewType === 'customers' ? 'Policy Count' : 'Access Level'}</th>
                      <th className="px-8 py-4 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Current Status</th>
                      <th className="px-8 py-4 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] text-right">Master Control</th>
                   </tr>
@@ -195,7 +211,7 @@ const UserManagement: React.FC = () => {
                   ) : filteredUsers.length === 0 ? (
                     <tr>
                       <td colSpan={4} className="px-8 py-20 text-center">
-                        <p className="text-sm font-bold text-slate-400">No personnel records found.</p>
+                        <p className="text-sm font-bold text-slate-400">No records found.</p>
                       </td>
                     </tr>
                   ) : filteredUsers.map((user) => (
@@ -212,13 +228,15 @@ const UserManagement: React.FC = () => {
                           </div>
                        </td>
                        <td className="px-8 py-6">
-                          <span className={`px-3 py-1 rounded-lg text-[10px] font-black tracking-widest uppercase ${
-                            user.role === 'SUPER_ADMIN' ? 'bg-red-50 text-red-600 border border-red-100' :
-                            user.role === 'ADMIN' ? 'bg-indigo-50 text-indigo-600 border border-indigo-100' :
-                            user.role === 'AGENT' ? 'bg-blue-50 text-blue-600 border border-blue-100' : 'bg-slate-50 text-slate-600 border border-slate-100'
-                          }`}>
-                            {user.role}
-                          </span>
+                           <span className={`px-3 py-1 rounded-lg text-[10px] font-black tracking-widest uppercase ${
+                             user.role === 'SUPER_ADMIN' ? 'bg-red-50 text-red-600 border border-red-100' :
+                             user.role === 'ADMIN' ? 'bg-indigo-50 text-indigo-600 border border-indigo-100' :
+                             user.role === 'AGENT' ? 'bg-blue-50 text-blue-600 border border-blue-100' : 
+                             user.role === 'USER' ? 'bg-emerald-50 text-emerald-600 border border-emerald-100' :
+                             'bg-slate-50 text-slate-600 border border-slate-100'
+                           }`}>
+                             {viewType === 'customers' ? 'ACTIVE CUSTOMER' : user.role}
+                           </span>
                        </td>
                        <td className="px-8 py-6">
                           <div className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-widest ${
