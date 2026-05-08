@@ -33,6 +33,8 @@ import Reports from './sections/Reports';
 import SystemConfig from './sections/SystemConfig';
 import AuditLogs from './sections/AuditLogs';
 import SystemStats from './sections/SystemStats';
+import PolicyLifecycleManagement from './sections/PolicyLifecycleManagement';
+import PolicyDetailView from './sections/PolicyDetailView';
 
 const SuperAdminDashboard: React.FC = () => {
   const { logout } = useAuth();
@@ -41,6 +43,7 @@ const SuperAdminDashboard: React.FC = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const [selectedPolicyId, setSelectedPolicyId] = useState<string | null>(null);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -56,6 +59,18 @@ const SuperAdminDashboard: React.FC = () => {
   // if (!user) return <Navigate to="/login" />;
 
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+
+  useEffect(() => {
+    const handleViewCustomer = (e: any) => {
+      // For demo purposes, we'll just show the same high-fidelity profile view
+      // In a real app, we'd fetch the specific user's policy or data
+      setSelectedPolicyId('SG-HLTH-002');
+      setActiveSection('policy-detail');
+    };
+
+    window.addEventListener('view-customer-profile', handleViewCustomer);
+    return () => window.removeEventListener('view-customer-profile', handleViewCustomer);
+  }, []);
 
   const adminMenuItems = [
     { id: 'overview', label: 'Dashboard', icon: LayoutDashboard },
@@ -79,6 +94,11 @@ const SuperAdminDashboard: React.FC = () => {
     navigate('/login');
   };
 
+  const handleViewPolicy = (policyId: string) => {
+    setSelectedPolicyId(policyId);
+    setActiveSection('policy-detail');
+  };
+
   const renderSection = () => {
     switch (activeSection) {
       case 'overview': return <AdminOverview />;
@@ -93,6 +113,13 @@ const SuperAdminDashboard: React.FC = () => {
       case 'audit': return <AuditLogs />;
       case 'stats': return <SystemStats />;
       case 'policies':
+        return <PolicyLifecycleManagement onViewPolicy={handleViewPolicy} />;
+      case 'policy-detail':
+        return selectedPolicyId ? (
+          <PolicyDetailView policyId={selectedPolicyId} onBack={() => setActiveSection('policies')} />
+        ) : (
+          <PolicyLifecycleManagement onViewPolicy={handleViewPolicy} />
+        );
       case 'renewals':
       case 'payments':
       case 'notifications':

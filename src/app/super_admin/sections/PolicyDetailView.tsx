@@ -1,0 +1,388 @@
+import React from 'react';
+import { 
+  ArrowLeft, 
+  Download, 
+  User, 
+  Mail, 
+  Phone, 
+  MapPin, 
+  Calendar, 
+  CreditCard, 
+  History, 
+  ShieldCheck, 
+  Zap, 
+  Users,
+  CheckCircle2,
+  FileText,
+  Activity,
+  Sparkles,
+  TrendingUp,
+  LayoutGrid,
+  Clock
+} from 'lucide-react';
+
+interface PolicyDetailViewProps {
+  policyId: string;
+  onBack: () => void;
+}
+
+const PolicyDetailView: React.FC<PolicyDetailViewProps> = ({ policyId, onBack }) => {
+  // Enhanced Mock Data Repository
+  const mockPolicies: Record<string, any> = {
+    'SG-HLTH-002': {
+      id: 'SG-HLTH-002',
+      name: 'Star Comprehensive Health',
+      status: 'Active',
+      portfolio: 'Family Float Portfolio',
+      theme: 'violet',
+      customer: {
+        fullName: 'Vijay Mehta',
+        email: 'vijay.mehta@example.com',
+        contact: '+91 98765 43210',
+        address: 'Sector 42, Golf Course Road, Gurgaon, Haryana - 122001'
+      },
+      period: {
+        issueDate: '01 Jan 2023',
+        expiryDate: '02 May 2027',
+        premium: '₹80,000',
+        dueDate: '02 May 2027'
+      },
+      paymentHistory: [
+        { amount: '₹80,000', date: '01 Jan 2023', type: 'New Issuance', status: 'Success' },
+        { amount: '₹80,000', date: '02 Jan 2024', type: 'Renewal Payment', status: 'Success' }
+      ],
+      renewalLogs: [
+        { status: 'Renewal Completed', date: '01 Jan 2024', verified: true },
+        { status: 'Initial Issuance', date: '01 Jan 2023', verified: true }
+      ],
+      coverage: ['Hospitalization', 'OPD Cover', 'Maternity'],
+      benefits: ['Platinum Plan'],
+      nominee: 'Sunita Mehta (Wife)'
+    },
+    'SG-MOTR-003': {
+      id: 'SG-MOTR-003',
+      name: 'Private Car Package Policy',
+      status: 'Renewal Due',
+      portfolio: 'Automobile Portfolio',
+      theme: 'blue',
+      customer: {
+        fullName: 'Deepak Singh',
+        email: 'deepak.s@example.com',
+        contact: '+91 99988 77766',
+        address: 'H-12, Malviya Nagar, New Delhi - 110017'
+      },
+      period: {
+        issueDate: '15 May 2023',
+        expiryDate: '14 May 2024',
+        premium: '₹12,500',
+        dueDate: '14 May 2024'
+      },
+      paymentHistory: [
+        { amount: '₹12,500', date: '15 May 2023', type: 'New Issuance', status: 'Success' }
+      ],
+      renewalLogs: [
+        { status: 'Renewal Pending', date: '14 May 2024', verified: false }
+      ],
+      coverage: ['Own Damage', 'Third Party Liability', 'Zero Dep'],
+      benefits: ['Standard Plan'],
+      nominee: 'Anita Singh (Mother)'
+    },
+    'SG-LIFE-001': {
+      id: 'SG-LIFE-001',
+      name: 'Term Life Protection',
+      status: 'Active',
+      portfolio: 'Wealth Management',
+      theme: 'indigo',
+      customer: {
+        fullName: 'Sneh Lata',
+        email: 'sneh.lata@example.com',
+        contact: '+91 88776 65544',
+        address: 'Flat 204, Royal Palms, Mumbai, Maharashtra'
+      },
+      period: {
+        issueDate: '10 Feb 2022',
+        expiryDate: '09 Feb 2042',
+        premium: '₹45,000',
+        dueDate: '10 Feb 2025'
+      },
+      paymentHistory: [
+        { amount: '₹45,000', date: '10 Feb 2024', type: 'Annual Premium', status: 'Success' },
+        { amount: '₹45,000', date: '10 Feb 2023', type: 'Annual Premium', status: 'Success' }
+      ],
+      renewalLogs: [
+        { status: 'Payment Verified', date: '10 Feb 2024', verified: true }
+      ],
+      coverage: ['Critical Illness', 'Death Benefit', 'Accidental Cover'],
+      benefits: ['Gold Plan'],
+      nominee: 'Amit Kumar (Son)'
+    }
+  };
+
+  // Fetch from localStorage to support newly created policies
+  const getPolicyFromStorage = () => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('safeguard_policies');
+      if (saved) {
+        try {
+          const parsed = JSON.parse(saved);
+          return parsed.find((p: any) => p.id === policyId);
+        } catch (e) {
+          console.error(e);
+        }
+      }
+    }
+    return null;
+  };
+
+  const storedPolicy = getPolicyFromStorage();
+  const basePolicy = mockPolicies[policyId] || mockPolicies['SG-HLTH-002'];
+
+  const policyData = storedPolicy ? {
+    ...basePolicy,
+    id: storedPolicy.id,
+    name: storedPolicy.type, // Using the type (e.g., 'Health Insurance') as the name for custom ones
+    status: storedPolicy.status,
+    customer: {
+      fullName: storedPolicy.customer || basePolicy.customer.fullName,
+      email: storedPolicy.email || basePolicy.customer.email,
+      contact: storedPolicy.contact || basePolicy.customer.contact,
+      address: basePolicy.customer.address // Mock address as it wasn't collected
+    },
+    period: {
+      ...basePolicy.period,
+      premium: storedPolicy.premium || basePolicy.period.premium,
+      expiryDate: storedPolicy.expiryDate || basePolicy.period.expiryDate,
+      dueDate: storedPolicy.expiryDate || basePolicy.period.dueDate
+    },
+    nominee: storedPolicy.nominee || basePolicy.nominee
+  } : basePolicy;
+
+  return (
+    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-8 duration-1000 pb-12">
+      {/* Dynamic Background Elements */}
+      <div className="fixed inset-0 pointer-events-none overflow-hidden -z-10">
+         <div className={`absolute top-0 right-0 w-[500px] h-[500px] bg-${policyData.theme}-500/10 rounded-full blur-[120px] -mr-48 -mt-48 animate-pulse`}></div>
+         <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-indigo-500/5 rounded-full blur-[100px] -ml-48 -mb-48"></div>
+      </div>
+
+      {/* Navigation & Actions */}
+      <div className="flex items-center justify-between">
+         <button 
+           onClick={onBack}
+           className="flex items-center gap-2.5 px-5 py-2.5 bg-white/40 backdrop-blur-md rounded-xl border border-white/60 text-slate-500 hover:text-violet-600 font-bold text-[11px] transition-all group shadow-sm hover:shadow-md"
+         >
+           <ArrowLeft className="w-3.5 h-3.5 group-hover:-translate-x-1 transition-transform" />
+           <span>Terminate Inspection</span>
+         </button>
+
+         <div className="flex items-center gap-3">
+            <button className="p-2.5 bg-white/40 backdrop-blur-md rounded-xl border border-white/60 text-slate-400 hover:text-violet-600 transition-all shadow-sm">
+               <LayoutGrid className="w-3.5 h-3.5" />
+            </button>
+            <button className="flex items-center gap-2 px-5 py-2.5 bg-slate-900 text-white rounded-xl font-black text-[11px] hover:bg-slate-800 transition-all shadow-lg">
+               <Download className="w-3.5 h-3.5" />
+               Download Statement
+            </button>
+         </div>
+      </div>
+
+      {/* Asset Header */}
+      <div className="bg-[#0f172a] rounded-[40px] p-10 flex flex-col lg:flex-row justify-between items-center gap-8 relative overflow-hidden shadow-2xl border border-white/5">
+        <div className="absolute top-0 right-0 w-64 h-64 bg-violet-600/20 rounded-full blur-[80px] -mr-32 -mt-32"></div>
+        
+        <div className="flex items-center gap-8 z-10">
+          <div className="relative">
+             <div className="w-20 h-20 rounded-[28px] bg-gradient-to-br from-violet-500 to-indigo-600 flex items-center justify-center shadow-xl">
+               <ShieldCheck className="w-10 h-10 text-white" />
+             </div>
+             <div className="absolute -bottom-1.5 -right-1.5 w-7 h-7 rounded-lg bg-emerald-500 border-4 border-[#0f172a] flex items-center justify-center">
+                <CheckCircle2 className="w-3.5 h-3.5 text-white" />
+             </div>
+          </div>
+          <div>
+            <div className="flex items-center gap-5 mb-2">
+              <h1 className="text-2xl font-black text-white tracking-tight uppercase">{policyData.name}</h1>
+              <span className={`px-3 py-1 rounded-lg text-[10px] font-bold border backdrop-blur-md ${
+                policyData.status === 'Active' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30' : 
+                policyData.status === 'Renewal Due' ? 'bg-amber-500/10 text-amber-400 border-amber-500/30' : 'bg-rose-500/10 text-rose-400 border-rose-500/30'
+              }`}>
+                {policyData.status}
+              </span>
+            </div>
+            <div className="flex items-center gap-3">
+              <div className="w-1 h-1 rounded-full bg-violet-500"></div>
+              <p className="text-slate-400 font-bold text-[11px] tracking-widest uppercase">
+                {policyData.id} <span className="mx-2 text-slate-700">|</span> {policyData.portfolio}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-white/5 backdrop-blur-xl rounded-[28px] p-5 border border-white/10 flex items-center gap-6 z-10">
+           <div className="text-right">
+              <p className="text-[10px] font-bold text-slate-500 mb-0.5 uppercase tracking-widest">Current Valuation</p>
+              <p className="text-xl font-black text-white">{policyData.period.premium}</p>
+           </div>
+           <div className="w-px h-10 bg-white/10"></div>
+           <div className="text-right">
+              <p className="text-[10px] font-bold text-slate-500 mb-0.5 uppercase tracking-widest">Maturity Date</p>
+              <p className="text-[13px] font-black text-violet-400 uppercase">{policyData.period.expiryDate}</p>
+           </div>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        <div className="lg:col-span-8 space-y-8">
+          {/* Asset Holder Identity */}
+          <div className="bg-white rounded-[40px] p-10 border border-slate-100 shadow-sm relative group overflow-hidden">
+             <div className="flex items-center gap-4 mb-10">
+                <div className="w-11 h-11 rounded-2xl bg-violet-50 text-violet-600 flex items-center justify-center shadow-inner">
+                   <User className="w-5 h-5" />
+                </div>
+                <h3 className="text-lg font-black text-slate-900 tracking-tight uppercase">Asset Holder Identity</h3>
+             </div>
+
+             <div className="grid grid-cols-1 md:grid-cols-3 gap-10 mb-10">
+                <div className="space-y-1">
+                   <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Legal Identity</p>
+                   <p className="text-base font-black text-slate-800">{policyData.customer.fullName}</p>
+                </div>
+                <div className="space-y-1">
+                   <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Electronic Mail</p>
+                   <p className="text-base font-bold text-slate-500">{policyData.customer.email}</p>
+                </div>
+                <div className="space-y-1">
+                   <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Secure Contact</p>
+                   <p className="text-base font-black text-slate-800">{policyData.customer.contact}</p>
+                </div>
+             </div>
+
+             <div className="flex items-start gap-5 p-6 bg-slate-50 rounded-[28px] border border-slate-100 group/addr hover:bg-slate-100 transition-colors">
+                <div className="w-9 h-9 rounded-xl bg-white flex items-center justify-center shadow-sm">
+                   <MapPin className="w-4 h-4 text-slate-400" />
+                </div>
+                <div>
+                   <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1.5">Registered Residence</p>
+                   <p className="text-[11px] font-bold text-slate-600 leading-relaxed">{policyData.customer.address}</p>
+                </div>
+             </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+             {/* Ledger */}
+             <div className="bg-white rounded-[40px] p-10 border border-slate-100 shadow-sm">
+                <div className="flex items-center gap-4 mb-10">
+                   <div className="w-11 h-11 rounded-2xl bg-indigo-50 flex items-center justify-center shadow-inner">
+                      <CreditCard className="w-5 h-5 text-indigo-600" />
+                   </div>
+                   <h3 className="text-lg font-black text-slate-900 tracking-tight uppercase">Ledger</h3>
+                </div>
+
+                <div className="space-y-3.5">
+                  {policyData.paymentHistory.map((payment: any, i: number) => (
+                    <div key={i} className="flex items-center justify-between p-5 bg-slate-50/50 rounded-[28px] border border-transparent hover:border-slate-200 hover:bg-white transition-all shadow-sm">
+                       <div>
+                          <p className="text-lg font-black text-slate-900">{payment.amount}</p>
+                          <p className="text-[9px] font-bold text-slate-400 mt-0.5">{payment.type}</p>
+                       </div>
+                       <div className="text-right">
+                          <p className="text-[10px] font-bold text-slate-800">{payment.date}</p>
+                          <div className={`mt-1.5 px-2.5 py-1 rounded-lg text-[8px] font-black uppercase tracking-widest inline-block ${payment.status === 'Success' ? 'bg-emerald-100 text-emerald-700' : 'bg-rose-100 text-rose-700'}`}>
+                             {payment.status}
+                          </div>
+                       </div>
+                    </div>
+                  ))}
+                </div>
+             </div>
+
+             {/* History */}
+             <div className="bg-[#0f172a] rounded-[40px] p-10 border border-white/5 shadow-2xl relative overflow-hidden">
+                <div className="flex items-center gap-4 mb-10">
+                   <div className="w-11 h-11 rounded-2xl bg-white/10 backdrop-blur-md flex items-center justify-center border border-white/10">
+                      <History className="w-5 h-5 text-violet-400" />
+                   </div>
+                   <h3 className="text-lg font-black text-white tracking-tight uppercase">History</h3>
+                </div>
+
+                <div className="space-y-3.5">
+                   {policyData.renewalLogs.map((log: any, i: number) => (
+                     <div key={i} className="flex items-center justify-between p-5 bg-white/5 rounded-[28px] border border-white/5 hover:border-violet-500/50 hover:bg-white/10 transition-all group">
+                        <div>
+                           <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">{log.status}</p>
+                           <p className="text-[10px] font-bold text-violet-400 mt-1">Authenticated {log.date}</p>
+                        </div>
+                        <div className={`w-8 h-8 rounded-full border flex items-center justify-center transition-all ${log.verified ? 'border-violet-500/50 bg-violet-500 text-white' : 'border-white/10 text-white/20'}`}>
+                           <CheckCircle2 className="w-4 h-4" />
+                        </div>
+                     </div>
+                   ))}
+                </div>
+             </div>
+          </div>
+        </div>
+
+        {/* Schedule Sidebar */}
+        <div className="lg:col-span-4 space-y-8">
+           <div className="bg-white rounded-[40px] p-10 border border-slate-100 shadow-sm">
+              <div className="flex items-center gap-4 mb-10">
+                 <div className="w-11 h-11 rounded-2xl bg-violet-50 flex items-center justify-center">
+                    <Calendar className="w-5 h-5 text-violet-600" />
+                 </div>
+                 <h3 className="text-lg font-black text-slate-900 tracking-tight uppercase">Schedule</h3>
+              </div>
+
+              <div className="space-y-6">
+                 {[
+                   { label: 'Genesis Date', value: policyData.period.issueDate, icon: Sparkles },
+                   { label: 'Maturity Date', value: policyData.period.expiryDate, icon: Clock, highlight: true },
+                   { label: 'Recurring Fee', value: policyData.period.premium, icon: CreditCard },
+                   { label: 'Settlement Due', value: policyData.period.dueDate, icon: Activity }
+                 ].map((item, i) => (
+                   <div key={i} className={`flex justify-between items-center p-3.5 rounded-xl transition-all ${item.highlight ? 'bg-violet-50 border border-violet-100 shadow-sm' : ''}`}>
+                      <div className="flex items-center gap-2.5">
+                         <item.icon className={`w-3 h-3 ${item.highlight ? 'text-violet-600' : 'text-slate-300'}`} />
+                         <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{item.label}</p>
+                      </div>
+                      <p className={`text-[11px] font-black ${item.highlight ? 'text-violet-700' : 'text-slate-900'}`}>{item.value}</p>
+                   </div>
+                 ))}
+              </div>
+
+              <div className="mt-10 bg-[#0f172a] rounded-[32px] p-8 relative overflow-hidden">
+                 <div className="flex items-center gap-5 mb-6">
+                    <div className="w-12 h-12 rounded-2xl bg-white/10 backdrop-blur-xl flex items-center justify-center border border-white/20 shadow-2xl">
+                       <p className="text-lg font-black text-violet-400">{policyData.nominee.substring(0, 2).toUpperCase()}</p>
+                    </div>
+                    <div>
+                       <p className="text-[10px] font-bold text-violet-400 uppercase tracking-widest mb-0.5">Secure Nominee</p>
+                       <p className="text-sm font-black text-white uppercase tracking-tight">{policyData.nominee}</p>
+                    </div>
+                 </div>
+                 <div className="flex items-center gap-2.5">
+                    <ShieldCheck className="w-3.5 h-3.5 text-emerald-500" />
+                    <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Beneficiary Verified</p>
+                 </div>
+              </div>
+           </div>
+
+           <div className="bg-gradient-to-br from-violet-600 to-indigo-700 rounded-[40px] p-10 text-white shadow-xl shadow-indigo-100 group overflow-hidden">
+              <div className="flex items-start gap-5 relative z-10">
+                 <div className="w-10 h-10 rounded-xl bg-white/20 backdrop-blur-xl flex items-center justify-center border border-white/30 shadow-2xl">
+                    <ShieldCheck className="w-5 h-5 text-white" />
+                 </div>
+                 <div>
+                    <h4 className="text-base font-black uppercase tracking-tight mb-3 leading-tight">Asset Protection Protocol</h4>
+                    <p className="text-[11px] font-bold text-white/60 leading-relaxed uppercase tracking-wider">
+                       Secured under primary Insurance Advisor clearing house. Institutional verification active.
+                    </p>
+                 </div>
+              </div>
+           </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default PolicyDetailView;

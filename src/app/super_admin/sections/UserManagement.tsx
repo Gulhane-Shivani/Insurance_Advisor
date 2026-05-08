@@ -11,7 +11,8 @@ import {
   UserCheck,
   RefreshCw,
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
+  Eye
 } from 'lucide-react';
 import api from '../../../services/api';
 import toast from 'react-hot-toast';
@@ -247,7 +248,17 @@ const UserManagement: React.FC<UserManagementProps> = ({ viewType = 'all' }) => 
                           </div>
                        </td>
                        <td className="px-8 py-6 text-right">
-                          <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                          <div className="flex items-center justify-end gap-2 transition-opacity">
+                             <button 
+                               onClick={() => {
+                                 const event = new CustomEvent('view-customer-profile', { detail: { userId: user.id } });
+                                 window.dispatchEvent(event);
+                               }}
+                               className="p-2.5 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-xl transition-all border border-transparent hover:border-indigo-100"
+                               title="View Profile"
+                             >
+                               <Eye className="w-4 h-4" />
+                             </button>
                              <button 
                                onClick={() => openEditModal(user)}
                                className="p-2.5 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-xl transition-all border border-transparent hover:border-indigo-100"
@@ -256,7 +267,7 @@ const UserManagement: React.FC<UserManagementProps> = ({ viewType = 'all' }) => 
                              </button>
                              <button 
                                onClick={() => handleDelete(user.id)}
-                               className="p-2.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-xl transition-all border border-transparent hover:border-red-100"
+                               className="p-2.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-xl transition-all border border-transparent hover:border-rose-100"
                              >
                                <Trash2 className="w-4 h-4" />
                              </button>
