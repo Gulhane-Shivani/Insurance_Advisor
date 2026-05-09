@@ -73,7 +73,6 @@ const AgentDashboard: React.FC = () => {
     { id: 'Documents', icon: FileText, label: 'Documents' },
     { id: 'Notifications', icon: Bell, label: 'Notifications', badge: 4 },
     { id: 'Profile', icon: User, label: 'Profile' },
-    { id: 'Settings', icon: Settings, label: 'Settings' },
   ];
 
   const handleLogout = () => {
@@ -93,7 +92,6 @@ const AgentDashboard: React.FC = () => {
       case 'Documents': return <DocumentsManagement />;
       case 'Notifications': return <NotificationPanel />;
       case 'Profile': return <AgentProfile />;
-      case 'Settings': return <SettingsManagement />;
       default: return <DashboardOverview setSection={setActiveSection} />;
     }
   };
