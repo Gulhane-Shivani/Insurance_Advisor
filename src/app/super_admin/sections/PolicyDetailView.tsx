@@ -149,6 +149,42 @@ const PolicyDetailView: React.FC<PolicyDetailViewProps> = ({ policyId, onBack })
       return dateStr;
    };
 
+   const generateHistory = (issueDateStr: string, premium: string) => {
+      const issueDate = new Date(issueDateStr);
+      if (isNaN(issueDate.getTime())) {
+         return {
+            payments: [{ amount: premium, date: formatDate(issueDateStr) || issueDateStr, type: 'New Issuance', status: 'Success' }],
+            renewals: [{ status: 'Initial Issuance', date: formatDate(issueDateStr) || issueDateStr, verified: true }]
+         };
+      }
+      
+      const today = new Date();
+      const payments = [];
+      const renewals = [];
+      let currentDate = new Date(issueDate);
+      let isFirst = true;
+      
+      do {
+         const dateStr = formatDate(currentDate.toISOString().split('T')[0]);
+         if (isFirst) {
+            payments.unshift({ amount: premium, date: dateStr, type: 'New Issuance', status: 'Success' });
+            renewals.unshift({ status: 'Initial Issuance', date: dateStr, verified: true });
+            isFirst = false;
+         } else {
+            payments.unshift({ amount: premium, date: dateStr, type: 'Renewal Payment', status: 'Success' });
+            renewals.unshift({ status: 'Renewal Completed', date: dateStr, verified: true });
+         }
+         currentDate.setFullYear(currentDate.getFullYear() + 1);
+      } while (currentDate <= today);
+      
+      return { payments, renewals };
+   };
+
+   const generatedHistory = generateHistory(
+      storedPolicy?.issueDate || basePolicy.period.issueDate, 
+      storedPolicy?.premium || basePolicy.period.premium
+   );
+
    const policyData = storedPolicy ? {
       ...basePolicy,
       id: storedPolicy.id,
@@ -170,12 +206,8 @@ const PolicyDetailView: React.FC<PolicyDetailViewProps> = ({ policyId, onBack })
       nominee: storedPolicy.nominee || basePolicy.nominee,
       coverage: storedPolicy.coverage || basePolicy.coverage,
       benefits: storedPolicy.benefits || basePolicy.benefits,
-      paymentHistory: storedPolicy.paymentHistory || [
-         { amount: storedPolicy.premium || basePolicy.period.premium, date: storedPolicy.issueDate ? formatDate(storedPolicy.issueDate) : basePolicy.period.issueDate, type: 'New Issuance', status: 'Success' }
-      ],
-      renewalLogs: storedPolicy.renewalLogs || [
-         { status: 'Initial Issuance', date: storedPolicy.issueDate ? formatDate(storedPolicy.issueDate) : basePolicy.period.issueDate, verified: true }
-      ]
+      paymentHistory: storedPolicy.paymentHistory || generatedHistory.payments,
+      renewalLogs: storedPolicy.renewalLogs || generatedHistory.renewals
    } : basePolicy;
 
    return (
@@ -222,7 +254,7 @@ const PolicyDetailView: React.FC<PolicyDetailViewProps> = ({ policyId, onBack })
                </div>
                <div>
                   <div className="flex items-center gap-5 mb-2">
-                     <h1 className="text-2xl font-black text-white tracking-tight uppercase">{policyData.name}</h1>
+                     <h1 className="text-2xl font-black text-white tracking-tight">{policyData.name}</h1>
                      <span className={`px-3 py-1 rounded-lg text-[10px] font-bold border backdrop-blur-md ${policyData.status === 'Active' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30' :
                            policyData.status === 'Renewal Due' ? 'bg-amber-500/10 text-amber-400 border-amber-500/30' : 'bg-rose-500/10 text-rose-400 border-rose-500/30'
                         }`}>
@@ -231,7 +263,7 @@ const PolicyDetailView: React.FC<PolicyDetailViewProps> = ({ policyId, onBack })
                   </div>
                   <div className="flex items-center gap-3">
                      <div className="w-1 h-1 rounded-full bg-violet-500"></div>
-                     <p className="text-slate-400 font-bold text-[11px] tracking-widest uppercase">
+                     <p className="text-slate-400 font-bold text-[11px] tracking-widest">
                         {policyData.id} <span className="mx-2 text-slate-700">|</span> {policyData.portfolio}
                      </p>
                   </div>
@@ -240,13 +272,13 @@ const PolicyDetailView: React.FC<PolicyDetailViewProps> = ({ policyId, onBack })
 
             <div className="bg-white/5 backdrop-blur-xl rounded-[28px] p-5 border border-white/10 flex items-center gap-6 z-10">
                <div className="text-right">
-                  <p className="text-[10px] font-bold text-slate-500 mb-0.5 uppercase tracking-widest">Current Valuation</p>
+                  <p className="text-[10px] font-bold text-slate-500 mb-0.5 tracking-widest">Current Valuation</p>
                   <p className="text-xl font-black text-white">{policyData.period.premium}</p>
                </div>
                <div className="w-px h-10 bg-white/10"></div>
                <div className="text-right">
-                  <p className="text-[10px] font-bold text-slate-500 mb-0.5 uppercase tracking-widest">Maturity Date</p>
-                  <p className="text-[13px] font-black text-violet-400 uppercase">{policyData.period.expiryDate}</p>
+                  <p className="text-[10px] font-bold text-slate-500 mb-0.5 tracking-widest">Maturity Date</p>
+                  <p className="text-[13px] font-black text-violet-400">{policyData.period.expiryDate}</p>
                </div>
             </div>
          </div>
@@ -259,20 +291,20 @@ const PolicyDetailView: React.FC<PolicyDetailViewProps> = ({ policyId, onBack })
                      <div className="w-11 h-11 rounded-2xl bg-violet-50 text-violet-600 flex items-center justify-center shadow-inner">
                         <User className="w-5 h-5" />
                      </div>
-                     <h3 className="text-lg font-black text-slate-900 tracking-tight uppercase">Asset Holder Identity</h3>
+                     <h3 className="text-lg font-black text-slate-900 tracking-tight">Asset Holder Identity</h3>
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-10 mb-10">
                      <div className="space-y-1">
-                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Legal Identity</p>
+                        <p className="text-[10px] font-bold text-slate-400 tracking-widest">Legal Identity</p>
                         <p className="text-base font-black text-slate-800">{policyData.customer.fullName}</p>
                      </div>
                      <div className="space-y-1">
-                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Electronic Mail</p>
+                        <p className="text-[10px] font-bold text-slate-400 tracking-widest">Electronic Mail</p>
                         <p className="text-base font-bold text-slate-500">{policyData.customer.email}</p>
                      </div>
                      <div className="space-y-1">
-                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Secure Contact</p>
+                        <p className="text-[10px] font-bold text-slate-400 tracking-widest">Secure Contact</p>
                         <p className="text-base font-black text-slate-800">{policyData.customer.contact}</p>
                      </div>
                   </div>
@@ -282,8 +314,77 @@ const PolicyDetailView: React.FC<PolicyDetailViewProps> = ({ policyId, onBack })
                         <MapPin className="w-4 h-4 text-slate-400" />
                      </div>
                      <div>
-                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1.5">Registered Residence</p>
+                        <p className="text-[10px] font-bold text-slate-400 tracking-widest mb-1.5">Registered Residence</p>
                         <p className="text-[11px] font-bold text-slate-600 leading-relaxed">{policyData.customer.address}</p>
+                     </div>
+                  </div>
+               </div>
+
+               {/* Comprehensive Specifications */}
+               <div className="bg-white rounded-[40px] p-10 border border-slate-100 shadow-sm relative group overflow-hidden">
+                  <div className="flex items-center gap-4 mb-10">
+                     <div className="w-11 h-11 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center shadow-inner">
+                        <FileText className="w-5 h-5" />
+                     </div>
+                     <h3 className="text-lg font-black text-slate-900 tracking-tight">Comprehensive Specifications</h3>
+                  </div>
+
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-8">
+                     {[
+                        { label: 'Insurance Company', value: 'SafeGuard Alliance' },
+                        { label: 'Policy Type', value: policyData.portfolio || policyData.name },
+                        { label: 'Policy Term', value: 'Annual Term' },
+                        { label: 'Start Date', value: policyData.period.issueDate },
+                        { label: 'Grace Period', value: '15 Days' },
+                        { label: 'Sum Insured', value: '₹5,00,000 Base' },
+                        { label: 'Premium Freq.', value: 'Annually' },
+                        { label: 'Payment Mode', value: 'Net Banking' },
+                        { label: 'Agent Assigned', value: 'Direct Digital' },
+                        { label: 'CSR Assigned', value: 'Unassigned' },
+                        { label: 'Coverage Type', value: 'Comprehensive' },
+                        { label: 'Waiting Period', value: '30 Days Standard' },
+                        { label: 'Add-ons / Riders', value: 'None Included' },
+                        { label: 'Exclusions', value: 'Standard Protocol' },
+                     ].map((item, i) => (
+                        <div key={i} className="space-y-1 min-w-0">
+                           <p className="text-[9px] font-bold text-slate-400 tracking-widest">{item.label}</p>
+                           <p className="text-sm font-black text-slate-800 truncate">{item.value}</p>
+                        </div>
+                     ))}
+                  </div>
+               </div>
+
+               {/* Coverage & Benefits */}
+               <div className="bg-[#0f172a] rounded-[40px] p-10 border border-slate-800 shadow-xl relative overflow-hidden">
+                  <div className="flex items-center gap-4 mb-8">
+                     <div className="w-11 h-11 rounded-2xl bg-white/10 backdrop-blur-md flex items-center justify-center border border-white/10">
+                        <ShieldCheck className="w-5 h-5 text-emerald-400" />
+                     </div>
+                     <h3 className="text-lg font-black text-white tracking-tight">Coverage & Benefits</h3>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                     <div>
+                        <p className="text-[10px] font-bold text-slate-400 tracking-widest mb-4">Included Coverage</p>
+                        <div className="space-y-3">
+                           {policyData.coverage.map((item: string, i: number) => (
+                              <div key={i} className="flex items-center gap-3">
+                                 <CheckCircle2 className="w-4 h-4 text-emerald-500" />
+                                 <span className="text-sm font-bold text-slate-300">{item}</span>
+                              </div>
+                           ))}
+                        </div>
+                     </div>
+                     <div>
+                        <p className="text-[10px] font-bold text-slate-400 tracking-widest mb-4">Core Benefits</p>
+                        <div className="space-y-3">
+                           {policyData.benefits.map((item: string, i: number) => (
+                              <div key={i} className="flex items-center gap-3">
+                                 <Zap className="w-4 h-4 text-violet-400" />
+                                 <span className="text-sm font-bold text-slate-300">{item}</span>
+                              </div>
+                           ))}
+                        </div>
                      </div>
                   </div>
                </div>
@@ -295,7 +396,7 @@ const PolicyDetailView: React.FC<PolicyDetailViewProps> = ({ policyId, onBack })
                         <div className="w-11 h-11 rounded-2xl bg-indigo-50 flex items-center justify-center shadow-inner">
                            <CreditCard className="w-5 h-5 text-indigo-600" />
                         </div>
-                        <h3 className="text-lg font-black text-slate-900 tracking-tight uppercase">Ledger</h3>
+                        <h3 className="text-lg font-black text-slate-900 tracking-tight">Ledger</h3>
                      </div>
 
                      <div className="space-y-3.5">
@@ -307,7 +408,7 @@ const PolicyDetailView: React.FC<PolicyDetailViewProps> = ({ policyId, onBack })
                               </div>
                               <div className="text-right">
                                  <p className="text-[10px] font-bold text-slate-800">{payment.date}</p>
-                                 <div className={`mt-1.5 px-2.5 py-1 rounded-lg text-[8px] font-black uppercase tracking-widest inline-block ${payment.status === 'Success' ? 'bg-emerald-100 text-emerald-700' : 'bg-rose-100 text-rose-700'}`}>
+                                 <div className={`mt-1.5 px-2.5 py-1 rounded-lg text-[8px] font-black tracking-widest inline-block ${payment.status === 'Success' ? 'bg-emerald-100 text-emerald-700' : 'bg-rose-100 text-rose-700'}`}>
                                     {payment.status}
                                  </div>
                               </div>
@@ -322,14 +423,14 @@ const PolicyDetailView: React.FC<PolicyDetailViewProps> = ({ policyId, onBack })
                         <div className="w-11 h-11 rounded-2xl bg-white/10 backdrop-blur-md flex items-center justify-center border border-white/10">
                            <History className="w-5 h-5 text-violet-400" />
                         </div>
-                        <h3 className="text-lg font-black text-white tracking-tight uppercase">History</h3>
+                        <h3 className="text-lg font-black text-white tracking-tight">History</h3>
                      </div>
 
                      <div className="space-y-3.5">
                         {policyData.renewalLogs.map((log: any, i: number) => (
                            <div key={i} className="flex items-center justify-between p-5 bg-white/5 rounded-[28px] border border-white/5 hover:border-violet-500/50 hover:bg-white/10 transition-all group">
                               <div>
-                                 <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">{log.status}</p>
+                                 <p className="text-[9px] font-bold text-slate-400 tracking-widest">{log.status}</p>
                                  <p className="text-[10px] font-bold text-violet-400 mt-1">Authenticated {log.date}</p>
                               </div>
                               <div className={`w-8 h-8 rounded-full border flex items-center justify-center transition-all ${log.verified ? 'border-violet-500/50 bg-violet-500 text-white' : 'border-white/10 text-white/20'}`}>
@@ -350,7 +451,7 @@ const PolicyDetailView: React.FC<PolicyDetailViewProps> = ({ policyId, onBack })
                         <div className="w-11 h-11 rounded-2xl bg-violet-50 flex items-center justify-center">
                            <Calendar className="w-5 h-5 text-violet-600" />
                         </div>
-                        <h3 className="text-lg font-black text-slate-900 tracking-tight uppercase">Policy Period</h3>
+                        <h3 className="text-lg font-black text-slate-900 tracking-tight">Policy Period</h3>
                      </div>
                      <button className="p-2 bg-slate-50 text-slate-400 hover:text-violet-600 hover:bg-violet-50 rounded-xl transition-all shadow-sm border border-slate-100" title="Edit Policy Period">
                         <Edit2 className="w-4 h-4" />
@@ -367,7 +468,7 @@ const PolicyDetailView: React.FC<PolicyDetailViewProps> = ({ policyId, onBack })
                         <div key={i} className={`flex justify-between items-center p-3.5 rounded-xl transition-all ${item.highlight ? 'bg-violet-50 border border-violet-100 shadow-sm' : ''}`}>
                            <div className="flex items-center gap-2.5">
                               <item.icon className={`w-3 h-3 ${item.highlight ? 'text-violet-600' : 'text-slate-300'}`} />
-                              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{item.label}</p>
+                              <p className="text-[10px] font-bold text-slate-400 tracking-widest">{item.label}</p>
                            </div>
                            <p className={`text-[11px] font-black ${item.highlight ? 'text-violet-700' : 'text-slate-900'}`}>{item.value}</p>
                         </div>
@@ -380,13 +481,13 @@ const PolicyDetailView: React.FC<PolicyDetailViewProps> = ({ policyId, onBack })
                            <p className="text-lg font-black text-violet-400">{policyData.nominee.substring(0, 2).toUpperCase()}</p>
                         </div>
                         <div>
-                           <p className="text-[10px] font-bold text-violet-400 uppercase tracking-widest mb-0.5">Secure Nominee</p>
-                           <p className="text-sm font-black text-white uppercase tracking-tight">{policyData.nominee}</p>
+                           <p className="text-[10px] font-bold text-violet-400 tracking-widest mb-0.5">Secure Nominee</p>
+                           <p className="text-sm font-black text-white tracking-tight">{policyData.nominee}</p>
                         </div>
                      </div>
                      <div className="flex items-center gap-2.5">
                         <ShieldCheck className="w-3.5 h-3.5 text-emerald-500" />
-                        <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Beneficiary Verified</p>
+                        <p className="text-[9px] font-bold text-slate-400 tracking-widest">Beneficiary Verified</p>
                      </div>
                   </div>
                </div>
@@ -397,8 +498,8 @@ const PolicyDetailView: React.FC<PolicyDetailViewProps> = ({ policyId, onBack })
                         <ShieldCheck className="w-5 h-5 text-white" />
                      </div>
                      <div>
-                        <h4 className="text-base font-black uppercase tracking-tight mb-3 leading-tight">Asset Protection Protocol</h4>
-                        <p className="text-[11px] font-bold text-white/60 leading-relaxed uppercase tracking-wider">
+                        <h4 className="text-base font-black tracking-tight mb-3 leading-tight">Asset Protection Protocol</h4>
+                        <p className="text-[11px] font-bold text-white/60 leading-relaxed tracking-wider">
                            Secured under primary Insurance Advisor clearing house. Institutional verification active.
                         </p>
                      </div>

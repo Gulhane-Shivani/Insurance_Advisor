@@ -149,7 +149,7 @@ const PolicyIssuanceForm: React.FC<PolicyIssuanceFormProps> = ({ onBack, onSave,
                   <Sparkles className="w-3.5 h-3.5 text-violet-500" />
                   <h1 className="text-xl font-black text-slate-900 tracking-tight">{editingPolicyId ? 'Policy Modification' : 'Policy Enrollment'}</h1>
                </div>
-               <p className="text-[10px] font-bold text-slate-400 tracking-widest uppercase">Institutional Grade Issuance Console</p>
+               <p className="text-[10px] font-bold text-slate-400 tracking-widest">Institutional Grade Issuance Console</p>
             </div>
          </div>
          
@@ -172,8 +172,8 @@ const PolicyIssuanceForm: React.FC<PolicyIssuanceFormProps> = ({ onBack, onSave,
                      <User className="w-5 h-5" />
                   </div>
                   <div>
-                     <h3 className="text-base font-black text-slate-900 tracking-tight uppercase">Customer Identity</h3>
-                     <p className="text-[10px] font-bold text-slate-400 tracking-widest uppercase">Verified Policy Holder Information</p>
+                     <h3 className="text-base font-black text-slate-900 tracking-tight">Customer Identity</h3>
+                     <p className="text-[10px] font-bold text-slate-400 tracking-widest">Verified Policy Holder Information</p>
                   </div>
                </div>
 
@@ -229,8 +229,8 @@ const PolicyIssuanceForm: React.FC<PolicyIssuanceFormProps> = ({ onBack, onSave,
                      <Users className="w-5 h-5" />
                   </div>
                   <div>
-                     <h3 className="text-base font-black text-slate-900 tracking-tight uppercase">Beneficiary Setup</h3>
-                     <p className="text-[10px] font-bold text-slate-400 tracking-widest uppercase">Assigned Nominee & Relationship</p>
+                     <h3 className="text-base font-black text-slate-900 tracking-tight">Beneficiary Setup</h3>
+                     <p className="text-[10px] font-bold text-slate-400 tracking-widest">Assigned Nominee & Relationship</p>
                   </div>
                </div>
 
@@ -269,7 +269,7 @@ const PolicyIssuanceForm: React.FC<PolicyIssuanceFormProps> = ({ onBack, onSave,
                   <div className="flex items-center justify-between mb-8">
                      <div className="flex items-center gap-3">
                         <Zap className="w-4 h-4 text-violet-400" />
-                        <h3 className="text-[12px] font-black text-white uppercase tracking-widest">Active Coverage</h3>
+                        <h3 className="text-[12px] font-black text-white tracking-widest">Active Coverage</h3>
                      </div>
                   </div>
                   <div className="space-y-2.5 relative z-10">
@@ -300,7 +300,7 @@ const PolicyIssuanceForm: React.FC<PolicyIssuanceFormProps> = ({ onBack, onSave,
                         </div>
                      )) : (
                         <div className="py-8 text-center">
-                           <p className="text-[10px] font-bold text-slate-600 uppercase tracking-widest">Pending Selection</p>
+                           <p className="text-[10px] font-bold text-slate-600 tracking-widest">Pending Selection</p>
                         </div>
                      )}
                   </div>
@@ -310,7 +310,7 @@ const PolicyIssuanceForm: React.FC<PolicyIssuanceFormProps> = ({ onBack, onSave,
                   <div className="absolute top-0 right-0 w-24 h-24 bg-violet-50/50 rounded-full blur-2xl -mr-12 -mt-12"></div>
                   <div className="flex items-center gap-3 mb-8">
                      <Sparkles className="w-4 h-4 text-violet-600" />
-                     <h3 className="text-[12px] font-black text-slate-900 uppercase tracking-widest">Exclusive Benefits</h3>
+                     <h3 className="text-[12px] font-black text-slate-900 tracking-widest">Exclusive Benefits</h3>
                   </div>
                   <div className="space-y-2.5 relative z-10">
                      {editingPolicyId ? (
@@ -340,7 +340,7 @@ const PolicyIssuanceForm: React.FC<PolicyIssuanceFormProps> = ({ onBack, onSave,
                         </div>
                      )) : (
                         <div className="py-8 text-center">
-                           <p className="text-[10px] font-bold text-slate-300 uppercase tracking-widest">No Benefits Cached</p>
+                           <p className="text-[10px] font-bold text-slate-300 tracking-widest">No Benefits Cached</p>
                         </div>
                      )}
                   </div>
@@ -354,7 +354,7 @@ const PolicyIssuanceForm: React.FC<PolicyIssuanceFormProps> = ({ onBack, onSave,
                <div className="bg-slate-900 p-8">
                   <div className="flex items-center gap-3">
                      <ShieldCheck className="w-5 h-5 text-violet-400" />
-                     <h3 className="text-base font-black text-white tracking-tight uppercase">Plan Archive</h3>
+                     <h3 className="text-base font-black text-white tracking-tight">Plan Archive</h3>
                   </div>
                </div>
                
@@ -381,7 +381,7 @@ const PolicyIssuanceForm: React.FC<PolicyIssuanceFormProps> = ({ onBack, onSave,
 
                   {selectedPlan && (
                      <div className="animate-in fade-in slide-in-from-top-2 duration-500 p-5 bg-violet-50/50 border border-violet-100 rounded-2xl">
-                        <p className="text-[10px] font-bold text-violet-600 uppercase tracking-widest mb-1">Active Selection</p>
+                        <p className="text-[10px] font-bold text-violet-600 tracking-widest mb-1">Active Selection</p>
                         <p className="text-sm font-black text-slate-800">{selectedPlan.name}</p>
                         <p className="text-[10px] font-bold text-slate-400 mt-0.5">{selectedPlan.provider}</p>
                      </div>
@@ -390,7 +390,7 @@ const PolicyIssuanceForm: React.FC<PolicyIssuanceFormProps> = ({ onBack, onSave,
                   <div className="space-y-4 pt-4 border-t border-slate-100">
                      <div className="grid grid-cols-2 gap-3">
                         <div className="space-y-1.5">
-                           <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Effective Date</label>
+                           <label className="text-[10px] font-bold text-slate-400 tracking-widest">Effective Date</label>
                            <input 
                               type="date" 
                               value={startDate}
@@ -399,7 +399,7 @@ const PolicyIssuanceForm: React.FC<PolicyIssuanceFormProps> = ({ onBack, onSave,
                            />
                         </div>
                         <div className="space-y-1.5">
-                           <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Maturity Date</label>
+                           <label className="text-[10px] font-bold text-slate-400 tracking-widest">Maturity Date</label>
                            <input 
                               type="date" 
                               value={expiryDate}
@@ -413,7 +413,7 @@ const PolicyIssuanceForm: React.FC<PolicyIssuanceFormProps> = ({ onBack, onSave,
                   <div className="pt-8 space-y-4">
                      <div className="flex justify-between items-center bg-slate-50 p-5 rounded-2xl border border-slate-100">
                         <div>
-                           <p className="text-[10px] font-bold text-slate-400 mb-0.5 uppercase tracking-widest">Premium Quote</p>
+                           <p className="text-[10px] font-bold text-slate-400 mb-0.5 tracking-widest">Premium Quote</p>
                            <p className="text-xl font-black text-slate-900">{selectedPlan ? selectedPlan.premium : '₹0'}</p>
                         </div>
                         {selectedPlan && (
@@ -426,7 +426,7 @@ const PolicyIssuanceForm: React.FC<PolicyIssuanceFormProps> = ({ onBack, onSave,
                      <button 
                         type="submit"
                         disabled={!selectedPlan || !customerName}
-                        className="w-full py-4 bg-slate-900 text-white rounded-2xl font-black shadow-xl hover:bg-slate-800 transition-all text-[12px] uppercase tracking-widest disabled:opacity-30"
+                        className="w-full py-4 bg-slate-900 text-white rounded-2xl font-black shadow-xl hover:bg-slate-800 transition-all text-[12px] tracking-widest disabled:opacity-30"
                      >
                         {editingPolicyId ? 'Save Modifications' : 'Initialize Policy'}
                      </button>
@@ -434,7 +434,7 @@ const PolicyIssuanceForm: React.FC<PolicyIssuanceFormProps> = ({ onBack, onSave,
                      <button 
                         type="button"
                         onClick={onBack}
-                        className="w-full py-3.5 bg-white text-slate-400 rounded-2xl font-bold border border-slate-100 hover:bg-slate-50 transition-all text-[11px] uppercase tracking-widest"
+                        className="w-full py-3.5 bg-white text-slate-400 rounded-2xl font-bold border border-slate-100 hover:bg-slate-50 transition-all text-[11px] tracking-widest"
                      >
                         {editingPolicyId ? 'Cancel Edit' : 'Cancel Enrollment'}
                      </button>

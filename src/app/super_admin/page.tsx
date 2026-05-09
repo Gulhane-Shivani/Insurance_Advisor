@@ -35,6 +35,7 @@ import AuditLogs from './sections/AuditLogs';
 import SystemStats from './sections/SystemStats';
 import PolicyLifecycleManagement from './sections/PolicyLifecycleManagement';
 import PolicyDetailView from './sections/PolicyDetailView';
+import RenewalManagement from './sections/RenewalManagement';
 
 const SuperAdminDashboard: React.FC = () => {
   const { logout } = useAuth();
@@ -121,6 +122,7 @@ const SuperAdminDashboard: React.FC = () => {
           <PolicyLifecycleManagement onViewPolicy={handleViewPolicy} />
         );
       case 'renewals':
+        return <RenewalManagement />;
       case 'payments':
       case 'notifications':
         return <div className="p-10 text-center"><h2 className="text-2xl font-bold text-slate-400">Module Coming Soon</h2></div>;

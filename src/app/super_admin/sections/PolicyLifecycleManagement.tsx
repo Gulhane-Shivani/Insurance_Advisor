@@ -9,7 +9,7 @@ import {
   Plus, 
   Eye, 
   Edit2, 
-  Trash2,
+  Ban,
   RotateCcw,
   CheckCircle2,
   AlertTriangle,
@@ -25,8 +25,9 @@ interface Policy {
   type: string;
   customer: string;
   premium: string;
-  status: 'Active' | 'Renewal Due' | 'Expired';
+  status: 'Active' | 'Renewal Due' | 'Expired' | 'Inactive';
   expiryDate: string;
+  isInactive?: boolean;
 }
 
 interface PolicyLifecycleManagementProps {
@@ -61,7 +62,8 @@ const PolicyLifecycleManagement: React.FC<PolicyLifecycleManagementProps> = ({ o
     }
   }, [policies]);
 
-  const getPolicyStatus = (expiryDateStr: string) => {
+  const getPolicyStatus = (expiryDateStr: string, isInactive?: boolean): Policy['status'] => {
+    if (isInactive) return 'Inactive';
     if (!expiryDateStr) return 'Active';
     const expiry = new Date(expiryDateStr);
     const today = new Date();
@@ -77,7 +79,7 @@ const PolicyLifecycleManagement: React.FC<PolicyLifecycleManagementProps> = ({ o
 
   const processedPolicies = policies.map(p => ({
     ...p,
-    status: getPolicyStatus(p.expiryDate)
+    status: getPolicyStatus(p.expiryDate, p.isInactive)
   }));
 
   const stats = [
@@ -97,9 +99,14 @@ const PolicyLifecycleManagement: React.FC<PolicyLifecycleManagementProps> = ({ o
     }
   };
 
-  const handleDeletePolicy = (policyId: string) => {
-    if (confirm('Are you sure you want to completely remove this policy record?')) {
-      setPolicies(policies.filter(p => p.id !== policyId));
+  const handleToggleInactive = (policyId: string) => {
+    if (confirm('Are you sure you want to change the active status of this policy?')) {
+      setPolicies(policies.map(p => {
+        if (p.id === policyId) {
+           return { ...p, isInactive: !p.isInactive };
+        }
+        return p;
+      }));
     }
   };
 
@@ -115,6 +122,7 @@ const PolicyLifecycleManagement: React.FC<PolicyLifecycleManagementProps> = ({ o
     if (activeTab === 'Active') return policy.status === 'Active';
     if (activeTab === 'Renewal Due') return policy.status === 'Renewal Due';
     if (activeTab === 'Expired') return policy.status === 'Expired';
+    if (activeTab === 'Inactive') return policy.status === 'Inactive';
 
     return true;
   });
@@ -184,7 +192,7 @@ const PolicyLifecycleManagement: React.FC<PolicyLifecycleManagementProps> = ({ o
       <div className="bg-white rounded-[32px] border border-slate-100 shadow-sm overflow-hidden">
         <div className="p-7 border-b border-slate-50 flex flex-col lg:flex-row justify-between items-center gap-6 bg-slate-50/30">
           <div className="flex bg-slate-100/50 p-1.5 rounded-xl overflow-x-auto shadow-inner w-full lg:w-auto border border-slate-200/50">
-             {['All Policies', 'Active', 'Renewal Due', 'Expired'].map(tab => (
+             {['All Policies', 'Active', 'Renewal Due', 'Expired', 'Inactive'].map(tab => (
                <button 
                  key={tab}
                  onClick={() => setActiveTab(tab)}
@@ -253,11 +261,13 @@ const PolicyLifecycleManagement: React.FC<PolicyLifecycleManagementProps> = ({ o
                   <td className="px-8 py-5">
                     <span className={`inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[10px] font-bold border ${
                       policy.status === 'Active' ? 'bg-emerald-50 text-emerald-600 border-emerald-100' :
-                      policy.status === 'Renewal Due' ? 'bg-amber-50 text-amber-600 border-amber-100' : 'bg-rose-50 text-rose-600 border-rose-100'
+                      policy.status === 'Renewal Due' ? 'bg-amber-50 text-amber-600 border-amber-100' : 
+                      policy.status === 'Inactive' ? 'bg-slate-100 text-slate-500 border-slate-200' : 'bg-rose-50 text-rose-600 border-rose-100'
                     }`}>
                       <div className={`w-1.5 h-1.5 rounded-full ${
                         policy.status === 'Active' ? 'bg-emerald-500' :
-                        policy.status === 'Renewal Due' ? 'bg-amber-500' : 'bg-rose-500'
+                        policy.status === 'Renewal Due' ? 'bg-amber-500' : 
+                        policy.status === 'Inactive' ? 'bg-slate-400' : 'bg-rose-500'
                       }`}></div>
                       {policy.status}
                     </span>
@@ -285,11 +295,11 @@ const PolicyLifecycleManagement: React.FC<PolicyLifecycleManagementProps> = ({ o
                         <Edit2 className="w-4 h-4" />
                       </button>
                       <button 
-                        onClick={() => handleDeletePolicy(policy.id)}
-                        className="p-2.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-xl transition-all border border-transparent hover:border-rose-100"
-                        title="Delete Policy"
+                        onClick={() => handleToggleInactive(policy.id)}
+                        className="p-2.5 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-xl transition-all border border-transparent hover:border-slate-200"
+                        title={policy.status === 'Inactive' ? "Reactivate Policy" : "Mark as Inactive"}
                       >
-                        <Trash2 className="w-4 h-4" />
+                        <Ban className="w-4 h-4" />
                       </button>
                     </div>
                   </td>
