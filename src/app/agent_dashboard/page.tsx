@@ -1,5 +1,5 @@
 /* src/app/agent_dashboard/page.tsx - CRM View Pre-optimized */
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import {
   LayoutDashboard,
   Users,
