@@ -1,219 +1,221 @@
-/* src/app/agent_dashboard/sections/DashboardOverview.tsx */
 import React from 'react';
-import {
-  FileCheck, RefreshCw, DollarSign, Target, ArrowUpRight,
-  ArrowDownRight, Phone, Mail, Users, Zap, UserPlus
+import { 
+  ShieldCheck, 
+  Users, 
+  RefreshCw, 
+  IndianRupee, 
+  UserPlus, 
+  CreditCard,
+  ArrowUpRight,
+  ArrowDownRight,
+  TrendingUp,
+  Activity,
+  Zap,
+  Clock,
+  ChevronRight,
+  Sparkles
 } from 'lucide-react';
-import {
+import { 
   AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
-  BarChart, Bar
+  BarChart, Bar, Cell
 } from 'recharts';
-import { Card, Button } from '../../../components/agent/UI';
 
 const chartData = [
-  { name: 'Jan', policies: 12, commission: 24000 },
-  { name: 'Feb', policies: 18, commission: 36000 },
-  { name: 'Mar', policies: 15, commission: 30000 },
-  { name: 'Apr', policies: 24, commission: 42500 },
-  { name: 'May', policies: 20, commission: 38000 },
-  { name: 'Jun', policies: 28, commission: 51000 },
+  { name: 'Jan', revenue: 45000, leads: 12 },
+  { name: 'Feb', revenue: 52000, leads: 15 },
+  { name: 'Mar', revenue: 48000, leads: 18 },
+  { name: 'Apr', revenue: 61000, leads: 22 },
+  { name: 'May', revenue: 55000, leads: 19 },
+  { name: 'Jun', revenue: 85000, leads: 25 },
 ];
 
-const DashboardOverview: React.FC<{ setSection: (s: string) => void }> = ({ setSection }) => {
-  const kpis = [
-    { label: 'New Policies', value: '24', change: '+12%', trend: 'up', icon: FileCheck, bgColor: 'bg-indigo-50', textColor: 'text-indigo-600' },
-    { label: 'Renewals (This Month)', value: '18', change: '+5%', trend: 'up', icon: RefreshCw, bgColor: 'bg-emerald-50', textColor: 'text-emerald-600' },
-    { label: 'Commission Earned', value: '₹42,500', change: '+18%', trend: 'up', icon: DollarSign, bgColor: 'bg-blue-50', textColor: 'text-blue-600' },
-    { label: 'Conversion Rate', value: '18.5%', change: '-2%', trend: 'down', icon: Target, bgColor: 'bg-amber-50', textColor: 'text-amber-600' },
-  ];
+const StatCard = ({ label, value, trend, isUp, icon: Icon, color }: any) => (
+  <div className="bg-white rounded-[24px] p-6 shadow-sm border border-slate-100 hover:shadow-xl hover:border-indigo-100 transition-all group overflow-hidden relative">
+    <div className={`absolute top-0 right-0 w-32 h-32 bg-${color}-500/5 rounded-full -mr-16 -mt-16 transition-all group-hover:scale-150`}></div>
+    <div className="flex items-start justify-between mb-4 relative z-10">
+      <div className={`w-12 h-12 rounded-2xl bg-${color}-50 text-${color}-600 flex items-center justify-center group-hover:scale-110 transition-transform`}>
+        <Icon size={24} />
+      </div>
+      <div className={`flex items-center gap-1 text-[10px] font-black px-2 py-1 rounded-lg ${isUp ? 'bg-emerald-50 text-emerald-600' : 'bg-rose-50 text-rose-600'}`}>
+        {isUp ? <ArrowUpRight size={12} /> : <ArrowDownRight size={12} />}
+        {trend}
+      </div>
+    </div>
+    <div className="relative z-10">
+      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.15em] mb-1">{label}</p>
+      <h3 className="text-2xl font-black text-slate-900 tracking-tight">{value}</h3>
+    </div>
+  </div>
+);
 
-  const recentLeads = [
-    { name: 'Rajesh Kumar', type: 'Life', status: 'Hot', time: '2h ago' },
-    { name: 'Anjali Sharma', type: 'Business', status: 'Hot', time: '5h ago' },
-    { name: 'Suresh Gupta', type: 'Health', status: 'Warm', time: '1d ago' },
+const DashboardOverview: React.FC<{ setSection: (s: string) => void }> = ({ setSection }) => {
+  const stats = [
+    { label: 'Total Policies Sold', value: '120', trend: '+14%', isUp: true, icon: ShieldCheck, color: 'indigo' },
+    { label: 'Active Customers', value: '95', trend: '+8%', isUp: true, icon: Users, color: 'blue' },
+    { label: 'Pending Renewals', value: '12', trend: 'Due Soon', isUp: false, icon: RefreshCw, color: 'amber' },
+    { label: 'Monthly Commission', value: '₹85,000', trend: '+22%', isUp: true, icon: IndianRupee, color: 'emerald' },
+    { label: 'Pending Payments', value: '5', trend: 'Urgent', isUp: false, icon: CreditCard, color: 'rose' },
   ];
 
   return (
-    <div className="space-y-8 pb-10 animate-fade-in">
-      {/* Quick Actions */}
-      <div className="flex flex-wrap gap-4">
-        <Button onClick={() => setSection('Leads')} icon={<UserPlus size={18} />} className="shadow-lg shadow-indigo-600/10">Add Lead</Button>
-        <Button variant="secondary" onClick={() => setSection('Quotes')} icon={<Zap size={18} />} className="shadow-lg shadow-slate-900/10">Create Quote</Button>
-        <Button variant="outline" onClick={() => setSection('Customers')} icon={<Users size={18} />}>My Customers</Button>
+    <div className="space-y-8 pb-12 animate-in fade-in duration-500">
+      {/* Welcome Section */}
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <div>
+          <h1 className="text-3xl font-black text-slate-900 tracking-tight flex items-center gap-3">
+            Welcome back, Rahul <Sparkles className="text-amber-500 w-6 h-6 animate-pulse" />
+          </h1>
+          <p className="text-sm font-bold text-slate-400 mt-1">Here's what's happening with your portfolio today.</p>
+        </div>
+        <div className="flex items-center gap-3">
+          <button 
+            onClick={() => setSection('Policies')}
+            className="px-6 py-3 bg-indigo-600 text-white rounded-2xl text-xs font-black uppercase tracking-widest hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-600/20"
+          >
+            Create Policy
+          </button>
+        </div>
       </div>
 
-      {/* KPI Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {kpis.map((kpi, idx) => (
-          <Card key={idx} className="p-6 hover:translate-y-[-4px] duration-300 border-none shadow-xl shadow-slate-200/50 group">
-            <div className={`w-12 h-12 rounded-2xl ${kpi.bgColor} ${kpi.textColor} flex items-center justify-center mb-4 shadow-sm group-hover:scale-110 transition-transform`}>
-              <kpi.icon size={24} />
-            </div>
-            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">{kpi.label}</p>
-            <div className="flex items-end justify-between">
-              <h3 className="text-2xl font-black text-slate-800 tracking-tight">{kpi.value}</h3>
-              <div className={`flex items-center gap-1 text-[10px] font-black ${kpi.trend === 'up' ? 'text-emerald-600' : 'text-red-500'}`}>
-                {kpi.trend === 'up' ? <ArrowUpRight size={14} /> : <ArrowDownRight size={14} />}
-                {kpi.change}
-              </div>
-            </div>
-          </Card>
+      {/* Stats Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-5">
+        {stats.map((stat, i) => (
+          <StatCard key={i} {...stat} />
         ))}
       </div>
 
-      {/* Target Achievement Card */}
-      <Card className="p-8 border-none shadow-xl shadow-slate-200/50 bg-slate-900 text-white relative overflow-hidden">
-        <div className="absolute top-0 right-0 p-10 opacity-10 rotate-12">
-          <Target size={160} />
-        </div>
-        <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
-          <div className="space-y-2">
-            <h3 className="text-xl font-black tracking-tight">Monthly Target Achievement</h3>
-            <p className="text-sm text-slate-400 font-medium">You have achieved **75%** of your sales goal for April.</p>
-          </div>
-          <div className="flex items-center gap-6">
-            <div className="w-32 h-32 relative flex items-center justify-center">
-              <svg className="w-full h-full -rotate-90">
-                <circle cx="64" cy="64" r="58" stroke="currentColor" strokeWidth="12" fill="transparent" className="text-white/10" />
-                <circle cx="64" cy="64" r="58" stroke="currentColor" strokeWidth="12" fill="transparent" strokeDasharray="364.4" strokeDashoffset="91.1" className="text-indigo-500" strokeLinecap="round" />
-              </svg>
-              <span className="absolute text-2xl font-black">75%</span>
-            </div>
-            <div className="hidden lg:block space-y-4">
-              <div className="flex items-center gap-3">
-                <div className="w-3 h-3 rounded-full bg-indigo-500"></div>
-                <p className="text-[10px] font-black uppercase text-slate-400">₹3,75,000 Achieved</p>
-              </div>
-              <div className="flex items-center gap-3">
-                <div className="w-3 h-3 rounded-full bg-white/10"></div>
-                <p className="text-[10px] font-black uppercase text-slate-400">₹1,25,000 Pending</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </Card>
-
-      {/* Charts Section */}
-      <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
-        <Card className="p-8 border-none shadow-xl shadow-slate-200/50">
-          <div className="flex items-center justify-between mb-8">
+      {/* Main Row */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        {/* Performance Chart */}
+        <div className="lg:col-span-2 bg-white rounded-[32px] p-8 shadow-sm border border-slate-100">
+          <div className="flex justify-between items-start mb-8">
             <div>
-              <h3 className="text-lg font-black text-slate-800 tracking-tight">Policy Trend</h3>
-              <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-0.5">Monthly Policy Issuance Volume</p>
+              <h3 className="text-lg font-black text-slate-900 tracking-tight">Earnings Performance</h3>
+              <p className="text-xs font-bold text-slate-400 mt-1">Monthly commission growth & lead conversion</p>
             </div>
+            <select className="bg-slate-50 border-none rounded-xl text-[10px] font-black uppercase tracking-widest p-2 text-slate-500 outline-none">
+              <option>Last 6 Months</option>
+              <option>Last Year</option>
+            </select>
           </div>
-          <div className="h-[300px] w-full min-h-[300px]">
+          <div className="h-[320px] w-full">
             <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={chartData}>
+              <AreaChart data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                 <defs>
-                  <linearGradient id="colorPolicies" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#6366f1" stopOpacity={0.1} />
-                    <stop offset="95%" stopColor="#6366f1" stopOpacity={0} />
+                  <linearGradient id="colorRev" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#6366f1" stopOpacity={0.1}/>
+                    <stop offset="95%" stopColor="#6366f1" stopOpacity={0}/>
                   </linearGradient>
                 </defs>
                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
-                <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: '#94a3b8', fontSize: 10, fontWeight: 700 }} />
-                <YAxis axisLine={false} tickLine={false} tick={{ fill: '#94a3b8', fontSize: 10, fontWeight: 700 }} />
-                <Tooltip contentStyle={{ borderRadius: '16px', border: 'none', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)' }} />
-                <Area type="monotone" dataKey="policies" stroke="#6366f1" strokeWidth={4} fillOpacity={1} fill="url(#colorPolicies)" />
+                <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 10, fontWeight: 700, fill: '#94a3b8' }} dy={10} />
+                <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 10, fontWeight: 700, fill: '#94a3b8' }} />
+                <Tooltip 
+                  contentStyle={{ backgroundColor: '#0f172a', border: 'none', borderRadius: '16px', color: '#fff' }}
+                  itemStyle={{ color: '#fff', fontSize: '12px', fontWeight: 'bold' }}
+                />
+                <Area type="monotone" dataKey="revenue" stroke="#6366f1" strokeWidth={4} fillOpacity={1} fill="url(#colorRev)" />
               </AreaChart>
             </ResponsiveContainer>
           </div>
-        </Card>
+        </div>
 
-        <Card className="p-8 border-none shadow-xl shadow-slate-200/50">
-          <div className="flex items-center justify-between mb-8">
-            <div>
-              <h3 className="text-lg font-black text-slate-800 tracking-tight">Revenue Analysis</h3>
-              <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-0.5">Commission Growth (INR)</p>
+        {/* Quick Actions / Tasks */}
+        <div className="bg-slate-900 rounded-[32px] p-8 text-white shadow-2xl relative overflow-hidden flex flex-col justify-between">
+          <div className="absolute top-0 right-0 p-8 opacity-10">
+            <Activity size={120} className="rotate-12" />
+          </div>
+          
+          <div className="relative z-10">
+            <h3 className="text-xl font-black mb-2">Priority Actions</h3>
+            <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-8">Items requiring attention</p>
+            
+            <div className="space-y-4">
+              {[
+                { label: 'Renewal Call', target: 'Rajesh K.', time: '10:30 AM', icon: Clock, color: 'amber' },
+                { label: 'Policy Draft', target: 'Priya S.', time: '02:00 PM', icon: Zap, color: 'indigo' },
+                { label: 'Lead Followup', target: 'Anjali G.', time: '04:30 PM', icon: UserPlus, color: 'emerald' },
+              ].map((task, i) => (
+                <div key={i} className="bg-white/5 border border-white/5 p-4 rounded-2xl flex items-center gap-4 hover:bg-white/10 transition-all cursor-pointer">
+                  <div className={`w-10 h-10 rounded-xl bg-${task.color}-500/20 text-${task.color}-400 flex items-center justify-center`}>
+                    <task.icon size={18} />
+                  </div>
+                  <div className="flex-1">
+                    <p className="text-xs font-black">{task.label}</p>
+                    <p className="text-[10px] font-bold text-slate-400">{task.target} • {task.time}</p>
+                  </div>
+                  <ChevronRight size={14} className="text-slate-600" />
+                </div>
+              ))}
             </div>
           </div>
-          <div className="h-[300px] w-full min-h-[300px]">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={chartData}>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
-                <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: '#94a3b8', fontSize: 10, fontWeight: 700 }} />
-                <YAxis axisLine={false} tickLine={false} tick={{ fill: '#94a3b8', fontSize: 10, fontWeight: 700 }} />
-                <Tooltip cursor={{ fill: '#f8fafc' }} contentStyle={{ borderRadius: '16px', border: 'none', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)' }} />
-                <Bar dataKey="commission" fill="#0ea5e9" radius={[10, 10, 0, 0]} />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-        </Card>
+
+          <button className="relative z-10 w-full py-4 bg-indigo-600 hover:bg-indigo-500 rounded-2xl flex items-center justify-center gap-3 text-xs font-black uppercase tracking-widest transition-all shadow-lg shadow-indigo-900/40 mt-8">
+            View All Tasks
+          </button>
+        </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Recent Leads */}
-        <Card className="p-8 border-none shadow-xl shadow-slate-200/50">
-          <h3 className="text-lg font-black text-slate-800 mb-6 flex items-center gap-2">Recent Leads</h3>
-          <div className="space-y-4">
-            {recentLeads.map((lead, idx) => (
-              <div key={idx} className="flex items-center justify-between p-4 bg-slate-50 rounded-2xl border border-slate-100 hover:border-indigo-100 hover:bg-white hover:shadow-lg transition-all duration-300">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-white border border-slate-200 flex items-center justify-center font-black text-xs text-indigo-600">
-                    {lead.name[0]}
+      {/* Secondary Row */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        {/* Recent Policies Snapshot */}
+        <div className="bg-white rounded-[32px] p-8 shadow-sm border border-slate-100">
+           <div className="flex justify-between items-center mb-6">
+              <h3 className="text-lg font-black text-slate-900">Recent Policies</h3>
+              <button onClick={() => setSection('Policies')} className="text-[10px] font-black text-indigo-600 uppercase tracking-widest hover:underline">View All</button>
+           </div>
+           <div className="divide-y divide-slate-50">
+              {[
+                { id: 'POL-8829', name: 'Amit Singh', type: 'Life Plus', date: '2 mins ago', amount: '₹12,400', status: 'Active' },
+                { id: 'POL-8828', name: 'Neha Kapoor', type: 'Health Pro', date: '1 hour ago', amount: '₹8,200', status: 'Pending' },
+                { id: 'POL-8827', name: 'Vikram Sahay', type: 'Car Shield', date: '3 hours ago', amount: '₹15,000', status: 'Active' },
+              ].map((item, i) => (
+                <div key={i} className="py-4 flex items-center justify-between group">
+                  <div className="flex items-center gap-4">
+                    <div className="w-10 h-10 rounded-xl bg-slate-50 text-slate-400 flex items-center justify-center group-hover:bg-indigo-50 group-hover:text-indigo-600 transition-colors">
+                      <ShieldCheck size={18} />
+                    </div>
+                    <div>
+                      <p className="text-sm font-black text-slate-800">{item.name}</p>
+                      <p className="text-[10px] font-bold text-slate-400">{item.id} • {item.type}</p>
+                    </div>
                   </div>
-                  <div>
+                  <div className="text-right">
+                    <p className="text-sm font-black text-slate-900">{item.amount}</p>
+                    <p className="text-[9px] font-bold text-slate-400 uppercase">{item.date}</p>
+                  </div>
+                </div>
+              ))}
+           </div>
+        </div>
+
+        {/* Lead Activity Snapshot */}
+        <div className="bg-white rounded-[32px] p-8 shadow-sm border border-slate-100">
+           <div className="flex justify-between items-center mb-6">
+              <h3 className="text-lg font-black text-slate-900">New Leads</h3>
+              <button onClick={() => setSection('Leads')} className="text-[10px] font-black text-indigo-600 uppercase tracking-widest hover:underline">Manage Pipeline</button>
+           </div>
+           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {[
+                { name: 'Suresh Raina', type: 'Life', score: 85, time: 'Added today' },
+                { name: 'Priya Verma', type: 'Health', score: 72, time: 'Added today' },
+                { name: 'Rahul Dravid', type: 'Auto', score: 92, time: 'Yesterday' },
+                { name: 'Sunil Chetri', type: 'Home', score: 64, time: 'Yesterday' },
+              ].map((lead, i) => (
+                <div key={i} className="p-4 bg-slate-50 border border-slate-100 rounded-2xl hover:bg-indigo-50 hover:border-indigo-100 transition-all cursor-pointer">
+                  <div className="flex justify-between items-start mb-2">
                     <p className="text-sm font-black text-slate-800">{lead.name}</p>
-                    <p className="text-[10px] text-slate-400 font-bold uppercase tracking-tight">{lead.type} Insurance</p>
+                    <span className="text-[9px] font-black px-2 py-0.5 bg-white text-emerald-600 rounded-lg shadow-sm">{lead.score}%</span>
                   </div>
-                </div>
-                <div className="text-right">
-                  <span className={`px-2 py-0.5 rounded text-[9px] font-black uppercase ${lead.status === 'Hot' ? 'bg-red-50 text-red-600' : 'bg-amber-50 text-amber-600'}`}>
-                    {lead.status}
-                  </span>
-                  <p className="text-[10px] text-slate-400 font-bold mt-1 uppercase tracking-tighter">{lead.time}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-          <button onClick={() => setSection('Leads')} className="w-full mt-6 py-4 text-xs font-black text-indigo-600 hover:bg-indigo-50 rounded-2xl transition-all uppercase tracking-widest">Explore Pipeline</button>
-        </Card>
-
-        {/* Activity Log Snapshot */}
-        <Card className="p-8 border-none shadow-xl shadow-slate-200/50">
-          <h3 className="text-lg font-black text-slate-800 mb-6 flex items-center gap-2">Recent Activity</h3>
-          <div className="space-y-6 relative before:absolute before:left-5 before:top-2 before:bottom-2 before:w-0.5 before:bg-slate-100">
-            {[
-              { type: 'Call', text: 'Rajesh Kumar', icon: Phone, color: 'text-blue-600', bg: 'bg-blue-50' },
-              { type: 'Email', text: 'Anjali Sharma', icon: Mail, color: 'text-amber-600', bg: 'bg-amber-50' },
-              { type: 'Meeting', text: 'Sunil Gupta', icon: Users, color: 'text-indigo-600', bg: 'bg-indigo-50' },
-            ].map((item, idx) => (
-              <div key={idx} className="flex gap-4 relative">
-                <div className={`w-10 h-10 rounded-xl ${item.bg} ${item.color} flex items-center justify-center z-10 border-4 border-white shadow-sm`}>
-                  <item.icon size={16} />
-                </div>
-                <div>
-                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.1em]">{item.type}</p>
-                  <p className="text-sm font-black text-slate-800 tracking-tight">{item.text}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-          <button onClick={() => setSection('Activity')} className="w-full mt-6 py-4 text-xs font-black text-indigo-600 hover:bg-indigo-50 rounded-2xl transition-all uppercase tracking-widest">Audit Full Log</button>
-        </Card>
-
-        {/* Reminders / Next Actions */}
-        <Card className="p-8 border-none shadow-xl shadow-slate-200/50 bg-indigo-600 text-white">
-          <h3 className="text-lg font-black mb-6">Upcoming Reminders</h3>
-          <div className="space-y-6">
-            {[
-              { title: 'Renewal: Rajesh K.', date: 'May 15', sub: 'Policy HL-7788' },
-              { title: 'Meeting: Sunil G.', date: 'May 20', sub: 'Juhu Residence' },
-            ].map((rem, i) => (
-              <div key={i} className="p-4 bg-white/10 rounded-2xl border border-white/5 hover:bg-white/20 transition-all cursor-pointer">
-                <div className="flex justify-between items-start">
-                  <div>
-                    <p className="text-sm font-black tracking-tight">{rem.title}</p>
-                    <p className="text-[10px] text-indigo-200 font-bold mt-0.5">{rem.sub}</p>
+                  <p className="text-[10px] font-bold text-slate-400 uppercase mb-3">{lead.type} Insurance</p>
+                  <div className="w-full h-1 bg-slate-200 rounded-full overflow-hidden">
+                    <div className="h-full bg-indigo-500 rounded-full" style={{ width: `${lead.score}%` }}></div>
                   </div>
-                  <span className="text-[10px] font-black bg-white text-indigo-600 px-2 py-0.5 rounded uppercase">{rem.date}</span>
+                  <p className="text-[9px] font-bold text-slate-400 mt-2">{lead.time}</p>
                 </div>
-              </div>
-            ))}
-          </div>
-          <button onClick={() => setSection('Tasks')} className="w-full mt-8 py-3 text-xs font-black text-white bg-white/10 hover:bg-white/20 rounded-xl transition-all uppercase tracking-widest">Open Calendar</button>
-        </Card>
+              ))}
+           </div>
+        </div>
       </div>
     </div>
   );

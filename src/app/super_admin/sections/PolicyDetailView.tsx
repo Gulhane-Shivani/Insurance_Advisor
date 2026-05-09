@@ -30,6 +30,146 @@ interface PolicyDetailViewProps {
 const PolicyDetailView: React.FC<PolicyDetailViewProps> = ({ policyId, onBack }) => {
    // Enhanced Mock Data Repository
    const mockPolicies: Record<string, any> = {
+      'POL-8829': {
+         id: 'POL-8829',
+         name: 'Life Insurance',
+         status: 'Active',
+         portfolio: 'Wealth Protection',
+         theme: 'violet',
+         customer: {
+            fullName: 'Amit Singh',
+            email: 'amit.singh@example.com',
+            contact: '+91 98765 43210',
+            address: 'H-45, Sector 15, Gurgaon, Haryana'
+         },
+         period: {
+            issueDate: '09 May 2024',
+            expiryDate: '09 May 2027',
+            premium: '₹12,400',
+            dueDate: '09 May 2025'
+         },
+         paymentHistory: [
+            { amount: '₹12,400', date: '09 May 2024', type: 'Initial Premium', status: 'Success' }
+         ],
+         renewalLogs: [
+            { status: 'Policy Issued', date: '09 May 2024', verified: true }
+         ],
+         coverage: ['Accidental Death', 'Term Life', 'Critical Illness'],
+         benefits: ['Tax Benefit', 'Loyalty Bonus'],
+         nominee: 'Priya Singh (Spouse)'
+      },
+      'POL-8828': {
+         id: 'POL-8828',
+         name: 'Health Insurance',
+         status: 'Pending',
+         portfolio: 'Health & Wellness',
+         theme: 'blue',
+         customer: {
+            fullName: 'Neha Kapoor',
+            email: 'neha.k@example.com',
+            contact: '+91 88888 77777',
+            address: 'Flat 202, Sunshine Apts, Mumbai'
+         },
+         period: {
+            issueDate: '15 Jun 2023',
+            expiryDate: '15 Jun 2026',
+            premium: '₹8,200',
+            dueDate: '15 Jun 2024'
+         },
+         paymentHistory: [
+            { amount: '₹8,200', date: '15 Jun 2023', type: 'Initial Premium', status: 'Success' }
+         ],
+         renewalLogs: [
+            { status: 'Pending Verification', date: '15 Jun 2023', verified: false }
+         ],
+         coverage: ['Hospitalization', 'OPD', 'Maternity'],
+         benefits: ['Cashless', 'No Claim Bonus'],
+         nominee: 'Rajesh Kapoor (Father)'
+      },
+      'POL-8827': {
+         id: 'POL-8827',
+         name: 'Car Insurance',
+         status: 'Active',
+         portfolio: 'Automobile Care',
+         theme: 'indigo',
+         customer: {
+            fullName: 'Vikram Sahay',
+            email: 'vikram.s@example.com',
+            contact: '+91 77777 66666',
+            address: 'Villa 12, Palm Grove, Bangalore'
+         },
+         period: {
+            issueDate: '20 May 2023',
+            expiryDate: '20 May 2026',
+            premium: '₹15,000',
+            dueDate: '20 May 2024'
+         },
+         paymentHistory: [
+            { amount: '₹15,000', date: '20 May 2023', type: 'Full Premium', status: 'Success' }
+         ],
+         renewalLogs: [
+            { status: 'Verified', date: '20 May 2023', verified: true }
+         ],
+         coverage: ['Third Party', 'Own Damage', 'Zero Dep'],
+         benefits: ['Roadside Assistance'],
+         nominee: 'Anjali Sahay (Wife)'
+      },
+      'POL-8826': {
+         id: 'POL-8826',
+         name: 'Life Insurance',
+         status: 'Renewal Due',
+         portfolio: 'Family Life Portfolio',
+         theme: 'amber',
+         customer: {
+            fullName: 'Suresh Raina',
+            email: 'suresh.r@example.com',
+            contact: '+91 77766 55544',
+            address: 'Plot 5, Sports City, Ghaziabad'
+         },
+         period: {
+            issueDate: '12 May 2023',
+            expiryDate: '12 May 2026',
+            premium: '₹22,000',
+            dueDate: '12 May 2024'
+         },
+         paymentHistory: [
+            { amount: '₹22,000', date: '12 May 2023', type: 'Initial Premium', status: 'Success' }
+         ],
+         renewalLogs: [
+            { status: 'Renewal Pending', date: '12 May 2024', verified: false }
+         ],
+         coverage: ['Critical Illness', 'Total Disability', 'Death Benefit'],
+         benefits: ['Income Replacement', 'Child Education Rider'],
+         nominee: 'Priyanka Raina (Wife)'
+      },
+      'POL-8825': {
+         id: 'POL-8825',
+         name: 'Health Insurance',
+         status: 'Expired',
+         portfolio: 'Personal Health Portfolio',
+         theme: 'rose',
+         customer: {
+            fullName: 'Priya Verma',
+            email: 'priya.v@example.com',
+            contact: '+91 99887 76655',
+            address: 'B-201, Green Park, South Delhi'
+         },
+         period: {
+            issueDate: '01 May 2023',
+            expiryDate: '01 May 2024',
+            premium: '₹9,500',
+            dueDate: '01 May 2024'
+         },
+         paymentHistory: [
+            { amount: '₹9,500', date: '01 May 2023', type: 'Initial Premium', status: 'Success' }
+         ],
+         renewalLogs: [
+            { status: 'Expired', date: '01 May 2024', verified: false }
+         ],
+         coverage: ['In-patient Hospitalization', 'AYUSH', 'Day Care'],
+         benefits: ['Cashless Treatment', 'Restoration Benefit'],
+         nominee: 'Sunil Verma (Husband)'
+      },
       'SG-HLTH-002': {
          id: 'SG-HLTH-002',
          name: 'Star Comprehensive Health',
@@ -59,63 +199,6 @@ const PolicyDetailView: React.FC<PolicyDetailViewProps> = ({ policyId, onBack })
          coverage: ['Hospitalization', 'OPD Cover', 'Maternity'],
          benefits: ['Platinum Plan'],
          nominee: 'Sunita Mehta (Wife)'
-      },
-      'SG-MOTR-003': {
-         id: 'SG-MOTR-003',
-         name: 'Private Car Package Policy',
-         status: 'Renewal Due',
-         portfolio: 'Automobile Portfolio',
-         theme: 'blue',
-         customer: {
-            fullName: 'Deepak Singh',
-            email: 'deepak.s@example.com',
-            contact: '+91 99988 77766',
-            address: 'H-12, Malviya Nagar, New Delhi - 110017'
-         },
-         period: {
-            issueDate: '15 May 2023',
-            expiryDate: '14 May 2024',
-            premium: '₹12,500',
-            dueDate: '14 May 2024'
-         },
-         paymentHistory: [
-            { amount: '₹12,500', date: '15 May 2023', type: 'New Issuance', status: 'Success' }
-         ],
-         renewalLogs: [
-            { status: 'Renewal Pending', date: '14 May 2024', verified: false }
-         ],
-         coverage: ['Own Damage', 'Third Party Liability', 'Zero Dep'],
-         benefits: ['Standard Plan'],
-         nominee: 'Anita Singh (Mother)'
-      },
-      'SG-LIFE-001': {
-         id: 'SG-LIFE-001',
-         name: 'Term Life Protection',
-         status: 'Active',
-         portfolio: 'Wealth Management',
-         theme: 'indigo',
-         customer: {
-            fullName: 'Sneh Lata',
-            email: 'sneh.lata@example.com',
-            contact: '+91 88776 65544',
-            address: 'Flat 204, Royal Palms, Mumbai, Maharashtra'
-         },
-         period: {
-            issueDate: '10 Feb 2022',
-            expiryDate: '09 Feb 2042',
-            premium: '₹45,000',
-            dueDate: '10 Feb 2025'
-         },
-         paymentHistory: [
-            { amount: '₹45,000', date: '10 Feb 2024', type: 'Annual Premium', status: 'Success' },
-            { amount: '₹45,000', date: '10 Feb 2023', type: 'Annual Premium', status: 'Success' }
-         ],
-         renewalLogs: [
-            { status: 'Payment Verified', date: '10 Feb 2024', verified: true }
-         ],
-         coverage: ['Critical Illness', 'Death Benefit', 'Accidental Cover'],
-         benefits: ['Gold Plan'],
-         nominee: 'Amit Kumar (Son)'
       }
    };
 
