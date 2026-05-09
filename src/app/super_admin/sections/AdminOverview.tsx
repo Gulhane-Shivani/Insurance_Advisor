@@ -10,8 +10,6 @@ import {
   ArrowUpRight,
   ArrowDownRight,
   ArrowRight,
-  TrendingUp,
-  Calendar,
   MoreVertical,
   MousePointer2,
   Zap
@@ -35,7 +33,6 @@ import {
 const AdminOverview: React.FC = () => {
   const [revenueScope, setRevenueScope] = useState('Monthly');
   const [isAuditing, setIsAuditing] = useState(false);
-  const [lastAudit, setLastAudit] = useState('');
 
   const revenueData = [
     { name: 'Jan', revenue: 2400 },
@@ -87,7 +84,6 @@ const AdminOverview: React.FC = () => {
                 setIsAuditing(true);
                 setTimeout(() => {
                    setIsAuditing(false);
-                   setLastAudit('Just now');
                    toast.success('System audit passed');
                 }, 2000);
              }}
@@ -332,7 +328,6 @@ const AdminOverview: React.FC = () => {
                    setIsAuditing(true);
                    setTimeout(() => {
                       setIsAuditing(false);
-                      setLastAudit('Just now');
                       toast.success('System audit passed');
                    }, 2000);
                 }}

@@ -2,7 +2,6 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { 
   CreditCard, 
   Search, 
-  ArrowDownToLine,
   TrendingUp,
   CheckCircle2,
   XCircle,

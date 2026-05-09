@@ -12,9 +12,7 @@ import {
   Monitor,
   Eye,
   LogOut,
-  CreditCard,
-  Zap,
-  Clock
+  CreditCard
 } from 'lucide-react';
 
 const SettingsManagement: React.FC = () => {

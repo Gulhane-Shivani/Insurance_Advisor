@@ -214,7 +214,7 @@ const UserProfileContent = ({ user, onBack }: any) => {
                    <h4 className="text-[10px] font-black text-slate-900 uppercase tracking-[0.15em] mb-5">Performance Snapshot</h4>
                    <div className="space-y-3">
                       {[
-                         { label: 'Policies', value: '120', icon: ShieldCheck, color: 'indigo' },
+                         { label: 'Policies', value: '120', icon: ShieldIcon, color: 'indigo' },
                          { label: 'Clients', value: '95', icon: Users, color: 'blue' },
                          { label: 'Tier', value: user.role === 'USER' ? 'Customer' : user.role === 'SUPER_ADMIN' ? 'Admin' : user.role, icon: Zap, color: 'amber' },
                       ].map((stat, i) => (

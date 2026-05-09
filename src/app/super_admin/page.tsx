@@ -5,17 +5,12 @@ import {
   LayoutDashboard,
   Users,
   Settings,
-  FileStack,
   Globe,
-  ShieldAlert,
   LogOut,
   Menu,
   X,
-  ExternalLink,
   ChevronDown,
   User as UserIcon,
-  Activity,
-  History,
   ShieldCheck,
   Bell,
   Search,
@@ -64,7 +59,7 @@ const SuperAdminDashboard: React.FC = () => {
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
 
   useEffect(() => {
-    const handleViewCustomer = (e: any) => {
+    const handleViewCustomer = () => {
       // For demo purposes, we'll just show the same high-fidelity profile view
       // In a real app, we'd fetch the specific user's policy or data
       setSelectedPolicyId('SG-HLTH-002');
@@ -133,12 +128,6 @@ const SuperAdminDashboard: React.FC = () => {
     }
   };
 
-  const getPageTitle = () => {
-    if (activeSection === 'audit') return 'Audit Logs';
-    if (activeSection === 'stats') return 'System Stats';
-    const current = adminMenuItems.find(item => item.id === activeSection);
-    return current ? current.label : 'Super Admin';
-  };
 
   return (
     <div className="flex h-screen w-full bg-slate-50 overflow-hidden font-sans">

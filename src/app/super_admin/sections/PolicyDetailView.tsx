@@ -3,8 +3,6 @@ import {
    ArrowLeft,
    Download,
    User,
-   Mail,
-   Phone,
    MapPin,
    Calendar,
    CreditCard,
