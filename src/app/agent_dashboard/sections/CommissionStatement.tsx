@@ -1,20 +1,17 @@
 import React from 'react';
 import { 
-  IndianRupee, 
   TrendingUp, 
   ArrowUpRight, 
-  ArrowDownRight, 
   Download, 
   Filter, 
   Calendar,
   DollarSign,
-  PieChart as PieIcon,
   CreditCard,
   Clock
 } from 'lucide-react';
 import { 
   AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
-  BarChart, Bar, Cell, PieChart, Pie
+  PieChart, Pie, Cell
 } from 'recharts';
 
 const chartData = [

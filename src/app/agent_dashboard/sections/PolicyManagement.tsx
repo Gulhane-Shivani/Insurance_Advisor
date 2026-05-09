@@ -3,21 +3,14 @@ import {
   ShieldCheck, 
   Search, 
   Plus, 
-  Filter, 
-  MoreHorizontal, 
   Eye, 
-  Edit3, 
   Bell, 
   Calendar, 
   IndianRupee,
   ChevronRight,
-  Download,
-  LayoutGrid,
   Zap,
   Clock,
-  AlertCircle,
-  TrendingUp,
-  ArrowLeft
+  AlertCircle
 } from 'lucide-react';
 import PolicyIssuanceForm from '../../super_admin/sections/PolicyIssuanceForm';
 import PolicyDetailView from '../../super_admin/sections/PolicyDetailView';

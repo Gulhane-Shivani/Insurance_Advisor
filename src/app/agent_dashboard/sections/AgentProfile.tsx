@@ -17,7 +17,6 @@ import {
   Star,
   Zap,
   Target,
-  ArrowUpRight,
   X,
   Save
 } from 'lucide-react';
@@ -26,7 +25,7 @@ const AgentProfile: React.FC = () => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [profileData, setProfileData] = useState({
     name: "Rahul Sharma",
-    photo: null,
+    photo: null as string | null,
     role: "Senior Insurance Advisor",
     branch: "Mumbai Central, MH",
     experience: "8+ Years",

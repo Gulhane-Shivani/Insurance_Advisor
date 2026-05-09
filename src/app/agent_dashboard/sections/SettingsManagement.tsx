@@ -7,10 +7,8 @@ import {
   Shield, 
   Globe, 
   Smartphone, 
-  Mail, 
   ChevronRight,
   Monitor,
-  Eye,
   LogOut,
   CreditCard
 } from 'lucide-react';

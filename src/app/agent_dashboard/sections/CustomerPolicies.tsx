@@ -3,7 +3,6 @@ import {
   Users, 
   Search, 
   UserPlus, 
-  MoreHorizontal, 
   Eye, 
   Edit3, 
   Upload, 
@@ -11,17 +10,11 @@ import {
   Mail, 
   Shield, 
   Calendar,
-  Filter,
   ChevronRight,
   X,
-  Plus,
   MapPin,
-  Clock,
-  CheckCircle2,
-  AlertCircle,
   ArrowLeft,
   FileText,
-  BadgeCheck,
   Zap,
   CreditCard,
   Activity
@@ -94,10 +87,6 @@ const CustomerManagement: React.FC = () => {
     setViewMode('details');
   };
 
-  const openEdit = (customer: any) => {
-    setSelectedCustomer(customer);
-    setIsEditModalOpen(true);
-  };
 
   if (viewMode === 'details' && selectedCustomer) {
     return (

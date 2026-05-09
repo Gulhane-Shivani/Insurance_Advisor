@@ -1,12 +1,7 @@
 import React, { useState } from 'react';
 import { 
   RefreshCw, 
-  Search, 
-  Bell, 
   Calendar, 
-  ChevronRight, 
-  User, 
-  ShieldCheck, 
   Clock, 
   CheckCircle2, 
   AlertTriangle, 
