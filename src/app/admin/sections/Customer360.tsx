@@ -1,10 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { 
-  User, 
   Search, 
   Phone, 
-  Mail, 
-  MapPin,
   Shield,
   Clock,
   IndianRupee,
