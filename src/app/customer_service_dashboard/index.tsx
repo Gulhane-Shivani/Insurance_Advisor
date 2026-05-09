@@ -81,13 +81,14 @@ const CSRDashboard: React.FC = () => {
       <aside className={`fixed inset-y-0 left-0 z-50 w-72 bg-slate-900 text-white transition-transform duration-300 transform ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:relative lg:translate-x-0 shadow-2xl flex flex-col`}>
         <div className="flex flex-col h-full">
           <div className="p-8">
-            <div className="flex items-center gap-2 mb-10 px-2">
-              <div className="w-9 h-9 bg-violet-600 rounded-xl flex items-center justify-center text-white font-black text-xl shadow-lg shadow-violet-500/20">
+            <div className="flex items-center gap-3 mb-10 px-2">
+              <div className="w-10 h-10 bg-[#0061FF] rounded-xl flex items-center justify-center text-white font-black text-xl shadow-lg shadow-blue-900/50">
                 IA
               </div>
-              <h1 className="text-xl font-bold tracking-tighter text-white">
-                Insurance<span className="text-violet-400">CSR</span>
-              </h1>
+              <div className="flex flex-col">
+                <h1 className="text-xl leading-none font-black uppercase tracking-tighter text-white">Insurance</h1>
+                <p className="text-xs text-violet-400 font-bold uppercase tracking-[0.3em]">Advisor</p>
+              </div>
             </div>
 
             <nav className="space-y-1.5">

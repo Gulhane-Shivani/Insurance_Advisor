@@ -103,12 +103,12 @@ const AgentDashboard: React.FC = () => {
         className={`fixed inset-y-0 left-0 z-50 w-72 bg-slate-900 text-white transition-all duration-300 transform ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:relative lg:translate-x-0 flex flex-col shadow-2xl`}
       >
         <div className="p-8 flex items-center gap-3">
-          <div className="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center shadow-lg shadow-indigo-500/20">
-            <ShieldCheck className="text-white w-6 h-6" />
+          <div className="w-10 h-10 bg-[#0061FF] rounded-xl flex items-center justify-center text-white font-black text-xl shadow-lg shadow-blue-900/20">
+            IA
           </div>
-          <div>
-            <h1 className="text-lg font-black tracking-tight leading-none">SafeGuard</h1>
-            <p className="text-[10px] font-bold text-indigo-400 uppercase tracking-widest mt-1">Advisor Pro</p>
+          <div className="flex flex-col">
+            <h1 className="text-xl leading-none font-black uppercase tracking-tighter text-white">Insurance</h1>
+            <p className="text-xs text-indigo-400 font-bold uppercase tracking-[0.3em]">Advisor</p>
           </div>
         </div>
 
@@ -136,21 +136,21 @@ const AgentDashboard: React.FC = () => {
           ))}
         </nav>
 
-        <div className="p-6 border-t border-white/5 bg-slate-900/50 backdrop-blur-md">
-          <div className="flex items-center gap-3 p-3 bg-white/5 rounded-2xl border border-white/5 group hover:bg-white/10 transition-all cursor-pointer" onClick={() => setActiveSection('Profile')}>
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center font-black text-white shadow-lg">
+        <div className="p-5 border-t border-white/5 bg-slate-900/50 backdrop-blur-md">
+          <div className="flex items-center gap-3 p-2.5 bg-white/5 rounded-2xl border border-white/5 group hover:bg-white/10 transition-all cursor-pointer" onClick={() => setActiveSection('Profile')}>
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center font-black text-white text-sm shadow-lg">
               {agentData.name.split(' ').map(n => n[0]).join('')}
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-xs font-black truncate">{agentData.name}</p>
-              <p className="text-[10px] text-slate-500 font-bold uppercase tracking-wider">{agentData.role}</p>
+              <p className="text-[11px] font-black truncate">{agentData.name}</p>
+              <p className="text-[9px] text-slate-500 font-bold uppercase tracking-wider">{agentData.role}</p>
             </div>
           </div>
           <button 
             onClick={handleLogout}
-            className="w-full mt-4 flex items-center gap-2 px-4 py-3 rounded-xl text-xs font-bold text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 transition-all"
+            className="w-full mt-3 flex items-center gap-2 px-3 py-2.5 rounded-xl text-[10px] font-bold text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 transition-all"
           >
-            <LogOut size={16} />
+            <LogOut size={14} />
             Sign Out
           </button>
         </div>

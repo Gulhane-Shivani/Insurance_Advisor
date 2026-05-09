@@ -150,8 +150,8 @@ const SuperAdminDashboard: React.FC = () => {
       `}>
         <div className="h-24 flex flex-col items-center justify-center bg-slate-900 border-b border-white/5">
           <span className="text-xl font-black tracking-tighter text-white flex items-center gap-3">
-            <div className="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center shadow-lg shadow-indigo-900/50">
-              <ShieldCheck className="w-6 h-6 text-white" />
+            <div className="w-10 h-10 bg-[#0061FF] rounded-xl flex items-center justify-center text-white font-black text-xl shadow-lg shadow-blue-900/50">
+              IA
             </div>
             <div className="flex flex-col">
               <span className="text-xl leading-none font-black uppercase tracking-tighter">Insurance</span>

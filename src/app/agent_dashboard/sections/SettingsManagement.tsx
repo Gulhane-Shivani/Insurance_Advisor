@@ -89,7 +89,7 @@ const SettingsManagement: React.FC = () => {
          <div className="bg-rose-50 rounded-[32px] p-8 border border-rose-100 flex flex-col md:flex-row items-center justify-between gap-6">
             <div>
                <h4 className="text-lg font-black text-rose-900">Sign Out Session</h4>
-               <p className="text-sm font-bold text-rose-600 mt-1">Sign out from the SafeGuard Advisor CRM on this device.</p>
+               <p className="text-sm font-bold text-rose-600 mt-1">Sign out from the Insurance Advisor CRM on this device.</p>
             </div>
             <button className="px-8 py-4 bg-rose-600 text-white rounded-2xl text-xs font-black uppercase tracking-widest hover:bg-rose-700 transition-all shadow-lg shadow-rose-200 flex items-center gap-2">
                <LogOut size={16} /> Sign Out

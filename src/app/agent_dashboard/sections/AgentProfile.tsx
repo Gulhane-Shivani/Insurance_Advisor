@@ -31,7 +31,7 @@ const AgentProfile: React.FC = () => {
     branch: "Mumbai Central, MH",
     experience: "8+ Years",
     id: "AGT-10294",
-    email: "rahul.sharma@safeguard.com",
+    email: "rahul.sharma@insuranceadvisor.com",
     phone: "+91 98765 43210",
     rating: 4.9,
     assignedPolicies: 120,
