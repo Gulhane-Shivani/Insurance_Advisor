@@ -8,7 +8,6 @@ import {
   CreditCard,
   ArrowUpRight,
   ArrowDownRight,
-  TrendingUp,
   Activity,
   Zap,
   Clock,
@@ -16,8 +15,7 @@ import {
   Sparkles
 } from 'lucide-react';
 import { 
-  AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
-  BarChart, Bar, Cell
+  AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer
 } from 'recharts';
 
 const chartData = [

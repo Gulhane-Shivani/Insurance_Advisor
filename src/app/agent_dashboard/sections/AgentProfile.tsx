@@ -9,13 +9,11 @@ import {
   TrendingUp, 
   ShieldCheck, 
   Users, 
-  IndianRupee,
   Calendar,
   Settings,
   Edit2,
   Camera,
   Star,
-  Zap,
   Target,
   X,
   Save

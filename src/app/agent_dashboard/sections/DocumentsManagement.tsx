@@ -5,16 +5,11 @@ import {
   Search, 
   Filter, 
   Download, 
-  Trash2, 
   Eye, 
-  MoreHorizontal,
   Folder,
   File,
   ShieldCheck,
   User,
-  Clock,
-  CheckCircle2,
-  ChevronRight,
   Plus
 } from 'lucide-react';
 

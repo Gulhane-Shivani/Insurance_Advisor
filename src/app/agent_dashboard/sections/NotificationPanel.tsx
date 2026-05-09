@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import { 
   Bell, 
-  Search, 
-  Filter, 
   RefreshCw, 
   ShieldCheck, 
   IndianRupee, 

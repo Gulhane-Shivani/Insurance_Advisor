@@ -1,11 +1,10 @@
 /* src/app/agent_dashboard/page.tsx - CRM View Pre-optimized */
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import {
   LayoutDashboard,
   Users,
   ShieldCheck,
   RefreshCw,
-  UserPlus,
   IndianRupee,
   CreditCard,
   FileText,
@@ -16,11 +15,7 @@ import {
   Menu,
   X,
   Search,
-  ChevronRight,
-  ChevronDown,
-  Activity,
-  Zap,
-  Sparkles
+  Zap
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
@@ -36,16 +31,13 @@ import PaymentsManagement from './sections/PaymentsManagement';
 import DocumentsManagement from './sections/DocumentsManagement';
 import NotificationPanel from './sections/NotificationPanel';
 import AgentProfile from './sections/AgentProfile';
-import SettingsManagement from './sections/SettingsManagement';
 
 const AgentDashboard: React.FC = () => {
-  const { user: authUser, logout } = useAuth();
+  const { logout } = useAuth();
   const navigate = useNavigate();
   const [activeSection, setActiveSection] = useState('Dashboard');
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-  const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const dropdownRef = useRef<HTMLDivElement>(null);
 
   // Mock Agent Data
   const agentData = {

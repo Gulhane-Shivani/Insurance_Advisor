@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 import { 
   CreditCard, 
   Search, 
-  Filter, 
-  ChevronRight, 
   CheckCircle2, 
   Clock, 
   XCircle, 
@@ -11,7 +9,6 @@ import {
   Calendar,
   ArrowUpRight,
   Download,
-  ShieldCheck,
   Activity
 } from 'lucide-react';
 

@@ -9,8 +9,7 @@ import {
   Plus, 
   Eye, 
   Edit2, 
-  RotateCcw,
-  CheckCircle2
+  RotateCcw
 } from 'lucide-react';
 import PolicyDetailView from '../../super_admin/sections/PolicyDetailView';
 
