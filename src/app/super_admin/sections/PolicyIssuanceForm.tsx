@@ -19,6 +19,7 @@ import {
 interface PolicyIssuanceFormProps {
   onBack: () => void;
   onSave: (policy: any) => void;
+  editingPolicyId?: string | null;
 }
 
 const PLANS = [
@@ -54,7 +55,7 @@ const PLANS = [
   }
 ];
 
-const PolicyIssuanceForm: React.FC<PolicyIssuanceFormProps> = ({ onBack, onSave }) => {
+const PolicyIssuanceForm: React.FC<PolicyIssuanceFormProps> = ({ onBack, onSave, editingPolicyId }) => {
   const [selectedPlanId, setSelectedPlanId] = useState('');
   const [customerName, setCustomerName] = useState('');
   const [email, setEmail] = useState('');
@@ -63,6 +64,49 @@ const PolicyIssuanceForm: React.FC<PolicyIssuanceFormProps> = ({ onBack, onSave 
   const [relationship, setRelationship] = useState('');
   const [startDate, setStartDate] = useState('');
   const [expiryDate, setExpiryDate] = useState('');
+  const [customBenefits, setCustomBenefits] = useState<string[]>([]);
+  const [customCoverage, setCustomCoverage] = useState<string[]>([]);
+
+  useEffect(() => {
+    if (editingPolicyId) {
+      const saved = localStorage.getItem('safeguard_policies_v2');
+      let p: any = null;
+      if (saved) {
+        try {
+          const parsed = JSON.parse(saved);
+          p = parsed.find((x: any) => x.id === editingPolicyId);
+        } catch(e) {}
+      }
+      
+      const mockPolicies: Record<string, any> = {
+        'SG-HLTH-002': { coverage: ['Hospitalization', 'OPD Cover', 'Maternity'], benefits: ['Platinum Plan'], nominee: 'Sunita Mehta (Wife)', customer: 'Vijay Mehta' },
+        'SG-MOTR-003': { coverage: ['Own Damage', 'Third Party Liability', 'Zero Dep'], benefits: ['Standard Plan'], nominee: 'Anita Singh (Mother)', customer: 'Deepak Singh' },
+        'SG-LIFE-001': { coverage: ['Critical Illness', 'Death Benefit', 'Accidental Cover'], benefits: ['Gold Plan'], nominee: 'Amit Kumar (Son)', customer: 'Sneh Lata' }
+      };
+
+      if (!p && mockPolicies[editingPolicyId]) {
+        p = { id: editingPolicyId, ...mockPolicies[editingPolicyId] };
+      }
+
+      if (p) {
+        setCustomerName(p.customer || '');
+        setEmail(p.email || '');
+        setContact(p.contact || '');
+        setNomineeName(p.nominee || '');
+        setExpiryDate(p.expiryDate || '');
+        setStartDate(p.issueDate || '');
+        
+        const b = p.benefits || (mockPolicies[editingPolicyId]?.benefits) || [];
+        const c = p.coverage || (mockPolicies[editingPolicyId]?.coverage) || [];
+        setCustomBenefits(Array.isArray(b) ? b : b.split(',').map((s: string) => s.trim()).filter(Boolean));
+        setCustomCoverage(Array.isArray(c) ? c : c.split(',').map((s: string) => s.trim()).filter(Boolean));
+
+        // Try to match plan
+        const match = PLANS.find(plan => plan.category === p.type || plan.name === p.name);
+        if (match) setSelectedPlanId(match.id);
+      }
+    }
+  }, [editingPolicyId]);
 
   const selectedPlan = PLANS.find(p => p.id === selectedPlanId);
 
@@ -71,7 +115,7 @@ const PolicyIssuanceForm: React.FC<PolicyIssuanceFormProps> = ({ onBack, onSave 
     if (!selectedPlan) return;
 
     const newPolicy = {
-      id: `IA-${selectedPlan.category.substring(0, 4).toUpperCase()}-${Math.floor(100 + Math.random() * 900)}`,
+      id: editingPolicyId || `IA-${selectedPlan.category.substring(0, 4).toUpperCase()}-${Math.floor(100 + Math.random() * 900)}`,
       type: selectedPlan.category,
       customer: customerName,
       email: email,
@@ -79,7 +123,10 @@ const PolicyIssuanceForm: React.FC<PolicyIssuanceFormProps> = ({ onBack, onSave 
       nominee: nomineeName,
       premium: selectedPlan.premium,
       status: 'Active',
-      expiryDate: expiryDate || '2027-05-08'
+      issueDate: startDate || new Date().toISOString().split('T')[0],
+      expiryDate: expiryDate || '2027-05-08',
+      benefits: editingPolicyId ? customBenefits : selectedPlan.benefits,
+      coverage: editingPolicyId ? customCoverage : selectedPlan.coverage
     };
 
     onSave(newPolicy);
@@ -100,7 +147,7 @@ const PolicyIssuanceForm: React.FC<PolicyIssuanceFormProps> = ({ onBack, onSave 
             <div>
                <div className="flex items-center gap-2 mb-0.5">
                   <Sparkles className="w-3.5 h-3.5 text-violet-500" />
-                  <h1 className="text-xl font-black text-slate-900 tracking-tight">Policy Enrollment</h1>
+                  <h1 className="text-xl font-black text-slate-900 tracking-tight">{editingPolicyId ? 'Policy Modification' : 'Policy Enrollment'}</h1>
                </div>
                <p className="text-[10px] font-bold text-slate-400 tracking-widest uppercase">Institutional Grade Issuance Console</p>
             </div>
@@ -158,12 +205,17 @@ const PolicyIssuanceForm: React.FC<PolicyIssuanceFormProps> = ({ onBack, onSave 
                      <div className="relative">
                         <label className="text-[11px] font-bold text-slate-500 mb-1.5 block">Contact Number</label>
                         <input 
-                           type="text" 
+                           type="tel" 
                            required
+                           pattern="[0-9]{10}"
+                           maxLength={10}
                            value={contact}
-                           onChange={(e) => setContact(e.target.value)}
+                           onChange={(e) => {
+                              const val = e.target.value.replace(/\D/g, '');
+                              if (val.length <= 10) setContact(val);
+                           }}
                            className="w-full px-5 py-3.5 bg-slate-50/50 border border-slate-200 rounded-2xl text-[13px] font-bold text-slate-700 focus:outline-none focus:ring-4 focus:ring-violet-500/5 focus:border-violet-500 transition-all"
-                           placeholder="+91 00000 00000"
+                           placeholder="10-digit mobile number"
                         />
                      </div>
                   </div>
@@ -214,12 +266,34 @@ const PolicyIssuanceForm: React.FC<PolicyIssuanceFormProps> = ({ onBack, onSave 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                <div className="bg-slate-900 rounded-[32px] p-8 shadow-xl relative overflow-hidden">
                   <div className="absolute top-0 right-0 w-24 h-24 bg-violet-600/10 rounded-full blur-2xl -mr-12 -mt-12"></div>
-                  <div className="flex items-center gap-3 mb-8">
-                     <Zap className="w-4 h-4 text-violet-400" />
-                     <h3 className="text-[12px] font-black text-white uppercase tracking-widest">Active Coverage</h3>
+                  <div className="flex items-center justify-between mb-8">
+                     <div className="flex items-center gap-3">
+                        <Zap className="w-4 h-4 text-violet-400" />
+                        <h3 className="text-[12px] font-black text-white uppercase tracking-widest">Active Coverage</h3>
+                     </div>
                   </div>
                   <div className="space-y-2.5 relative z-10">
-                     {selectedPlan ? selectedPlan.coverage.map((item, i) => (
+                     {editingPolicyId ? (
+                        <div className="space-y-3 relative z-10">
+                           {Array.from(new Set([...(selectedPlan?.coverage || []), ...customCoverage])).map((item, i) => (
+                              <label key={i} className="flex items-center gap-3 p-3.5 bg-white/5 border border-white/10 rounded-xl cursor-pointer hover:bg-white/10 transition-colors">
+                                 <input 
+                                    type="checkbox" 
+                                    className="w-4 h-4 rounded border-slate-300 text-violet-600 focus:ring-violet-500 bg-transparent cursor-pointer"
+                                    checked={customCoverage.includes(item)}
+                                    onChange={(e) => {
+                                       if (e.target.checked) {
+                                          setCustomCoverage([...customCoverage, item]);
+                                       } else {
+                                          setCustomCoverage(customCoverage.filter(c => c !== item));
+                                       }
+                                    }}
+                                 />
+                                 <span className="text-[11px] font-bold text-slate-300">{item}</span>
+                              </label>
+                           ))}
+                        </div>
+                     ) : selectedPlan ? selectedPlan.coverage.map((item, i) => (
                         <div key={i} className="flex items-center justify-between p-3.5 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition-colors">
                            <span className="text-[11px] font-bold text-slate-300">{item}</span>
                            <CheckCircle2 className="w-4 h-4 text-violet-500" />
@@ -239,7 +313,27 @@ const PolicyIssuanceForm: React.FC<PolicyIssuanceFormProps> = ({ onBack, onSave 
                      <h3 className="text-[12px] font-black text-slate-900 uppercase tracking-widest">Exclusive Benefits</h3>
                   </div>
                   <div className="space-y-2.5 relative z-10">
-                     {selectedPlan ? selectedPlan.benefits.map((benefit, i) => (
+                     {editingPolicyId ? (
+                        <div className="space-y-3 relative z-10">
+                           {Array.from(new Set([...(selectedPlan?.benefits || []), ...customBenefits])).map((benefit, i) => (
+                              <label key={i} className="flex items-center gap-3 p-3.5 bg-violet-50/50 border border-violet-100 rounded-xl cursor-pointer">
+                                 <input 
+                                    type="checkbox" 
+                                    className="w-4 h-4 rounded border-slate-300 text-violet-600 focus:ring-violet-500 bg-white cursor-pointer"
+                                    checked={customBenefits.includes(benefit)}
+                                    onChange={(e) => {
+                                       if (e.target.checked) {
+                                          setCustomBenefits([...customBenefits, benefit]);
+                                       } else {
+                                          setCustomBenefits(customBenefits.filter(b => b !== benefit));
+                                       }
+                                    }}
+                                 />
+                                 <span className="text-[11px] font-bold text-slate-800">{benefit}</span>
+                              </label>
+                           ))}
+                        </div>
+                     ) : selectedPlan ? selectedPlan.benefits.map((benefit, i) => (
                         <div key={i} className="flex items-center justify-between p-3.5 bg-violet-50/50 border border-violet-100 rounded-xl">
                            <span className="text-[11px] font-bold text-slate-800">{benefit}</span>
                            <CheckCircle2 className="w-4 h-4 text-violet-600" />
@@ -271,7 +365,8 @@ const PolicyIssuanceForm: React.FC<PolicyIssuanceFormProps> = ({ onBack, onSave 
                         <select 
                            value={selectedPlanId}
                            onChange={(e) => setSelectedPlanId(e.target.value)}
-                           className="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-2xl text-[13px] font-black text-slate-800 focus:outline-none focus:ring-4 focus:ring-violet-500/5 focus:border-violet-600 transition-all appearance-none cursor-pointer"
+                           disabled={!!editingPolicyId}
+                           className={`w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-2xl text-[13px] font-black text-slate-800 focus:outline-none focus:ring-4 focus:ring-violet-500/5 focus:border-violet-600 transition-all appearance-none ${editingPolicyId ? 'opacity-60 cursor-not-allowed' : 'cursor-pointer'}`}
                         >
                            <option value="">Choose Catalog...</option>
                            {PLANS.map(plan => (
@@ -333,7 +428,7 @@ const PolicyIssuanceForm: React.FC<PolicyIssuanceFormProps> = ({ onBack, onSave 
                         disabled={!selectedPlan || !customerName}
                         className="w-full py-4 bg-slate-900 text-white rounded-2xl font-black shadow-xl hover:bg-slate-800 transition-all text-[12px] uppercase tracking-widest disabled:opacity-30"
                      >
-                        Initialize Policy
+                        {editingPolicyId ? 'Save Modifications' : 'Initialize Policy'}
                      </button>
                      
                      <button 
@@ -341,7 +436,7 @@ const PolicyIssuanceForm: React.FC<PolicyIssuanceFormProps> = ({ onBack, onSave 
                         onClick={onBack}
                         className="w-full py-3.5 bg-white text-slate-400 rounded-2xl font-bold border border-slate-100 hover:bg-slate-50 transition-all text-[11px] uppercase tracking-widest"
                      >
-                        Cancel Enrollment
+                        {editingPolicyId ? 'Cancel Edit' : 'Cancel Enrollment'}
                      </button>
                   </div>
                </div>

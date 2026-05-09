@@ -9,6 +9,7 @@ import {
   Plus, 
   Eye, 
   Edit2, 
+  Trash2,
   RotateCcw,
   CheckCircle2,
   AlertTriangle,
@@ -32,49 +33,17 @@ interface PolicyLifecycleManagementProps {
   onViewPolicy: (policyId: string) => void;
 }
 
-const INITIAL_MOCK_POLICIES: Policy[] = [
-  {
-    id: 'SG-HLTH-002',
-    type: 'Health Insurance',
-    customer: 'Vijay Mehta',
-    premium: '₹80,000',
-    status: 'Active',
-    expiryDate: '2027-05-02'
-  },
-  {
-    id: 'SG-MOTR-003',
-    type: 'Motor Insurance',
-    customer: 'Deepak Singh',
-    premium: '₹12,500',
-    status: 'Renewal Due',
-    expiryDate: '2026-05-30'
-  },
-  {
-    id: 'SG-LIFE-001',
-    type: 'Life Insurance',
-    customer: 'Sneh Lata',
-    premium: '₹45,000',
-    status: 'Active',
-    expiryDate: '2027-05-06'
-  },
-  {
-    id: 'SG-HLTH-005',
-    type: 'Health Insurance',
-    customer: 'Rahul Verma',
-    premium: '₹65,000',
-    status: 'Active',
-    expiryDate: '2027-06-12'
-  }
-];
+const INITIAL_MOCK_POLICIES: Policy[] = [];
 
 const PolicyLifecycleManagement: React.FC<PolicyLifecycleManagementProps> = ({ onViewPolicy }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [activeTab, setActiveTab] = useState('All Policies');
   const [showForm, setShowForm] = useState(false);
+  const [editingPolicyId, setEditingPolicyId] = useState<string | null>(null);
   
   const [policies, setPolicies] = useState<Policy[]>(() => {
     if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('safeguard_policies');
+      const saved = localStorage.getItem('safeguard_policies_v2');
       if (saved) {
         try {
           return JSON.parse(saved);
@@ -87,22 +56,56 @@ const PolicyLifecycleManagement: React.FC<PolicyLifecycleManagementProps> = ({ o
   });
 
   useEffect(() => {
-    localStorage.setItem('safeguard_policies', JSON.stringify(policies));
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('safeguard_policies_v2', JSON.stringify(policies));
+    }
   }, [policies]);
 
+  const getPolicyStatus = (expiryDateStr: string) => {
+    if (!expiryDateStr) return 'Active';
+    const expiry = new Date(expiryDateStr);
+    const today = new Date();
+    expiry.setHours(23, 59, 59, 999);
+    if (expiry < today) return 'Expired';
+    
+    const thirtyDays = new Date();
+    thirtyDays.setDate(today.getDate() + 30);
+    if (expiry <= thirtyDays) return 'Renewal Due';
+    
+    return 'Active';
+  };
+
+  const processedPolicies = policies.map(p => ({
+    ...p,
+    status: getPolicyStatus(p.expiryDate)
+  }));
+
   const stats = [
-    { label: 'Active Policies', value: policies.filter(p => p.status === 'Active').length.toString(), icon: Zap, color: 'violet' },
-    { label: 'Renewals Due', value: policies.filter(p => p.status === 'Renewal Due').length.toString(), icon: Clock, color: 'blue' },
-    { label: 'Expired Records', value: policies.filter(p => p.status === 'Expired').length.toString(), icon: AlertCircle, color: 'rose' },
+    { label: 'Active Policies', value: processedPolicies.filter(p => p.status === 'Active').length.toString(), icon: Zap, color: 'violet' },
+    { label: 'Renewals Due', value: processedPolicies.filter(p => p.status === 'Renewal Due').length.toString(), icon: Clock, color: 'blue' },
+    { label: 'Expired Records', value: processedPolicies.filter(p => p.status === 'Expired').length.toString(), icon: AlertCircle, color: 'rose' },
     { label: 'Retention KPI', value: '98.2%', icon: TrendingUp, color: 'indigo' },
   ];
 
   const handleSavePolicy = (newPolicy: Policy) => {
-    setPolicies([newPolicy, ...policies]);
-    setShowForm(false);
+    if (editingPolicyId) {
+      setPolicies(policies.map(p => p.id === newPolicy.id ? newPolicy : p));
+      setEditingPolicyId(null);
+    } else {
+      setPolicies([newPolicy, ...policies]);
+      setShowForm(false);
+    }
   };
 
-  const filteredPolicies = policies.filter(policy => {
+  const handleDeletePolicy = (policyId: string) => {
+    if (confirm('Are you sure you want to completely remove this policy record?')) {
+      setPolicies(policies.filter(p => p.id !== policyId));
+    }
+  };
+
+
+
+  const filteredPolicies = processedPolicies.filter(policy => {
     const matchesSearch = policy.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
                           policy.customer.toLowerCase().includes(searchQuery.toLowerCase()) ||
                           policy.type.toLowerCase().includes(searchQuery.toLowerCase());
@@ -116,8 +119,12 @@ const PolicyLifecycleManagement: React.FC<PolicyLifecycleManagementProps> = ({ o
     return true;
   });
 
-  if (showForm) {
-    return <PolicyIssuanceForm onBack={() => setShowForm(false)} onSave={handleSavePolicy} />;
+  if (showForm || editingPolicyId) {
+    return <PolicyIssuanceForm 
+             onBack={() => { setShowForm(false); setEditingPolicyId(null); }} 
+             onSave={handleSavePolicy} 
+             editingPolicyId={editingPolicyId}
+           />;
   }
 
   return (
@@ -270,11 +277,19 @@ const PolicyLifecycleManagement: React.FC<PolicyLifecycleManagementProps> = ({ o
                       >
                         <Eye className="w-4 h-4" />
                       </button>
-                      <button className="p-2.5 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-xl transition-all border border-transparent hover:border-blue-100">
+                      <button 
+                        onClick={() => setEditingPolicyId(policy.id)}
+                        className="p-2.5 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-xl transition-all border border-transparent hover:border-blue-100"
+                        title="Edit Expiry, Nominee & Benefits"
+                      >
                         <Edit2 className="w-4 h-4" />
                       </button>
-                      <button className="p-2.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-xl transition-all border border-transparent hover:border-rose-100">
-                        <RotateCcw className="w-4 h-4" />
+                      <button 
+                        onClick={() => handleDeletePolicy(policy.id)}
+                        className="p-2.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-xl transition-all border border-transparent hover:border-rose-100"
+                        title="Delete Policy"
+                      >
+                        <Trash2 className="w-4 h-4" />
                       </button>
                     </div>
                   </td>
