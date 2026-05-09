@@ -26,8 +26,6 @@ interface UserManagementProps {
 }
 
 const UserProfileModal = ({ isOpen, onClose, user }: any) => {
-  if (!isOpen || !user) return null;
-
   const [userPolicies, setUserPolicies] = useState<any[]>([]);
 
   useEffect(() => {
@@ -42,6 +40,8 @@ const UserProfileModal = ({ isOpen, onClose, user }: any) => {
        }
     }
   }, [user, isOpen]);
+
+  if (!isOpen || !user) return null;
 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-in fade-in">
@@ -150,25 +150,43 @@ const UserManagement: React.FC<UserManagementProps> = ({ viewType = 'all' }) => 
     setIsLoading(true);
     try {
       let activeFilter: boolean | undefined = undefined;
-
       if (activeTab === 'Active') activeFilter = true;
       if (activeTab === 'Inactive') activeFilter = false;
 
-      const [usersRes, statsRes] = await Promise.all([
-        api.get('/users/', {
-          params: {
-            skip: page * limit,
-            limit: limit,
-            is_active: activeFilter
-          }
-        }),
-        api.get('/users/stats')
-      ]);
+      // Try the primary users endpoint
+      try {
+        const [usersRes, statsRes] = await Promise.all([
+          api.get('/users/', {
+            params: {
+              skip: page * limit,
+              limit: limit,
+              is_active: activeFilter
+            }
+          }).catch(err => {
+            if (err.response?.status === 403) {
+              // Fallback for Admin role who might only have access to /admin/users
+              return api.get('/admin/users');
+            }
+            throw err;
+          }),
+          api.get('/users/stats').catch(() => ({ data: {} })) // Stats are optional
+        ]);
 
-      setUsers(usersRes.data);
-      setStats(statsRes.data);
+        setUsers(Array.isArray(usersRes.data) ? usersRes.data : []);
+        setStats(statsRes.data || {});
+      } catch (innerError: any) {
+        if (innerError.response?.status === 403) {
+          // Final fallback: if everything is 403, try the admin specific endpoint directly
+          const adminRes = await api.get('/admin/users');
+          setUsers(adminRes.data);
+          setStats({});
+        } else {
+          throw innerError;
+        }
+      }
     } catch (error) {
-      toast.error('Failed to fetch data');
+      console.error('Fetch error:', error);
+      toast.error('Access restricted or session expired');
     } finally {
       setIsLoading(false);
     }

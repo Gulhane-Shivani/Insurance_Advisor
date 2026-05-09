@@ -41,6 +41,11 @@ import ApprovalsTasks from './app/admin/sections/ApprovalsTasks';
 import CommissionFinance from './app/admin/sections/CommissionFinance';
 import OperationsReports from './app/admin/sections/OperationsReports';
 import ContentCommunication from './app/admin/sections/ContentCommunication';
+import PolicyLifecycleManagement from './app/super_admin/sections/PolicyLifecycleManagement';
+import RenewalManagement from './app/super_admin/sections/RenewalManagement';
+import PaymentManagement from './app/super_admin/sections/PaymentManagement';
+import NotificationCenter from './app/super_admin/sections/NotificationCenter';
+import AdminOverview from './app/super_admin/sections/AdminOverview';
 
 import AgentDashboard from './app/agent_dashboard/page';
 import CSRDashboard from './app/customer_service_dashboard';
@@ -87,9 +92,9 @@ const App: React.FC = () => {
           {/* Admin Routes */}
           <Route path="/admin" element={<AdminLayout />}>
             <Route index element={<Navigate to="/admin/overview" replace />} />
-            <Route path="overview" element={<BusinessOverview />} />
+            <Route path="overview" element={<AdminOverview />} />
             <Route path="leads" element={<LeadManagement />} />
-            <Route path="policies" element={<PolicyManagement />} />
+            <Route path="policies" element={<PolicyLifecycleManagement />} />
             <Route path="team" element={<TeamPerformance />} />
             <Route path="customer-360" element={<Customer360 />} />
             <Route path="approvals" element={<ApprovalsTasks />} />
@@ -99,6 +104,9 @@ const App: React.FC = () => {
             <Route path="users" element={<AdminUsers />} />
             <Route path="dashboard" element={<AdminDashboard />} />
             <Route path="insurance" element={<AdminInsurance />} />
+            <Route path="renewals" element={<RenewalManagement />} />
+            <Route path="payments" element={<PaymentManagement />} />
+            <Route path="notifications" element={<NotificationCenter />} />
           </Route>
         </Routes>
       </Router>

@@ -100,22 +100,39 @@ const AdminOverview: React.FC = () => {
         </div>
       </div>
 
-      {/* Stats Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
+      {/* Stats Cards — Premium compact layout */}
+      <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
         {stats.map((stat, i) => (
-          <div key={i} className="bg-white p-6 rounded-[24px] border border-slate-200 shadow-sm hover:shadow-md hover:border-indigo-200 transition-all duration-300 group relative">
-            <div className="flex items-start justify-between mb-8">
-              <div className={`w-11 h-11 rounded-xl ${stat.bg} ${stat.color} flex items-center justify-center transition-all group-hover:scale-105 shadow-inner`}>
-                <stat.icon size={20} />
+          <div key={i} className="bg-white rounded-[20px] border border-slate-100 shadow-sm hover:shadow-md transition-all duration-300 group overflow-hidden relative">
+            {/* Gradient accent bar on top */}
+            <div className={`h-[3px] w-full ${
+              stat.color === 'text-emerald-500' ? 'bg-gradient-to-r from-emerald-400 to-teal-400' :
+              stat.color === 'text-blue-500' ? 'bg-gradient-to-r from-blue-400 to-indigo-400' :
+              stat.color === 'text-orange-500' ? 'bg-gradient-to-r from-orange-400 to-amber-400' :
+              stat.color === 'text-red-500' ? 'bg-gradient-to-r from-rose-400 to-red-400' :
+              'bg-gradient-to-r from-indigo-400 to-violet-400'
+            }`} />
+
+            <div className="p-5">
+              <div className="flex items-start justify-between mb-4">
+                <div className={`w-9 h-9 rounded-xl ${stat.bg} ${stat.color} flex items-center justify-center shadow-inner group-hover:scale-105 transition-transform duration-300`}>
+                  <stat.icon size={17} />
+                </div>
+                <div className={`flex items-center gap-1 text-[9px] font-black px-2 py-0.5 rounded-full ${stat.isUp ? 'bg-emerald-50 text-emerald-600' : 'bg-red-50 text-red-600'}`}>
+                  {stat.isUp ? <ArrowUpRight size={10} /> : <ArrowDownRight size={10} />}
+                  {stat.trend}
+                </div>
               </div>
-              <div className={`flex items-center gap-1 text-[9px] font-black px-2 py-0.5 rounded-full ${stat.isUp ? 'bg-emerald-50 text-emerald-600' : 'bg-red-50 text-red-600'}`}>
-                {stat.isUp ? <ArrowUpRight size={10} /> : <ArrowDownRight size={10} />}
-                {stat.trend}
-              </div>
-            </div>
-            <div>
-              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">{stat.label}</p>
-              <h3 className="text-xl font-black text-slate-900 tracking-tight">{stat.value}</h3>
+
+              <p className="text-[10px] font-bold text-slate-400 mb-1 tracking-wide">{stat.label}</p>
+              <h3 className="text-2xl font-black text-slate-900 tracking-tight leading-none">{stat.value}</h3>
+
+              <div className={`mt-3 h-0.5 w-6 rounded-full ${
+                stat.color === 'text-emerald-500' ? 'bg-emerald-300' :
+                stat.color === 'text-blue-500' ? 'bg-blue-300' :
+                stat.color === 'text-orange-500' ? 'bg-orange-300' :
+                stat.color === 'text-red-500' ? 'bg-rose-300' : 'bg-indigo-300'
+              } group-hover:w-full transition-all duration-500`} />
             </div>
           </div>
         ))}

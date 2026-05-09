@@ -19,6 +19,7 @@ import {
   LayoutGrid
 } from 'lucide-react';
 import PolicyIssuanceForm from './PolicyIssuanceForm';
+import PolicyDetailView from './PolicyDetailView';
 
 interface Policy {
   id: string;
@@ -31,7 +32,7 @@ interface Policy {
 }
 
 interface PolicyLifecycleManagementProps {
-  onViewPolicy: (policyId: string) => void;
+  onViewPolicy?: (policyId: string) => void;
 }
 
 const INITIAL_MOCK_POLICIES: Policy[] = [];
@@ -41,6 +42,7 @@ const PolicyLifecycleManagement: React.FC<PolicyLifecycleManagementProps> = ({ o
   const [activeTab, setActiveTab] = useState('All Policies');
   const [showForm, setShowForm] = useState(false);
   const [editingPolicyId, setEditingPolicyId] = useState<string | null>(null);
+  const [internalViewPolicyId, setInternalViewPolicyId] = useState<string | null>(null);
   
   const [policies, setPolicies] = useState<Policy[]>(() => {
     if (typeof window !== 'undefined') {
@@ -132,6 +134,14 @@ const PolicyLifecycleManagement: React.FC<PolicyLifecycleManagementProps> = ({ o
              onBack={() => { setShowForm(false); setEditingPolicyId(null); }} 
              onSave={handleSavePolicy} 
              editingPolicyId={editingPolicyId}
+           />;
+  }
+
+  // Inline view (used when component is mounted via Router without onViewPolicy prop)
+  if (internalViewPolicyId) {
+    return <PolicyDetailView 
+             policyId={internalViewPolicyId} 
+             onBack={() => setInternalViewPolicyId(null)} 
            />;
   }
 
@@ -281,7 +291,13 @@ const PolicyLifecycleManagement: React.FC<PolicyLifecycleManagementProps> = ({ o
                   <td className="px-8 py-5 text-right">
                     <div className="flex items-center justify-end gap-2.5 transition-all duration-300">
                       <button 
-                        onClick={() => onViewPolicy(policy.id)}
+                        onClick={() => {
+                          if (onViewPolicy) {
+                            onViewPolicy(policy.id);
+                          } else {
+                            setInternalViewPolicyId(policy.id);
+                          }
+                        }}
                         className="p-2.5 text-slate-400 hover:text-violet-600 hover:bg-violet-50 rounded-xl transition-all border border-transparent hover:border-violet-100"
                         title="View asset profile"
                       >

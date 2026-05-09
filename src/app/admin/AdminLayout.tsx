@@ -15,7 +15,10 @@ import {
   CheckSquare,
   IndianRupee,
   Megaphone,
-  Briefcase
+  Briefcase,
+  RefreshCw,
+  CreditCard,
+  Bell
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 
@@ -45,9 +48,11 @@ const AdminLayout: React.FC = () => {
     {
       title: 'Operations',
       links: [
-        { to: '/admin/overview', icon: LayoutDashboard, label: 'Business Overview' },
-        { to: '/admin/leads', icon: Target, label: 'Lead Management' },
+        { to: '/admin/overview', icon: LayoutDashboard, label: 'Dashboard' },
         { to: '/admin/policies', icon: Shield, label: 'Policy Management' },
+        { to: '/admin/renewals', icon: RefreshCw, label: 'Renewals' },
+        { to: '/admin/payments', icon: CreditCard, label: 'Payments' },
+        { to: '/admin/notifications', icon: Bell, label: 'Notifications' },
       ]
     },
     {
@@ -61,8 +66,6 @@ const AdminLayout: React.FC = () => {
     {
       title: 'Enterprise',
       links: [
-        { to: '/admin/finance', icon: IndianRupee, label: 'Commission & Finance' },
-        { to: '/admin/reports', icon: BarChart3, label: 'Reports' },
         { to: '/admin/communication', icon: Megaphone, label: 'Communication' },
       ]
     },
@@ -70,7 +73,6 @@ const AdminLayout: React.FC = () => {
       title: 'System',
       links: [
         { to: '/admin/users', icon: Briefcase, label: 'User Control' },
-        { to: '/admin/dashboard', icon: ClipboardList, label: 'Support Messages' },
       ]
     }
   ];
@@ -85,23 +87,24 @@ const AdminLayout: React.FC = () => {
 
   return (
     <div className="flex h-screen w-full bg-[#f8fafc] overflow-hidden font-sans antialiased text-slate-900">
-      {/* Sidebar - Higher Density */}
-      <aside className="w-60 bg-slate-900 text-white flex flex-col flex-shrink-0 shadow-2xl z-20">
-        <div className="h-14 flex items-center px-5 bg-slate-950 border-b border-slate-800/50">
-          <NavLink to="/admin/overview" className="text-xl font-bold tracking-tight text-white flex items-center gap-2 no-underline group">
-            <div className="w-8 h-8 bg-blue-600 rounded-xl flex items-center justify-center text-white font-bold text-lg group-hover:scale-105 transition-transform shadow-lg shadow-blue-500/20">
-              IA
+      {/* Sidebar - Matching Super Admin */}
+      <aside className="w-64 bg-slate-900 text-white flex flex-col flex-shrink-0 shadow-2xl z-20">
+        <div className="h-24 flex flex-col items-center justify-center bg-slate-900 border-b border-white/5">
+          <span className="text-xl font-black tracking-tighter text-white flex items-center gap-3">
+            <div className="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center shadow-lg shadow-indigo-900/50">
+              <Shield className="w-6 h-6 text-white" />
             </div>
-            <span>
-              Insurance<span className="text-blue-500">Advisor</span>
-            </span>
-          </NavLink>
+            <div className="flex flex-col">
+              <span className="text-xl leading-none font-black uppercase tracking-tighter">Insurance</span>
+              <span className="text-xs text-indigo-400 font-bold uppercase tracking-[0.3em]">Advisor</span>
+            </div>
+          </span>
         </div>
 
-        <nav className="flex-1 px-3 py-4 space-y-5 overflow-y-auto custom-scrollbar">
+        <nav className="flex-1 px-4 py-6 space-y-5 overflow-y-auto scrollbar-hide">
           {navGroups.map((group) => (
-            <div key={group.title} className="space-y-1">
-              <div className="text-[9px] font-black text-slate-500 uppercase tracking-[0.2em] px-3 mb-2">{group.title}</div>
+            <div key={group.title} className="space-y-2">
+              <div className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] px-4 mb-2">{group.title}</div>
               {group.links.map((link) => {
                 const Icon = link.icon;
                 return (
@@ -109,14 +112,18 @@ const AdminLayout: React.FC = () => {
                     key={link.to}
                     to={link.to}
                     className={({ isActive }) =>
-                      `flex items-center px-3 py-2 text-[12px] font-bold rounded-lg transition-all duration-200 ${isActive
-                        ? 'bg-indigo-600 text-white shadow-md shadow-indigo-900/40'
-                        : 'text-slate-400 hover:bg-slate-800/50 hover:text-white'
+                      `w-full flex items-center px-4 py-3 text-sm font-bold rounded-xl transition-all duration-200 ${isActive
+                        ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-900/50'
+                        : 'text-slate-400 hover:bg-slate-800 hover:text-white'
                       }`
                     }
                   >
-                    <Icon className="mr-2.5 h-4 w-4" />
-                    {link.label}
+                    {({ isActive }) => (
+                      <>
+                        <Icon className={`mr-3 h-5 w-5 ${isActive ? 'text-white' : 'text-slate-500'}`} />
+                        {link.label}
+                      </>
+                    )}
                   </NavLink>
                 );
               })}
@@ -124,14 +131,14 @@ const AdminLayout: React.FC = () => {
           ))}
         </nav>
 
-        <div className="p-3 border-t border-slate-800/50">
-          <div className="bg-slate-800/50 rounded-xl p-3 flex items-center gap-2.5 border border-slate-700/30">
-            <div className="w-8 h-8 rounded-lg bg-indigo-500 flex items-center justify-center flex-shrink-0 text-white font-black text-xs">
+        <div className="p-4 border-t border-slate-800">
+          <div className="bg-slate-800/50 rounded-2xl p-4 flex items-center gap-3 border border-slate-700">
+            <div className="w-10 h-10 rounded-full bg-indigo-600 flex items-center justify-center flex-shrink-0 text-white font-bold border-2 border-indigo-500/50 shadow-lg">
               {user?.full_name?.charAt(0) || 'A'}
             </div>
             <div className="overflow-hidden">
-              <p className="text-[11px] font-black text-white truncate">{user?.full_name || 'Administrator'}</p>
-              <p className="text-[9px] text-slate-500 font-bold truncate uppercase tracking-wider">Ops Manager</p>
+              <p className="text-sm font-black text-white truncate">{user?.full_name || 'Administrator'}</p>
+              <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Ops Manager</p>
             </div>
           </div>
         </div>
@@ -197,8 +204,8 @@ const AdminLayout: React.FC = () => {
           </div>
         </header>
 
-        {/* Page Content - More breathing room but tight components */}
-        <main className="flex-1 overflow-y-auto p-6 scroll-smooth">
+        {/* Page Content */}
+        <main className="flex-1 overflow-y-auto scrollbar-hide p-6 scroll-smooth">
           <div className="max-w-7xl mx-auto h-full">
             <Outlet />
           </div>
