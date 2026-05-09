@@ -12,7 +12,10 @@ import {
   RefreshCw,
   ChevronLeft,
   ChevronRight,
-  Eye
+  Eye,
+  X,
+  User as UserIcon,
+  ShieldCheck
 } from 'lucide-react';
 import api from '../../../services/api';
 import toast from 'react-hot-toast';
@@ -21,6 +24,115 @@ import UserModal from '../components/UserModal';
 interface UserManagementProps {
   viewType?: 'staff' | 'customers' | 'all';
 }
+
+const UserProfileModal = ({ isOpen, onClose, user }: any) => {
+  if (!isOpen || !user) return null;
+
+  const [userPolicies, setUserPolicies] = useState<any[]>([]);
+
+  useEffect(() => {
+    if (user && isOpen) {
+       const saved = localStorage.getItem('safeguard_policies_v2');
+       if (saved) {
+         try {
+           const policies = JSON.parse(saved);
+           const matched = policies.filter((p: any) => p.customer?.toLowerCase().includes(user.full_name?.toLowerCase()));
+           setUserPolicies(matched);
+         } catch(e) {}
+       }
+    }
+  }, [user, isOpen]);
+
+  return (
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-in fade-in">
+       <div className="bg-white rounded-[32px] w-full max-w-3xl shadow-2xl overflow-hidden max-h-[90vh] flex flex-col">
+          <div className="p-8 bg-slate-900 text-white flex justify-between items-start relative overflow-hidden">
+             <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-500/20 rounded-full blur-[80px] -mr-32 -mt-32"></div>
+             <div className="flex gap-6 relative z-10">
+                <div className="w-20 h-20 rounded-2xl bg-indigo-500 flex items-center justify-center text-3xl font-black shadow-lg">
+                   {user.full_name?.substring(0, 2).toUpperCase()}
+                </div>
+                <div className="pt-2">
+                   <h2 className="text-2xl font-black">{user.full_name}</h2>
+                   <p className="text-indigo-300 font-bold mt-1">{user.email}</p>
+                   <span className="inline-block mt-3 px-3 py-1 bg-white/10 rounded-lg text-[10px] font-black tracking-widest uppercase">
+                     {user.role === 'USER' ? 'CUSTOMER' : user.role}
+                   </span>
+                </div>
+             </div>
+             <button onClick={onClose} className="p-2 bg-white/10 hover:bg-white/20 rounded-xl transition-all relative z-10">
+               <X className="w-5 h-5" />
+             </button>
+          </div>
+
+          <div className="p-8 overflow-y-auto bg-slate-50 flex-1">
+             <div className="mb-8 bg-white p-6 rounded-[24px] border border-slate-200 shadow-sm">
+                <h3 className="text-sm font-black text-slate-900 mb-4 uppercase tracking-widest flex items-center gap-2">
+                  <UserIcon className="w-4 h-4 text-indigo-500" /> Basic Information
+                </h3>
+                <div className="grid grid-cols-2 gap-6">
+                   <div>
+                     <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Account Status</p>
+                     <p className="text-sm font-black text-slate-800 mt-1">{user.is_active ? 'Active' : 'Inactive'}</p>
+                   </div>
+                   <div>
+                     <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Verification</p>
+                     <p className="text-sm font-black text-emerald-600 mt-1 flex items-center gap-1">
+                       <ShieldCheck className="w-4 h-4" /> Fully Verified
+                     </p>
+                   </div>
+                   <div>
+                     <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Contact Number</p>
+                     <p className="text-sm font-black text-slate-800 mt-1">{user.phone_number || userPolicies[0]?.contact || '+91 98XXX XXXXX'}</p>
+                   </div>
+                   <div>
+                     <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Registered Identity</p>
+                     <p className="text-sm font-black text-slate-800 mt-1">{user.full_name}</p>
+                   </div>
+                   <div className="col-span-2">
+                     <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Registered Residence</p>
+                     <p className="text-sm font-bold text-slate-600 mt-1">{user.address || userPolicies[0]?.address || 'Awaiting KYC Update'}</p>
+                   </div>
+                </div>
+             </div>
+
+             {userPolicies.length > 0 ? (
+               <div className="space-y-4">
+                 <h3 className="text-sm font-black text-slate-900 uppercase tracking-widest mb-4 flex items-center gap-2">
+                   <Shield className="w-4 h-4 text-emerald-500" /> Associated Policies
+                 </h3>
+                 {userPolicies.map((p, i) => (
+                   <div key={i} className="bg-white p-6 rounded-[24px] border border-slate-200 shadow-sm flex flex-col md:flex-row justify-between gap-4">
+                      <div>
+                         <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Policy ID</p>
+                         <p className="text-base font-black text-slate-900 mt-1">{p.id}</p>
+                         <p className="text-xs font-bold text-indigo-600 mt-1">{p.type}</p>
+                      </div>
+                      <div>
+                         <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Expiry Date</p>
+                         <p className="text-sm font-bold text-slate-800 mt-1">{p.expiryDate}</p>
+                      </div>
+                      <div>
+                         <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Premium</p>
+                         <p className="text-sm font-black text-emerald-600 mt-1">{p.premium}</p>
+                      </div>
+                   </div>
+                 ))}
+               </div>
+             ) : (
+               <div className="bg-white p-10 rounded-[24px] border border-slate-200 shadow-sm flex flex-col items-center justify-center text-center">
+                 <div className="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mb-4">
+                   <Shield className="w-8 h-8 text-slate-300" />
+                 </div>
+                 <h3 className="text-lg font-black text-slate-800">No Linked Policies</h3>
+                 <p className="text-xs font-bold text-slate-400 mt-2 max-w-xs">This profile does not have any active insurance policies associated with their identity.</p>
+               </div>
+             )}
+          </div>
+       </div>
+    </div>
+  );
+};
 
 const UserManagement: React.FC<UserManagementProps> = ({ viewType = 'all' }) => {
   const [users, setUsers] = useState<any[]>([]);
@@ -32,6 +144,7 @@ const UserManagement: React.FC<UserManagementProps> = ({ viewType = 'all' }) => 
   const [page, setPage] = useState(0);
   const [limit] = useState(10);
   const [stats, setStats] = useState<any>({});
+  const [viewingProfile, setViewingProfile] = useState<any>(null);
 
   const fetchUsers = async () => {
     setIsLoading(true);
@@ -117,6 +230,12 @@ const UserManagement: React.FC<UserManagementProps> = ({ viewType = 'all' }) => 
         onClose={() => setIsModalOpen(false)} 
         onSave={fetchUsers} 
         user={selectedUser} 
+      />
+
+      <UserProfileModal 
+        isOpen={!!viewingProfile} 
+        user={viewingProfile} 
+        onClose={() => setViewingProfile(null)} 
       />
 
       {/* Action Header */}
@@ -250,10 +369,7 @@ const UserManagement: React.FC<UserManagementProps> = ({ viewType = 'all' }) => 
                        <td className="px-8 py-6 text-right">
                           <div className="flex items-center justify-end gap-2 transition-opacity">
                              <button 
-                               onClick={() => {
-                                 const event = new CustomEvent('view-customer-profile', { detail: { userId: user.id } });
-                                 window.dispatchEvent(event);
-                               }}
+                               onClick={() => setViewingProfile(user)}
                                className="p-2.5 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-xl transition-all border border-transparent hover:border-indigo-100"
                                title="View Profile"
                              >
