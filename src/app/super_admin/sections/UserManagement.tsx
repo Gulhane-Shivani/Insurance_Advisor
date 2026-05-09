@@ -15,7 +15,21 @@ import {
   Eye,
   X,
   User as UserIcon,
-  ShieldCheck
+  ShieldCheck,
+  Phone,
+  Mail,
+  MapPin,
+  Shield as ShieldIcon,
+  Zap,
+  Activity,
+  FileText,
+  CreditCard,
+  ArrowLeft,
+  MapPinIcon,
+  Briefcase,
+  Star,
+  Settings,
+  HeartPulse
 } from 'lucide-react';
 import api from '../../../services/api';
 import toast from 'react-hot-toast';
@@ -25,420 +39,491 @@ interface UserManagementProps {
   viewType?: 'staff' | 'customers' | 'all';
 }
 
-const UserProfileModal = ({ isOpen, onClose, user }: any) => {
+const UserProfileContent = ({ user, onBack, onEdit }: any) => {
   const [userPolicies, setUserPolicies] = useState<any[]>([]);
 
   useEffect(() => {
-    if (user && isOpen) {
-       const saved = localStorage.getItem('safeguard_policies_v2');
-       if (saved) {
-         try {
-           const policies = JSON.parse(saved);
-           const matched = policies.filter((p: any) => p.customer?.toLowerCase().includes(user.full_name?.toLowerCase()));
-           setUserPolicies(matched);
-         } catch(e) {}
-       }
+    if (user) {
+       const mockData = [
+         { id: 'POL-8829', type: 'Life Insurance', premium: '₹12,400', due: '2026-05-12', status: 'Active', icon: ShieldIcon, theme: 'indigo' },
+         { id: 'POL-8828', type: 'Health Insurance', premium: '₹8,200', due: '2026-06-15', status: 'Renewal Due', icon: HeartPulse, theme: 'indigo' },
+       ];
+       setUserPolicies(mockData);
     }
-  }, [user, isOpen]);
+  }, [user]);
 
-  if (!isOpen || !user) return null;
+  if (!user) return null;
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-in fade-in">
-       <div className="bg-white rounded-[32px] w-full max-w-3xl shadow-2xl overflow-hidden max-h-[90vh] flex flex-col">
-          <div className="p-8 bg-slate-900 text-white flex justify-between items-start relative overflow-hidden">
-             <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-500/20 rounded-full blur-[80px] -mr-32 -mt-32"></div>
-             <div className="flex gap-6 relative z-10">
-                <div className="w-20 h-20 rounded-2xl bg-indigo-500 flex items-center justify-center text-3xl font-black shadow-lg">
-                   {user.full_name?.substring(0, 2).toUpperCase()}
-                </div>
-                <div className="pt-2">
-                   <h2 className="text-2xl font-black">{user.full_name}</h2>
-                   <p className="text-indigo-300 font-bold mt-1">{user.email}</p>
-                   <span className="inline-block mt-3 px-3 py-1 bg-white/10 rounded-lg text-[10px] font-black tracking-widest uppercase">
-                     {user.role === 'USER' ? 'CUSTOMER' : user.role}
-                   </span>
-                </div>
-             </div>
-             <button onClick={onClose} className="p-2 bg-white/10 hover:bg-white/20 rounded-xl transition-all relative z-10">
-               <X className="w-5 h-5" />
-             </button>
-          </div>
-
-          <div className="p-8 overflow-y-auto bg-slate-50 flex-1">
-             <div className="mb-8 bg-white p-6 rounded-[24px] border border-slate-200 shadow-sm">
-                <h3 className="text-sm font-black text-slate-900 mb-4 uppercase tracking-widest flex items-center gap-2">
-                  <UserIcon className="w-4 h-4 text-indigo-500" /> Basic Information
-                </h3>
-                <div className="grid grid-cols-2 gap-6">
-                   <div>
-                     <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Account Status</p>
-                     <p className="text-sm font-black text-slate-800 mt-1">{user.is_active ? 'Active' : 'Inactive'}</p>
-                   </div>
-                   <div>
-                     <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Verification</p>
-                     <p className="text-sm font-black text-emerald-600 mt-1 flex items-center gap-1">
-                       <ShieldCheck className="w-4 h-4" /> Fully Verified
-                     </p>
-                   </div>
-                   <div>
-                     <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Contact Number</p>
-                     <p className="text-sm font-black text-slate-800 mt-1">{user.phone_number || userPolicies[0]?.contact || '+91 98XXX XXXXX'}</p>
-                   </div>
-                   <div>
-                     <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Registered Identity</p>
-                     <p className="text-sm font-black text-slate-800 mt-1">{user.full_name}</p>
-                   </div>
-                   <div className="col-span-2">
-                     <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Registered Residence</p>
-                     <p className="text-sm font-bold text-slate-600 mt-1">{user.address || userPolicies[0]?.address || 'Awaiting KYC Update'}</p>
-                   </div>
-                </div>
-             </div>
-
-             {userPolicies.length > 0 ? (
-               <div className="space-y-4">
-                 <h3 className="text-sm font-black text-slate-900 uppercase tracking-widest mb-4 flex items-center gap-2">
-                   <Shield className="w-4 h-4 text-emerald-500" /> Associated Policies
-                 </h3>
-                 {userPolicies.map((p, i) => (
-                   <div key={i} className="bg-white p-6 rounded-[24px] border border-slate-200 shadow-sm flex flex-col md:flex-row justify-between gap-4">
-                      <div>
-                         <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Policy ID</p>
-                         <p className="text-base font-black text-slate-900 mt-1">{p.id}</p>
-                         <p className="text-xs font-bold text-indigo-600 mt-1">{p.type}</p>
-                      </div>
-                      <div>
-                         <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Expiry Date</p>
-                         <p className="text-sm font-bold text-slate-800 mt-1">{p.expiryDate}</p>
-                      </div>
-                      <div>
-                         <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Premium</p>
-                         <p className="text-sm font-black text-emerald-600 mt-1">{p.premium}</p>
-                      </div>
-                   </div>
-                 ))}
-               </div>
-             ) : (
-               <div className="bg-white p-10 rounded-[24px] border border-slate-200 shadow-sm flex flex-col items-center justify-center text-center">
-                 <div className="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mb-4">
-                   <Shield className="w-8 h-8 text-slate-300" />
-                 </div>
-                 <h3 className="text-lg font-black text-slate-800">No Linked Policies</h3>
-                 <p className="text-xs font-bold text-slate-400 mt-2 max-w-xs">This profile does not have any active insurance policies associated with their identity.</p>
-               </div>
-             )}
-          </div>
+    <div className="space-y-6 animate-in fade-in duration-500 pb-12">
+       {/* Breadcrumb Bar */}
+       <div className="flex items-center justify-between bg-white/60 backdrop-blur-md p-4 rounded-[24px] border border-slate-100 shadow-sm">
+          <button 
+            onClick={onBack}
+            className="flex items-center gap-2 text-[10px] font-black text-slate-400 hover:text-indigo-600 transition-all uppercase tracking-[0.2em]"
+          >
+             <ArrowLeft size={16} /> Back to Customer List
+          </button>
        </div>
+
+       {user.role === 'USER' ? (
+          /* High-Fidelity Customer Profile (Exact replica of Rajesh Kumar style) */
+          <div className="bg-white rounded-[48px] border border-slate-100 shadow-2xl overflow-hidden min-h-[80vh]">
+             {/* Banner Identity */}
+             <div className="h-44 bg-slate-900 p-8 flex items-end relative overflow-hidden">
+                <div className="absolute right-0 top-0 w-96 h-96 bg-indigo-600/20 rounded-full blur-[100px] -mr-48 -mt-48"></div>
+                <div className="flex items-center gap-6 relative z-10 translate-y-12 ml-6">
+                   <div className="w-32 h-32 rounded-[40px] bg-white p-2 shadow-2xl border border-slate-50">
+                      <div className="w-full h-full rounded-[32px] bg-indigo-50 flex items-center justify-center text-indigo-600 font-black text-3xl">
+                         {user.full_name?.split(' ').map((n: any) => n[0]).join('')}
+                      </div>
+                   </div>
+                   <div className="pb-4">
+                      <h2 className="text-4xl font-black text-white tracking-tight mb-2">{user.full_name}</h2>
+                      <div className="flex items-center gap-3">
+                         <span className="px-4 py-1.5 bg-emerald-500 text-white rounded-xl text-[10px] font-black uppercase tracking-widest shadow-lg shadow-emerald-500/20">Active</span>
+                         <span className="text-[11px] font-black text-slate-400 uppercase tracking-widest">Client ID: CU-{user.id}</span>
+                      </div>
+                   </div>
+                </div>
+             </div>
+
+             <div className="pt-24 px-12 pb-12">
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
+                   {/* Left Column: Contact & Status (Span 4) */}
+                   <div className="lg:col-span-4 space-y-10">
+                      <div>
+                         <h4 className="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em] mb-6">Contact Information</h4>
+                         <div className="space-y-6">
+                            <div className="flex items-center gap-4 group">
+                               <div className="w-12 h-12 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-400 group-hover:bg-indigo-50 group-hover:text-indigo-600 transition-all">
+                                  <Phone size={20} />
+                               </div>
+                               <div>
+                                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Mobile Number</p>
+                                  <p className="text-base font-black text-slate-800">{user.phone_number || '+91 98765 43210'}</p>
+                               </div>
+                            </div>
+                            <div className="flex items-center gap-4 group">
+                               <div className="w-12 h-12 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-400 group-hover:bg-indigo-50 group-hover:text-indigo-600 transition-all">
+                                  <Mail size={20} />
+                               </div>
+                               <div>
+                                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Email Address</p>
+                                  <p className="text-base font-black text-slate-800 lowercase">{user.email}</p>
+                               </div>
+                            </div>
+                            <div className="flex items-center gap-4 group">
+                               <div className="w-12 h-12 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-400 group-hover:bg-indigo-50 group-hover:text-indigo-600 transition-all">
+                                  <MapPin size={20} />
+                               </div>
+                               <div>
+                                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Current Address</p>
+                                  <p className="text-base font-black text-slate-800">{user.address || 'Mumbai, Maharashtra'}</p>
+                               </div>
+                            </div>
+                         </div>
+                      </div>
+
+                      {/* Relationship Status Card */}
+                      <div className="p-8 bg-slate-900 rounded-[40px] text-white shadow-2xl relative overflow-hidden">
+                         <div className="absolute right-0 bottom-0 p-6 opacity-5">
+                            <Zap size={60} />
+                         </div>
+                         <p className="text-[10px] font-black text-indigo-400 uppercase tracking-[0.2em] mb-6">Relationship Status</p>
+                         <div className="space-y-4">
+                            <div className="flex items-center justify-between pb-4 border-b border-white/5">
+                               <span className="text-[11px] font-bold text-slate-400">Client Since</span>
+                               <span className="text-sm font-black text-white">2024-01-15</span>
+                            </div>
+                            <div className="flex items-center justify-between">
+                               <span className="text-[11px] font-bold text-slate-400">Lifetime Value</span>
+                               <span className="text-sm font-black text-white">₹2,45,000</span>
+                            </div>
+                         </div>
+                      </div>
+                   </div>
+
+                   {/* Right Column: Portfolio (Span 8) */}
+                   <div className="lg:col-span-8 space-y-8">
+                      <div className="flex items-center justify-between mb-2">
+                         <h4 className="text-2xl font-black text-slate-900 tracking-tight">Active Insurance Portfolio</h4>
+                         <span className="text-[11px] font-black text-slate-400 uppercase tracking-widest">{userPolicies.length} Total Policies</span>
+                      </div>
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                         {userPolicies.map((policy) => (
+                           <div key={policy.id} className="p-6 bg-white border border-slate-100 rounded-[32px] shadow-sm hover:shadow-xl hover:border-indigo-100 transition-all group cursor-pointer relative overflow-hidden">
+                              <div className="flex justify-between items-start mb-6">
+                                 <div className="w-14 h-14 rounded-[22px] bg-indigo-50 text-indigo-600 flex items-center justify-center group-hover:scale-110 transition-transform">
+                                    <policy.icon size={28} />
+                                 </div>
+                                 <span className={`px-3 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest ${
+                                   policy.status === 'Active' ? 'bg-emerald-50 text-emerald-600' : 'bg-amber-50 text-amber-600'
+                                 }`}>
+                                   {policy.status}
+                                 </span>
+                              </div>
+                              <div className="mb-6">
+                                 <h5 className="text-lg font-black text-slate-800 mb-0.5">{policy.type}</h5>
+                                 <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Policy ID: {policy.id}</p>
+                              </div>
+                              <div className="flex justify-between items-center pt-5 border-t border-slate-50">
+                                 <div>
+                                    <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Annual Premium</p>
+                                    <p className="text-base font-black text-slate-900">{policy.premium}</p>
+                                 </div>
+                                 <div className="text-right">
+                                    <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">{policy.status === 'Renewal Due' ? 'Renewal Due' : 'Expiry Date'}</p>
+                                    <p className="text-base font-black text-slate-900">{policy.due}</p>
+                                 </div>
+                              </div>
+                           </div>
+                         ))}
+                      </div>
+                   </div>
+                </div>
+             </div>
+          </div>
+       ) : (
+          /* Staff Profile ( advisor Style) */
+          <div className="space-y-4">
+             <div className="bg-white rounded-[32px] border border-slate-100 shadow-xl overflow-hidden pb-6">
+                <div className="h-28 bg-gradient-to-r from-[#8B5CF6] to-[#A855F7] relative">
+                   <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-10"></div>
+                </div>
+                <div className="px-8 flex flex-wrap items-end justify-between -translate-y-8 gap-4">
+                   <div className="flex items-end gap-6">
+                      <div className="w-28 h-28 rounded-[32px] bg-white p-1.5 shadow-2xl relative">
+                         <div className="w-full h-full rounded-[26px] bg-slate-50 flex items-center justify-center text-slate-400 font-black text-2xl border border-slate-100">
+                            {user.full_name?.split(' ').map((n: any) => n[0]).join('')}
+                         </div>
+                         <div className="absolute bottom-1 right-1 w-6 h-6 bg-emerald-500 border-[3px] border-white rounded-full flex items-center justify-center shadow-lg">
+                            <div className="w-1.5 h-1.5 bg-white rounded-full animate-pulse"></div>
+                         </div>
+                      </div>
+                      <div className="pb-1">
+                         <div className="flex items-center gap-2.5 mb-1.5">
+                            <h2 className="text-xl font-black text-slate-900 tracking-tight">{user.full_name}</h2>
+                            <span className="px-2 py-0.5 bg-indigo-50 text-indigo-600 rounded-md text-[8px] font-black uppercase tracking-[0.15em] border border-indigo-100">
+                               Verified Staff
+                            </span>
+                         </div>
+                         <div className="flex flex-wrap items-center gap-4 text-slate-400">
+                            <div className="flex items-center gap-1.5">
+                               <MapPinIcon size={12} className="text-indigo-500" />
+                               <span className="text-[10px] font-bold uppercase tracking-widest">Mumbai Central, MH</span>
+                            </div>
+                            <div className="flex items-center gap-1.5">
+                               <Briefcase size={12} className="text-indigo-500" />
+                               <span className="text-[10px] font-bold uppercase tracking-widest">8+ Yrs Exp</span>
+                            </div>
+                            <div className="flex items-center gap-1.5">
+                               <Star size={12} className="text-amber-500 fill-amber-500" />
+                               <span className="text-[10px] font-black text-slate-800 tracking-widest">4.9</span>
+                            </div>
+                         </div>
+                      </div>
+                   </div>
+                   <div className="flex items-center gap-2 pb-1">
+                      <button className="w-10 h-10 bg-white rounded-xl border border-slate-100 flex items-center justify-center text-slate-400 hover:text-indigo-600 hover:shadow-lg transition-all">
+                         <Settings size={18} />
+                      </button>
+                   </div>
+                </div>
+             </div>
+             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div className="bg-white p-6 rounded-[32px] border border-slate-100 shadow-sm">
+                   <h4 className="text-[10px] font-black text-slate-900 uppercase tracking-[0.15em] mb-5">Performance Snapshot</h4>
+                   <div className="space-y-3">
+                      {[
+                         { label: 'Policies', value: '120', icon: ShieldCheck, color: 'indigo' },
+                         { label: 'Clients', value: '95', icon: Users, color: 'blue' },
+                         { label: 'Tier', value: user.role === 'USER' ? 'Customer' : user.role === 'SUPER_ADMIN' ? 'Admin' : user.role, icon: Zap, color: 'amber' },
+                      ].map((stat, i) => (
+                         <div key={i} className="flex items-center gap-3 p-4 bg-slate-50 rounded-[24px] border border-slate-50 group hover:bg-white hover:shadow-md transition-all cursor-pointer">
+                            <div className="w-10 h-10 rounded-xl bg-white text-indigo-600 flex items-center justify-center shadow-sm">
+                               <stat.icon size={18} />
+                            </div>
+                            <div>
+                               <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest">{stat.label}</p>
+                               <p className="text-base font-black text-slate-900">{stat.value}</p>
+                            </div>
+                         </div>
+                      ))}
+                   </div>
+                </div>
+                <div className="lg:col-span-2 bg-white p-6 rounded-[32px] border border-slate-100 shadow-sm">
+                   <h4 className="text-[10px] font-black text-slate-900 uppercase tracking-[0.15em] mb-4">About {user.full_name?.split(' ')[0]}</h4>
+                   <p className="text-xs font-bold text-slate-500 leading-relaxed mb-6">
+                      Passionate insurance professional dedicated to helping families and businesses secure their future. Specialist in {user.role === 'USER' ? 'Portfolio Management' : user.role + ' operations'}.
+                   </p>
+                   <div className="grid grid-cols-2 gap-8">
+                      <div>
+                         <h5 className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-4">Contact Information</h5>
+                         <div className="space-y-3">
+                            <div className="flex items-center gap-3">
+                               <div className="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center text-slate-400">
+                                  <Mail size={16} />
+                               </div>
+                               <p className="text-[11px] font-black text-slate-800">{user.email}</p>
+                            </div>
+                            <div className="flex items-center gap-3">
+                               <div className="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center text-slate-400">
+                                  <Phone size={16} />
+                               </div>
+                               <p className="text-[11px] font-black text-slate-800">{user.phone_number || '+91 98XXX XXXXX'}</p>
+                            </div>
+                         </div>
+                      </div>
+                      <div>
+                         <h5 className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-4">Regional Assignment</h5>
+                         <div className="space-y-3">
+                            <div className="flex items-center gap-3">
+                               <div className="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center text-slate-400">
+                                  <MapPinIcon size={16} />
+                               </div>
+                               <p className="text-[11px] font-black text-slate-800">Mumbai Central, MH</p>
+                            </div>
+                            <div className="flex items-center gap-3">
+                               <div className="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center text-slate-400">
+                                  <RefreshCw size={16} />
+                               </div>
+                               <p className="text-[11px] font-black text-slate-800">Joined {new Date(user.created_at).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}</p>
+                            </div>
+                         </div>
+                      </div>
+                   </div>
+                </div>
+             </div>
+          </div>
+       )}
     </div>
   );
 };
 
 const UserManagement: React.FC<UserManagementProps> = ({ viewType = 'all' }) => {
   const [users, setUsers] = useState<any[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState('All Users');
+  const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState<any>(null);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [page, setPage] = useState(0);
-  const [limit] = useState(10);
-  const [stats, setStats] = useState<any>({});
-  const [viewingProfile, setViewingProfile] = useState<any>(null);
-
-  const fetchUsers = async () => {
-    setIsLoading(true);
-    try {
-      let activeFilter: boolean | undefined = undefined;
-      if (activeTab === 'Active') activeFilter = true;
-      if (activeTab === 'Inactive') activeFilter = false;
-
-      // Try the primary users endpoint
-      try {
-        const [usersRes, statsRes] = await Promise.all([
-          api.get('/users/', {
-            params: {
-              skip: page * limit,
-              limit: limit,
-              is_active: activeFilter
-            }
-          }).catch(err => {
-            if (err.response?.status === 403) {
-              // Fallback for Admin role who might only have access to /admin/users
-              return api.get('/admin/users');
-            }
-            throw err;
-          }),
-          api.get('/users/stats').catch(() => ({ data: {} })) // Stats are optional
-        ]);
-
-        setUsers(Array.isArray(usersRes.data) ? usersRes.data : []);
-        setStats(statsRes.data || {});
-      } catch (innerError: any) {
-        if (innerError.response?.status === 403) {
-          // Final fallback: if everything is 403, try the admin specific endpoint directly
-          const adminRes = await api.get('/admin/users');
-          setUsers(adminRes.data);
-          setStats({});
-        } else {
-          throw innerError;
-        }
-      }
-    } catch (error) {
-      console.error('Fetch error:', error);
-      toast.error('Access restricted or session expired');
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
 
   useEffect(() => {
     fetchUsers();
-  }, [activeTab, page]);
+  }, [viewType]);
 
-  const handleDelete = async (userId: number) => {
-    if (!window.confirm('Are you sure you want to deactivate this user?')) return;
+  const fetchUsers = async () => {
     try {
-      await api.delete(`/users/${userId}`);
-      toast.success('User deactivated');
-      fetchUsers();
+      const response = await api.get('/users/');
+      let filtered = response.data;
+      if (viewType === 'staff') {
+        filtered = response.data.filter((u: any) => u.role !== 'USER');
+      } else if (viewType === 'customers') {
+        filtered = response.data.filter((u: any) => u.role === 'USER');
+      }
+      setUsers(filtered);
     } catch (error) {
-      toast.error('Failed to deactivate user');
+      toast.error('Failed to fetch users');
+    } finally {
+      setLoading(false);
     }
   };
 
-  const openEditModal = (user: any) => {
+  const handleDelete = async (id: number) => {
+    if (!window.confirm('Are you sure you want to delete this user?')) return;
+    try {
+      await api.delete(`/users/${id}`);
+      toast.success('User deleted successfully');
+      fetchUsers();
+    } catch (error) {
+      toast.error('Failed to delete user');
+    }
+  };
+
+  const handleEdit = (user: any) => {
     setSelectedUser(user);
     setIsModalOpen(true);
   };
 
-  const openCreateModal = () => {
-    setSelectedUser(null);
-    setIsModalOpen(true);
+  const handleViewProfile = (user: any) => {
+    setSelectedUser(user);
+    setIsProfileOpen(true);
   };
 
-  const filteredUsers = users.filter(user => {
-    const matchesSearch = user.full_name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                          user.email?.toLowerCase().includes(searchQuery.toLowerCase());
-    
-    if (!matchesSearch) return false;
+  const filteredUsers = users.filter(u => 
+    u.full_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    u.email?.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
-    if (viewType === 'staff') {
-      return ['SUPER_ADMIN', 'ADMIN', 'AGENT', 'CSR'].includes(user.role);
-    }
-    if (viewType === 'customers') {
-      return user.role === 'USER';
-    }
-    return true;
-  });
-
-  const roles = viewType === 'customers' ? [
-    { name: 'Customers', key: 'USER', icon: Users, color: 'blue' },
-  ] : [
-    { name: 'Super Admin', key: 'SUPER_ADMIN', icon: Shield, color: 'red' },
-    { name: 'Admin', key: 'ADMIN', icon: Lock, color: 'indigo' },
-    { name: 'Agent', key: 'AGENT', icon: Users, color: 'blue' },
-    { name: 'CSR', key: 'CSR', icon: UserCheck, color: 'emerald' },
-  ];
+  if (isProfileOpen && selectedUser) {
+    return (
+      <UserProfileContent 
+        user={selectedUser} 
+        onBack={() => setIsProfileOpen(false)} 
+        onEdit={(u: any) => {
+           setSelectedUser(u);
+           setIsModalOpen(true);
+        }}
+      />
+    );
+  }
 
   return (
-    <div className="space-y-8 animate-in fade-in duration-500">
-      <UserModal 
-        isOpen={isModalOpen} 
-        onClose={() => setIsModalOpen(false)} 
-        onSave={fetchUsers} 
-        user={selectedUser} 
-      />
-
-      <UserProfileModal 
-        isOpen={!!viewingProfile} 
-        user={viewingProfile} 
-        onClose={() => setViewingProfile(null)} 
-      />
-
-      {/* Action Header */}
-      <div className="flex flex-col sm:flex-row justify-between items-center gap-4 bg-white p-6 rounded-[24px] border border-slate-200 shadow-sm">
-         <div>
-            <h2 className="text-xl font-black text-slate-900">Personnel Directory</h2>
-            <p className="text-sm font-bold text-slate-400">Master Authority Hub • Manage access levels for platform personnel</p>
-         </div>
-         <button 
-           onClick={openCreateModal}
-           className="w-full sm:w-auto px-6 py-3 bg-indigo-600 text-white rounded-2xl text-sm font-black hover:bg-indigo-700 shadow-lg shadow-indigo-200 transition-all flex items-center justify-center gap-2"
-         >
-            <UserPlus className="w-4 h-4" /> Add New {viewType === 'customers' ? 'Customer' : 'Personnel'}
-         </button>
-      </div>
-
-      {/* Role Summary */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {roles.map((role, i) => (
-            <div key={i} className={`${viewType === 'customers' ? 'lg:col-span-4' : ''} bg-white p-6 rounded-[24px] border border-slate-200 shadow-sm flex items-center gap-5 hover:border-indigo-200 transition-all group`}>
-              <div className={`w-12 h-12 rounded-2xl flex items-center justify-center shadow-inner group-hover:scale-110 transition-transform ${
-                role.color === 'red' ? 'bg-red-50 text-red-600' :
-                role.color === 'indigo' ? 'bg-indigo-50 text-indigo-600' :
-                role.color === 'blue' ? 'bg-blue-50 text-blue-600' : 'bg-emerald-50 text-emerald-600'
-              }`}>
-                 <role.icon className="w-6 h-6" />
-              </div>
-              <div>
-                 <h3 className="text-sm font-black text-slate-900">{role.name}</h3>
-                 <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.1em]">{stats[role.key] || 0} Verified {viewType === 'customers' ? 'Customers' : 'Personnel'}</p>
-              </div>
-            </div>
-          ))}
-      </div>
-
-      {/* Table Section */}
-      <div className="bg-white rounded-[32px] border border-slate-200 shadow-sm overflow-hidden">
-         <div className="p-6 border-b border-slate-100 flex flex-col lg:flex-row justify-between items-center gap-4 bg-slate-50/30">
-            <div className="flex bg-slate-100 p-1.5 rounded-2xl w-full lg:w-auto overflow-x-auto shadow-inner">
-               {['All Users', 'Active', 'Inactive'].map(tab => (
-                 <button 
-                   key={tab}
-                   onClick={() => { setActiveTab(tab); setPage(0); }}
-                   className={`px-8 py-2.5 rounded-xl text-xs font-black transition-all whitespace-nowrap ${
-                     activeTab === tab ? 'bg-white text-indigo-600 shadow-md shadow-indigo-100' : 'text-slate-500 hover:text-slate-900'
-                   }`}
-                 >
-                    {tab}
-                 </button>
-               ))}
-            </div>
-            
-            <div className="flex items-center gap-3 w-full lg:w-auto">
-               <div className="flex-1 lg:w-80 bg-white border border-slate-200 rounded-2xl px-5 py-2.5 flex items-center gap-3 focus-within:ring-4 focus-within:ring-indigo-500/5 focus-within:border-indigo-500 transition-all shadow-sm">
-                  <Search className="w-4 h-4 text-slate-400" />
-                  <input 
-                    type="text" 
-                    placeholder={`Search ${viewType === 'customers' ? 'customers' : 'personnel'}...`} 
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="bg-transparent border-none outline-none text-sm font-bold w-full text-slate-700" 
-                  />
-               </div>
-               <button 
-                 onClick={fetchUsers}
-                 className="p-3 bg-white border border-slate-200 rounded-2xl text-slate-400 hover:text-indigo-600 hover:border-indigo-200 transition-all shadow-sm"
-               >
-                  <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
-               </button>
-            </div>
-         </div>
-
-         <div className="overflow-x-auto">
-            <table className="w-full text-left">
-               <thead>
-                  <tr className="bg-slate-50/50 border-b border-slate-100">
-                     <th className="px-8 py-4 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">{viewType === 'customers' ? 'Customer' : 'Personnel'} Identity</th>
-                     <th className="px-8 py-4 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">{viewType === 'customers' ? 'Policy Count' : 'Access Level'}</th>
-                     <th className="px-8 py-4 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Current Status</th>
-                     <th className="px-8 py-4 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] text-right">Master Control</th>
-                  </tr>
-               </thead>
-               <tbody className="divide-y divide-slate-50">
-                  {isLoading ? (
-                    <tr>
-                      <td colSpan={4} className="px-8 py-20 text-center">
-                        <div className="flex flex-col items-center gap-3">
-                          <div className="w-10 h-10 border-4 border-slate-100 border-t-indigo-600 rounded-full animate-spin"></div>
-                          <p className="text-xs font-black text-slate-400 uppercase tracking-widest">Accessing Directory...</p>
-                        </div>
-                      </td>
-                    </tr>
-                  ) : filteredUsers.length === 0 ? (
-                    <tr>
-                      <td colSpan={4} className="px-8 py-20 text-center">
-                        <p className="text-sm font-bold text-slate-400">No records found.</p>
-                      </td>
-                    </tr>
-                  ) : filteredUsers.map((user) => (
-                    <tr key={user.id} className="hover:bg-slate-50/80 transition-colors group">
-                       <td className="px-8 py-6">
-                          <div className="flex items-center gap-4">
-                             <div className="w-11 h-11 rounded-2xl bg-indigo-100 text-indigo-700 flex items-center justify-center text-sm font-black shadow-inner border border-white">
-                                {user.full_name?.substring(0, 2).toUpperCase()}
-                             </div>
-                             <div>
-                                <p className="text-sm font-black text-slate-800">{user.full_name}</p>
-                                <p className="text-[11px] text-slate-400 font-bold">{user.email}</p>
-                             </div>
-                          </div>
-                       </td>
-                       <td className="px-8 py-6">
-                           <span className={`px-3 py-1 rounded-lg text-[10px] font-black tracking-widest uppercase ${
-                             user.role === 'SUPER_ADMIN' ? 'bg-red-50 text-red-600 border border-red-100' :
-                             user.role === 'ADMIN' ? 'bg-indigo-50 text-indigo-600 border border-indigo-100' :
-                             user.role === 'AGENT' ? 'bg-blue-50 text-blue-600 border border-blue-100' : 
-                             user.role === 'USER' ? 'bg-emerald-50 text-emerald-600 border border-emerald-100' :
-                             'bg-slate-50 text-slate-600 border border-slate-100'
-                           }`}>
-                             {viewType === 'customers' ? 'ACTIVE CUSTOMER' : user.role}
-                           </span>
-                       </td>
-                       <td className="px-8 py-6">
-                          <div className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-widest ${
-                            user.is_active ? 'bg-emerald-50 text-emerald-600 border border-emerald-100' : 'bg-slate-100 text-slate-500 border border-slate-200'
-                          }`}>
-                             <div className={`w-2 h-2 rounded-full shadow-sm ${user.is_active ? 'bg-emerald-500 animate-pulse' : 'bg-slate-400'}`}></div>
-                             {user.is_active ? 'Authorized' : 'Restricted'}
-                          </div>
-                       </td>
-                       <td className="px-8 py-6 text-right">
-                          <div className="flex items-center justify-end gap-2 transition-opacity">
-                             <button 
-                               onClick={() => setViewingProfile(user)}
-                               className="p-2.5 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-xl transition-all border border-transparent hover:border-indigo-100"
-                               title="View Profile"
-                             >
-                               <Eye className="w-4 h-4" />
-                             </button>
-                             <button 
-                               onClick={() => openEditModal(user)}
-                               className="p-2.5 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-xl transition-all border border-transparent hover:border-indigo-100"
-                             >
-                               <Edit3 className="w-4 h-4" />
-                             </button>
-                             <button 
-                               onClick={() => handleDelete(user.id)}
-                               className="p-2.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-xl transition-all border border-transparent hover:border-rose-100"
-                             >
-                               <Trash2 className="w-4 h-4" />
-                             </button>
-                             <button className="p-2.5 text-slate-400 hover:bg-slate-100 rounded-xl transition-all">
-                               <MoreHorizontal className="w-4 h-4" />
-                             </button>
-                          </div>
-                       </td>
-                    </tr>
-                  ))}
-               </tbody>
-            </table>
-         </div>
-
-         {/* Pagination */}
-         <div className="px-8 py-5 border-t border-slate-50 flex items-center justify-between bg-slate-50/30">
-            <p className="text-[11px] font-black text-slate-400 uppercase tracking-widest">
-               Page {page + 1} of Personnel Directory
+    <div className="space-y-6 animate-in fade-in duration-500 pb-12">
+      <div className="bg-white p-6 rounded-[28px] border border-slate-200 shadow-sm flex flex-wrap items-center justify-between gap-4">
+        <div className="flex items-center gap-3">
+          <div className="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center shadow-inner">
+            <Users className="w-6 h-6" />
+          </div>
+          <div>
+            <h3 className="text-lg font-black text-slate-800 tracking-tight">
+              {viewType === 'staff' ? 'Staff Directory' : viewType === 'customers' ? 'Customer Database' : 'User Management'}
+            </h3>
+            <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mt-0.5">
+              Manage permissions and identities
             </p>
-            <div className="flex items-center gap-2">
-               <button 
-                 disabled={page === 0}
-                 onClick={() => setPage(p => Math.max(0, p - 1))}
-                 className="p-2 bg-white border border-slate-200 rounded-xl text-slate-400 hover:text-slate-900 transition-all disabled:opacity-40"
-               >
-                  <ChevronLeft className="w-4 h-4" />
-               </button>
-               <button 
-                 disabled={users.length < limit}
-                 onClick={() => setPage(p => p + 1)}
-                 className="p-2 bg-white border border-slate-200 rounded-xl text-slate-400 hover:text-slate-900 transition-all disabled:opacity-40"
-               >
-                  <ChevronRight className="w-4 h-4" />
-               </button>
-            </div>
-         </div>
+          </div>
+        </div>
+        <button 
+          onClick={() => { setSelectedUser(null); setIsModalOpen(true); }}
+          className="px-6 py-3 bg-indigo-600 text-white rounded-2xl text-xs font-black uppercase tracking-widest hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-600/20 flex items-center gap-2"
+        >
+          <UserPlus size={16} /> Add New User
+        </button>
       </div>
+
+      <div className="bg-white rounded-[32px] border border-slate-200 shadow-sm overflow-hidden">
+        <div className="p-6 border-b border-slate-100 flex flex-wrap items-center justify-between gap-4 bg-slate-50/30">
+          <div className="relative w-full md:w-96">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
+            <input 
+              type="text" 
+              placeholder="Search by name or email..." 
+              className="w-full pl-11 pr-4 py-2.5 bg-white border border-slate-200 rounded-xl text-xs font-bold outline-none focus:ring-4 focus:ring-indigo-500/5 transition-all"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest px-3 py-1 bg-slate-100 rounded-lg">
+              Total {viewType}: {filteredUsers.length}
+            </span>
+          </div>
+        </div>
+
+        <div className="overflow-x-auto">
+          <table className="w-full text-left border-collapse">
+            <thead>
+              <tr className="bg-slate-50/50">
+                <th className="px-6 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest">User Identity</th>
+                <th className="px-6 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest">Role & Access</th>
+                <th className="px-6 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest">Account Status</th>
+                <th className="px-6 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest text-right">Administrative Actions</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-50">
+              {loading ? (
+                <tr>
+                  <td colSpan={4} className="px-6 py-20 text-center">
+                    <RefreshCw className="w-8 h-8 text-indigo-500 animate-spin mx-auto mb-4" />
+                    <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">Securely loading database...</p>
+                  </td>
+                </tr>
+              ) : filteredUsers.length === 0 ? (
+                <tr>
+                  <td colSpan={4} className="px-6 py-20 text-center">
+                    <div className="w-16 h-16 rounded-full bg-slate-100 flex items-center justify-center mx-auto mb-4">
+                       <Search className="w-8 h-8 text-slate-300" />
+                    </div>
+                    <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">No matching records found</p>
+                  </td>
+                </tr>
+              ) : (
+                filteredUsers.map((user) => (
+                  <tr key={user.id} className="hover:bg-slate-50/50 transition-colors group">
+                    <td className="px-6 py-5">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-xl bg-indigo-100 text-indigo-700 flex items-center justify-center font-black text-xs shadow-inner">
+                          {user.full_name?.split(' ').map((n: any) => n[0]).join('')}
+                        </div>
+                        <div>
+                          <p className="text-sm font-black text-slate-800">{user.full_name}</p>
+                          <p className="text-[10px] font-bold text-slate-400 lowercase">{user.email}</p>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="px-6 py-5">
+                      <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest border ${
+                        user.role === 'SUPER_ADMIN' ? 'bg-indigo-50 text-indigo-600 border-indigo-100' :
+                        user.role === 'ADMIN' ? 'bg-purple-50 text-purple-600 border-purple-100' :
+                        user.role === 'AGENT' ? 'bg-blue-50 text-blue-600 border-blue-100' :
+                        'bg-slate-50 text-slate-600 border-slate-100'
+                      }`}>
+                        {user.role === 'USER' ? 'CUSTOMER' : user.role}
+                      </span>
+                    </td>
+                    <td className="px-6 py-5">
+                      <div className="flex items-center gap-2">
+                        <div className={`w-1.5 h-1.5 rounded-full ${user.is_active ? 'bg-emerald-500 shadow-lg shadow-emerald-200' : 'bg-slate-300'}`}></div>
+                        <span className={`text-[10px] font-black uppercase tracking-widest ${user.is_active ? 'text-emerald-600' : 'text-slate-400'}`}>
+                          {user.is_active ? 'Operational' : 'Disabled'}
+                        </span>
+                      </div>
+                    </td>
+                    <td className="px-6 py-5 text-right">
+                      <div className="flex items-center justify-end gap-1.5">
+                        <button 
+                          onClick={() => handleViewProfile(user)}
+                          className="p-2 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-all" 
+                          title="View Profile"
+                        >
+                          <Eye size={16} />
+                        </button>
+                        <button 
+                          onClick={() => handleEdit(user)}
+                          className="p-2 text-slate-400 hover:text-purple-600 hover:bg-purple-50 rounded-lg transition-all" 
+                          title="Edit Identity"
+                        >
+                          <Edit3 size={16} />
+                        </button>
+                        <button 
+                          onClick={() => handleDelete(user.id)}
+                          className="p-2 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-all" 
+                          title="Revoke Access"
+                        >
+                          <Trash2 size={16} />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
+
+        <div className="px-6 py-4 bg-slate-50 border-t border-slate-100 flex items-center justify-between">
+           <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Institutional Directory Records</p>
+           <div className="flex items-center gap-2">
+              <button className="p-2 text-slate-400 hover:bg-white rounded-lg transition-all disabled:opacity-40" disabled>
+                <ChevronLeft size={16} />
+              </button>
+              <span className="text-[10px] font-black text-slate-800 px-3 py-1 bg-white rounded-md shadow-sm border border-slate-200">1</span>
+              <button className="p-2 text-slate-400 hover:bg-white rounded-lg transition-all disabled:opacity-40" disabled>
+                <ChevronRight size={16} />
+              </button>
+           </div>
+        </div>
+      </div>
+
+      <UserModal 
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        user={selectedUser}
+        onSuccess={fetchUsers}
+      />
     </div>
   );
 };

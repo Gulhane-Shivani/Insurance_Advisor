@@ -298,7 +298,12 @@ const CustomerManagement: React.FC = () => {
             <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mt-0.5">Manage your assigned client portfolio</p>
           </div>
         </div>
-        {/* Button removed as per request */}
+        <button 
+          onClick={() => setIsAddModalOpen(true)}
+          className="px-6 py-3 bg-indigo-600 text-white rounded-2xl text-xs font-black uppercase tracking-widest hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-600/20 flex items-center gap-2"
+        >
+          <UserPlus size={16} /> Add New Customer
+        </button>
       </div>
 
       {/* Tools & Filters */}
