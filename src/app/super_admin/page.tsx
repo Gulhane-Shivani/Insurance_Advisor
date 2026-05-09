@@ -36,6 +36,8 @@ import SystemStats from './sections/SystemStats';
 import PolicyLifecycleManagement from './sections/PolicyLifecycleManagement';
 import PolicyDetailView from './sections/PolicyDetailView';
 import RenewalManagement from './sections/RenewalManagement';
+import PaymentManagement from './sections/PaymentManagement';
+import NotificationCenter from './sections/NotificationCenter';
 
 const SuperAdminDashboard: React.FC = () => {
   const { logout } = useAuth();
@@ -124,8 +126,9 @@ const SuperAdminDashboard: React.FC = () => {
       case 'renewals':
         return <RenewalManagement />;
       case 'payments':
+        return <PaymentManagement />;
       case 'notifications':
-        return <div className="p-10 text-center"><h2 className="text-2xl font-bold text-slate-400">Module Coming Soon</h2></div>;
+        return <NotificationCenter />;
       default: return <AdminOverview />;
     }
   };
