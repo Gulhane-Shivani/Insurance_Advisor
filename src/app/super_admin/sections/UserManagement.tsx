@@ -2,28 +2,17 @@ import React, { useState, useEffect } from 'react';
 import { 
   Users, 
   UserPlus, 
-  Shield, 
-  MoreHorizontal, 
   Search, 
   Trash2, 
   Edit3,
-  Lock,
-  UserCheck,
   RefreshCw,
   ChevronLeft,
   ChevronRight,
   Eye,
-  X,
-  User as UserIcon,
   ShieldCheck,
   Phone,
   Mail,
-  MapPin,
-  Shield as ShieldIcon,
   Zap,
-  Activity,
-  FileText,
-  CreditCard,
   ArrowLeft,
   MapPinIcon,
   Briefcase,
@@ -39,7 +28,7 @@ interface UserManagementProps {
   viewType?: 'staff' | 'customers' | 'all';
 }
 
-const UserProfileContent = ({ user, onBack, onEdit }: any) => {
+const UserProfileContent = ({ user, onBack }: any) => {
   const [userPolicies, setUserPolicies] = useState<any[]>([]);
 
   useEffect(() => {
@@ -350,10 +339,6 @@ const UserManagement: React.FC<UserManagementProps> = ({ viewType = 'all' }) => 
       <UserProfileContent 
         user={selectedUser} 
         onBack={() => setIsProfileOpen(false)} 
-        onEdit={(u: any) => {
-           setSelectedUser(u);
-           setIsModalOpen(true);
-        }}
       />
     );
   }
@@ -510,7 +495,7 @@ const UserManagement: React.FC<UserManagementProps> = ({ viewType = 'all' }) => 
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         user={selectedUser}
-        onSuccess={fetchUsers}
+        onSave={fetchUsers}
       />
     </div>
   );

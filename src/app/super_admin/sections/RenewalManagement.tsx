@@ -1,16 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { 
-  Shield, 
   Clock, 
   AlertCircle, 
   Search, 
   CheckCircle2,
   RefreshCw,
-  CreditCard,
-  History,
-  Zap,
-  Eye,
-  Mail,
   X,
   FileText,
   Calendar as CalendarIcon
