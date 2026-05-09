@@ -11,12 +11,10 @@ import {
    History,
    ShieldCheck,
    Zap,
-   Users,
    CheckCircle2,
    FileText,
    Activity,
    Sparkles,
-   TrendingUp,
    LayoutGrid,
    Clock,
    Edit2

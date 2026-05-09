@@ -3,15 +3,9 @@ import {
   ArrowLeft, 
   User, 
   ShieldCheck, 
-  Calendar, 
-  Mail, 
-  Phone, 
   Users, 
   Zap, 
   CheckCircle2, 
-  Info,
-  Clock,
-  Shield,
   Sparkles,
   ChevronDown
 } from 'lucide-react';

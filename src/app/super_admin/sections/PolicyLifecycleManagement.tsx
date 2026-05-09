@@ -1,19 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { 
-  Shield, 
   Clock, 
   AlertCircle, 
-  Activity, 
   Search, 
-  Filter, 
   Plus, 
   Eye, 
   Edit2, 
   Ban,
-  RotateCcw,
-  CheckCircle2,
-  AlertTriangle,
-  Sparkles,
   Zap,
   TrendingUp,
   LayoutGrid

@@ -9,7 +9,7 @@ import {
   ChevronLeft,
   ChevronRight,
   Eye,
-  ShieldCheck,
+  ShieldCheck as ShieldIcon,
   Phone,
   Mail,
   Zap,
