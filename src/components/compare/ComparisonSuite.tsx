@@ -39,14 +39,46 @@ const ComparisonSuite: React.FC<ComparisonSuiteProps> = ({
   const [selectedComparePlans, setSelectedComparePlans] = useState<typeof insurancePlans[0][]>([]);
   const [acceptedTerms, setAcceptedTerms] = useState(false);
 
+  const allPlans = useMemo(() => {
+    const savedPlansRaw = localStorage.getItem('custom_insurance_plans');
+    if (!savedPlansRaw) return insurancePlans;
+
+    try {
+      const savedPlans = JSON.parse(savedPlansRaw);
+      // Map PolicyPlan back to InsurancePlan format
+      const mappedPlans = savedPlans.map((p: any) => ({
+        id: p.id,
+        carrierId: p.provider.toLowerCase().replace(/ /g, '-'),
+        carrierName: p.provider,
+        carrierLogo: p.logo || `https://www.google.com/s2/favicons?domain=${
+          p.provider === 'Star Health' ? 'starhealth.in' :
+          p.provider === 'HDFC Ergo' ? 'hdfcergo.com' :
+          p.provider === 'ICICI Lombard' ? 'icicilombard.com' :
+          p.provider === 'Tata AIG' ? 'tataaig.com' :
+          p.provider.toLowerCase().replace(/ /g, '') + '.com'
+        }&sz=128`,
+        planName: p.name,
+        type: p.category.toLowerCase().split(' ')[0] as any, // 'health', 'life', 'car', 'business'
+        monthlyPrice: p.monthlyPrice,
+        coverageAmount: p.coverage,
+        benefits: p.topBenefits,
+        rating: p.rating,
+        features: {}
+      }));
+      return mappedPlans;
+    } catch (e) {
+      return insurancePlans;
+    }
+  }, []);
+
   const filteredPlans = useMemo(() => {
-    return insurancePlans.filter((plan) => {
+    return allPlans.filter((plan: any) => {
       const typeMatch = filterType === 'all' || plan.type === filterType;
       const priceMatch = plan.monthlyPrice <= maxPrice;
       const carrierMatch = selectedCarrier === 'all' || plan.carrierId === selectedCarrier;
       return typeMatch && priceMatch && carrierMatch;
     });
-  }, [filterType, maxPrice, selectedCarrier]);
+  }, [filterType, maxPrice, selectedCarrier, allPlans]);
 
   const handleCloseModal = () => {
     setViewingPlan(null);
@@ -114,7 +146,9 @@ const ComparisonSuite: React.FC<ComparisonSuiteProps> = ({
               onChange={(e) => setSelectedCarrier(e.target.value)}
             >
               <option value="all">All Carriers</option>
-              {carriers.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
+              {Array.from(new Set(allPlans.map((p: any) => p.carrierName))).sort().map((name) => (
+                <option key={name} value={name.toLowerCase().replace(/ /g, '-')}>{name}</option>
+              ))}
             </select>
           </div>
 

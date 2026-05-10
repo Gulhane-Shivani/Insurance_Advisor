@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { 
   ShieldCheck, 
   Plus, 
@@ -220,6 +220,24 @@ const PolicyPlanManagement: React.FC = () => {
     logoPreview: ''
   });
 
+
+  // Sync with LocalStorage for cross-page persistence (Compare Page)
+  useEffect(() => {
+    const savedPlans = localStorage.getItem('custom_insurance_plans');
+    if (savedPlans) {
+      setPlans(JSON.parse(savedPlans));
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('custom_insurance_plans', JSON.stringify(plans));
+  }, [plans]);
+
+  // Derive unique providers for the filter
+  const uniqueProviders = useMemo(() => {
+    const providers = plans.map(p => p.provider);
+    return Array.from(new Set(providers)).sort();
+  }, [plans]);
 
   const filteredPlans = plans.filter(plan => {
     const matchesSearch = plan.name.toLowerCase().includes(searchQuery.toLowerCase());
@@ -700,10 +718,9 @@ const PolicyPlanManagement: React.FC = () => {
               className="w-full h-14 pl-5 pr-10 bg-slate-50 border border-slate-200 rounded-2xl text-xs font-bold text-slate-700 focus:outline-none focus:ring-4 focus:ring-blue-500/5 focus:border-blue-500 transition-all appearance-none cursor-pointer"
             >
               <option>All Carriers</option>
-              <option>Star Health</option>
-              <option>HDFC Ergo</option>
-              <option>ICICI Lombard</option>
-              <option>Tata AIG</option>
+              {uniqueProviders.map(provider => (
+                <option key={provider} value={provider}>{provider}</option>
+              ))}
             </select>
             <ChevronRight className="absolute right-5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 rotate-90 pointer-events-none" />
           </div>
