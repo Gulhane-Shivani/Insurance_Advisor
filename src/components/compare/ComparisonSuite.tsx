@@ -15,7 +15,7 @@ import {
   CreditCard,
   Lock
 } from 'lucide-react';
-import { insurancePlans, carriers } from '../../data/carriers';
+import { insurancePlans } from '../../data/carriers';
 import { useAuth } from '../../context/AuthContext';
 import toast from 'react-hot-toast';
 import '../../styles/globals.css';
@@ -146,7 +146,7 @@ const ComparisonSuite: React.FC<ComparisonSuiteProps> = ({
               onChange={(e) => setSelectedCarrier(e.target.value)}
             >
               <option value="all">All Carriers</option>
-              {Array.from(new Set(allPlans.map((p: any) => p.carrierName))).sort().map((name) => (
+              {Array.from<string>(new Set(allPlans.map((p: any) => p.carrierName as string))).sort().map((name: string) => (
                 <option key={name} value={name.toLowerCase().replace(/ /g, '-')}>{name}</option>
               ))}
             </select>
@@ -172,7 +172,7 @@ const ComparisonSuite: React.FC<ComparisonSuiteProps> = ({
         {/* Plans Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {filteredPlans.length > 0 ? (
-            filteredPlans.map((plan) => (
+            filteredPlans.map((plan: any) => (
               <div key={plan.id} className="bg-white rounded-[24px] border border-slate-100 shadow-sm hover:shadow-lg hover:border-blue-200 transition-all p-4 flex flex-col gap-3 group relative overflow-hidden">
                 <div className="absolute top-0 right-0 w-24 h-24 bg-blue-50/30 blur-2xl rounded-full translate-x-1/2 -translate-y-1/2 group-hover:bg-blue-100/40 transition-colors"></div>
                 
@@ -208,7 +208,7 @@ const ComparisonSuite: React.FC<ComparisonSuiteProps> = ({
                   <div>
                     <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest mb-1">Top Benefits</p>
                     <ul className="flex flex-col gap-0.5">
-                      {plan.benefits.slice(0, 2).map((b, i) => (
+                      {plan.benefits.slice(0, 2).map((b: string, i: number) => (
                         <li key={i} className="text-[9px] font-semibold text-slate-600 flex items-center gap-1">
                           <Check className="w-2 h-2 text-green-500" />
                           <span className="line-clamp-1">{b}</span>

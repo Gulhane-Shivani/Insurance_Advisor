@@ -60,8 +60,8 @@ const SuperAdminDashboard: React.FC = () => {
   // Auth bypass for testing
   // if (!user) return <Navigate to="/login" />;
 
-  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   
+
   const toggleMenu = (id: string) => {
     setOpenMenus(prev => 
       prev.includes(id) ? prev.filter(m => m !== id) : [...prev, id]
