@@ -244,14 +244,31 @@ const PolicyPlanManagement: React.FC = () => {
     setFormData({ ...formData, topBenefits: updated });
   };
 
+  const handleEditPlan = () => {
+    if (!selectedPlan) return;
+    setFormData({
+      name: selectedPlan.name,
+      category: selectedPlan.category,
+      provider: selectedPlan.provider,
+      newProvider: '',
+      monthlyPrice: selectedPlan.monthlyPrice.toString(),
+      coverage: selectedPlan.coverage,
+      description: selectedPlan.description,
+      topBenefits: selectedPlan.topBenefits.length > 0 ? selectedPlan.topBenefits : [''],
+      logoPreview: selectedPlan.logo || ''
+    });
+    setView('add');
+  };
+
   const handleDeployPlan = (e: React.FormEvent) => {
     e.preventDefault();
-    const newPlan: PolicyPlan = {
-      id: `PLN-${Math.random().toString(36).substr(2, 4).toUpperCase()}`,
+    
+    const planData: PolicyPlan = {
+      id: selectedPlan && view === 'add' && formData.name === selectedPlan.name ? selectedPlan.id : `PLN-${Math.random().toString(36).substr(2, 4).toUpperCase()}`,
       name: formData.name,
       category: formData.category,
       provider: formData.newProvider || formData.provider,
-      rating: 4.0,
+      rating: selectedPlan ? selectedPlan.rating : 4.0,
       monthlyPrice: parseInt(formData.monthlyPrice) || 0,
       coverage: formData.coverage,
       status: 'Active',
@@ -259,9 +276,19 @@ const PolicyPlanManagement: React.FC = () => {
       topBenefits: formData.topBenefits.filter(b => b.trim() !== ''),
       logo: formData.logoPreview
     };
-    setPlans([newPlan, ...plans]);
-    toast.success('New policy plan deployed successfully');
+
+    if (selectedPlan && view === 'add') {
+      // Update existing plan
+      setPlans(plans.map(p => p.id === selectedPlan.id ? planData : p));
+      toast.success('Policy plan updated successfully');
+    } else {
+      // Create new plan
+      setPlans([planData, ...plans]);
+      toast.success('New policy plan deployed successfully');
+    }
+
     setView('list');
+    setSelectedPlan(null);
     setFormData({
       name: '',
       category: 'Health Insurance',
@@ -270,68 +297,69 @@ const PolicyPlanManagement: React.FC = () => {
       monthlyPrice: '',
       coverage: '',
       description: '',
-      topBenefits: ['']
+      topBenefits: [''],
+      logoPreview: ''
     });
   };
 
   if (view === 'add') {
     return (
       <div className="animate-in fade-in slide-in-from-right-10 duration-500">
-        <div className="flex items-center justify-between mb-10">
+        <div className="flex items-center justify-between mb-8">
           <div className="flex items-center gap-4">
             <button 
-              onClick={() => setView('list')}
-              className="w-12 h-12 bg-white border border-slate-200 rounded-2xl flex items-center justify-center text-slate-400 hover:text-blue-600 hover:border-blue-500 transition-all shadow-sm"
+              onClick={() => { setView('list'); setSelectedPlan(null); }}
+              className="w-10 h-10 bg-white border border-slate-200 rounded-xl flex items-center justify-center text-slate-400 hover:text-blue-600 hover:border-blue-500 transition-all shadow-sm"
             >
-              <ChevronRight className="w-5 h-5 rotate-180" />
+              <ChevronRight className="w-4 h-4 rotate-180" />
             </button>
             <div>
-              <h1 className="text-2xl font-black text-slate-900 tracking-tight">Deploy New Policy Plan</h1>
-              <p className="text-[10px] text-slate-400 font-bold uppercase tracking-[0.2em] mt-1">Product Catalog Architecture Console</p>
+              <h1 className="text-xl font-black text-slate-900 tracking-tight">{selectedPlan ? 'Edit Policy Plan' : 'Deploy New Policy Plan'}</h1>
+              <p className="text-[9px] text-slate-400 font-bold uppercase tracking-[0.2em] mt-0.5">Product Catalog Architecture Console</p>
             </div>
           </div>
           <div className="flex items-center gap-3">
             <button 
-              onClick={() => setView('list')}
-              className="px-6 py-3 bg-slate-100 text-slate-600 rounded-xl text-xs font-black uppercase tracking-widest hover:bg-slate-200 transition-all"
+              onClick={() => { setView('list'); setSelectedPlan(null); }}
+              className="px-5 py-2.5 bg-slate-100 text-slate-600 rounded-lg text-[10px] font-black uppercase tracking-widest hover:bg-slate-200 transition-all"
             >
               Cancel
             </button>
             <button 
               onClick={handleDeployPlan}
-              className="px-8 py-3 bg-slate-900 text-white rounded-xl text-xs font-black uppercase tracking-widest hover:bg-blue-600 shadow-xl shadow-blue-500/10 transition-all"
+              className="px-7 py-2.5 bg-slate-900 text-white rounded-lg text-[10px] font-black uppercase tracking-widest hover:bg-blue-600 shadow-xl shadow-blue-500/10 transition-all"
             >
-              Deploy Plan Architecture
+              {selectedPlan ? 'Update Plan' : 'Deploy Plan'}
             </button>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
-          <div className="lg:col-span-2 space-y-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div className="lg:col-span-2 space-y-6">
             {/* Core Configuration Card */}
-            <div className="bg-white p-10 rounded-[40px] border border-slate-100 shadow-sm space-y-8">
-              <h3 className="text-sm font-black text-slate-900 uppercase tracking-widest flex items-center gap-3">
-                <div className="w-1.5 h-4 bg-blue-600 rounded-full"></div>
-                Core Plan Configuration
+            <div className="bg-white p-8 rounded-[32px] border border-slate-100 shadow-sm space-y-6">
+              <h3 className="text-[11px] font-black text-slate-900 uppercase tracking-[0.2em] flex items-center gap-3">
+                <div className="w-1 h-3 bg-blue-600 rounded-full"></div>
+                Core Configuration
               </h3>
               
-              <div className="grid grid-cols-2 gap-8">
-                <div className="space-y-2.5">
-                  <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Plan Display Name</label>
+              <div className="grid grid-cols-2 gap-6">
+                <div className="space-y-2">
+                  <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest ml-1">Plan Display Name</label>
                   <input 
                     type="text" 
                     value={formData.name}
                     onChange={(e) => setFormData({...formData, name: e.target.value})}
-                    className="w-full h-14 px-6 bg-slate-50 border border-slate-200 rounded-2xl text-sm font-bold focus:outline-none focus:border-blue-500 transition-all" 
+                    className="w-full h-12 px-5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold focus:outline-none focus:border-blue-500 transition-all placeholder:text-slate-300" 
                     placeholder="e.g. Optima Secure Elite" 
                   />
                 </div>
-                <div className="space-y-2.5">
-                  <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Insurance Category</label>
+                <div className="space-y-2">
+                  <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest ml-1">Insurance Category</label>
                   <select 
                     value={formData.category}
                     onChange={(e) => setFormData({...formData, category: e.target.value})}
-                    className="w-full h-14 px-6 bg-slate-50 border border-slate-200 rounded-2xl text-sm font-bold focus:outline-none focus:border-blue-500 transition-all appearance-none cursor-pointer"
+                    className="w-full h-12 px-5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold focus:outline-none focus:border-blue-500 transition-all appearance-none cursor-pointer"
                   >
                     <option>Health Insurance</option>
                     <option>Motor Insurance</option>
@@ -341,19 +369,20 @@ const PolicyPlanManagement: React.FC = () => {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-8">
-                <div className="space-y-2.5">
-                  <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Provider Partner</label>
-                  <div className="space-y-3">
+              <div className="grid grid-cols-2 gap-6">
+                <div className="space-y-2">
+                  <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest ml-1">Provider Partner</label>
+                  <div className="space-y-2">
                     <select 
                       value={formData.provider}
                       onChange={(e) => setFormData({...formData, provider: e.target.value})}
-                      className="w-full h-14 px-6 bg-slate-50 border border-slate-200 rounded-2xl text-sm font-bold focus:outline-none focus:border-blue-500 transition-all appearance-none cursor-pointer"
+                      className="w-full h-12 px-5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold focus:outline-none focus:border-blue-500 transition-all appearance-none cursor-pointer"
                     >
                       <option value="">Select Existing Provider</option>
                       <option>Star Health</option>
                       <option>HDFC Ergo</option>
                       <option>ICICI Lombard</option>
+                      <option>Tata AIG</option>
                       <option value="NEW">+ Add New Provider</option>
                     </select>
                     {formData.provider === 'NEW' && (
@@ -361,82 +390,82 @@ const PolicyPlanManagement: React.FC = () => {
                         type="text" 
                         value={formData.newProvider}
                         onChange={(e) => setFormData({...formData, newProvider: e.target.value})}
-                        className="w-full h-12 px-6 bg-blue-50/50 border border-blue-200 rounded-xl text-xs font-bold focus:outline-none focus:border-blue-500 transition-all animate-in slide-in-from-top-2" 
+                        className="w-full h-10 px-5 bg-blue-50/50 border border-blue-200 rounded-lg text-[10px] font-bold focus:outline-none focus:border-blue-500 transition-all animate-in slide-in-from-top-2" 
                         placeholder="Enter New Provider Name" 
                       />
                     )}
                   </div>
                 </div>
-                <div className="space-y-2.5">
-                  <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Monthly Premium</label>
+                <div className="space-y-2">
+                  <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest ml-1">Monthly Premium</label>
                   <div className="relative">
-                    <span className="absolute left-6 top-1/2 -translate-y-1/2 text-sm font-black text-slate-400">₹</span>
+                    <span className="absolute left-5 top-1/2 -translate-y-1/2 text-xs font-black text-slate-400">₹</span>
                     <input 
                       type="number" 
                       value={formData.monthlyPrice}
                       onChange={(e) => setFormData({...formData, monthlyPrice: e.target.value})}
-                      className="w-full h-14 pl-10 pr-6 bg-slate-50 border border-slate-200 rounded-2xl text-sm font-bold focus:outline-none focus:border-blue-500 transition-all" 
+                      className="w-full h-12 pl-8 pr-5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold focus:outline-none focus:border-blue-500 transition-all" 
                       placeholder="1200" 
                     />
                   </div>
                 </div>
               </div>
 
-              <div className="space-y-2.5">
-                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Coverage Details</label>
+              <div className="space-y-2">
+                <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest ml-1">Coverage Details</label>
                 <input 
                   type="text" 
                   value={formData.coverage}
                   onChange={(e) => setFormData({...formData, coverage: e.target.value})}
-                  className="w-full h-14 px-6 bg-slate-50 border border-slate-200 rounded-2xl text-sm font-bold focus:outline-none focus:border-blue-500 transition-all" 
+                  className="w-full h-12 px-5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold focus:outline-none focus:border-blue-500 transition-all" 
                   placeholder="e.g. ₹5,00,000 or IDV ₹8,50,000" 
                 />
               </div>
 
-              <div className="space-y-2.5">
-                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Value Proposition Description</label>
+              <div className="space-y-2">
+                <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest ml-1">Description</label>
                 <textarea 
-                  rows={3} 
+                  rows={2} 
                   value={formData.description}
                   onChange={(e) => setFormData({...formData, description: e.target.value})}
-                  className="w-full p-6 bg-slate-50 border border-slate-200 rounded-3xl text-sm font-bold focus:outline-none focus:border-blue-500 transition-all" 
-                  placeholder="Describe the unique benefits of this policy plan..."
+                  className="w-full p-5 bg-slate-50 border border-slate-200 rounded-2xl text-xs font-bold focus:outline-none focus:border-blue-500 transition-all resize-none" 
+                  placeholder="Describe the unique benefits..."
                 ></textarea>
               </div>
             </div>
 
             {/* Benefits Management Card */}
-            <div className="bg-white p-10 rounded-[40px] border border-slate-100 shadow-sm space-y-8">
+            <div className="bg-white p-8 rounded-[32px] border border-slate-100 shadow-sm space-y-6">
               <div className="flex justify-between items-center">
-                <h3 className="text-sm font-black text-slate-900 uppercase tracking-widest flex items-center gap-3">
-                  <div className="w-1.5 h-4 bg-emerald-500 rounded-full"></div>
-                  Key Benefits & Features
+                <h3 className="text-[11px] font-black text-slate-900 uppercase tracking-[0.2em] flex items-center gap-3">
+                  <div className="w-1 h-3 bg-emerald-500 rounded-full"></div>
+                  Key Benefits
                 </h3>
                 <button 
                   onClick={handleAddBenefit}
-                  className="flex items-center gap-2 px-4 py-2 bg-emerald-50 text-emerald-600 rounded-lg text-[10px] font-black uppercase tracking-widest hover:bg-emerald-100 transition-all"
+                  className="flex items-center gap-2 px-3 py-1.5 bg-emerald-50 text-emerald-600 rounded-lg text-[9px] font-black uppercase tracking-widest hover:bg-emerald-100 transition-all"
                 >
-                  <Plus className="w-3.5 h-3.5" /> Add Benefit
+                  <Plus className="w-3 h-3" /> Add Benefit
                 </button>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 {formData.topBenefits.map((benefit, i) => (
-                  <div key={i} className="flex items-center gap-3 group">
+                  <div key={i} className="flex items-center gap-2 group">
                     <div className="flex-1 relative">
-                      <div className="absolute left-4 top-1/2 -translate-y-1/2 w-2 h-2 bg-emerald-500 rounded-full"></div>
+                      <div className="absolute left-4 top-1/2 -translate-y-1/2 w-1.5 h-1.5 bg-emerald-500 rounded-full"></div>
                       <input 
                         type="text" 
                         value={benefit}
                         onChange={(e) => handleBenefitChange(i, e.target.value)}
-                        className="w-full h-12 pl-10 pr-12 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold focus:outline-none focus:border-emerald-500 transition-all" 
+                        className="w-full h-10 pl-8 pr-10 bg-slate-50 border border-slate-200 rounded-lg text-[10px] font-bold focus:outline-none focus:border-emerald-500 transition-all" 
                         placeholder={`Benefit ${i+1}`} 
                       />
                       <button 
                         onClick={() => handleRemoveBenefit(i)}
-                        className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-300 hover:text-red-500 transition-colors"
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-300 hover:text-red-500 transition-colors"
                       >
-                        <Trash2 className="w-3.5 h-3.5" />
+                        <Trash2 className="w-3 h-3" />
                       </button>
                     </div>
                   </div>
@@ -447,71 +476,44 @@ const PolicyPlanManagement: React.FC = () => {
 
           <div className="space-y-8">
             {/* Logo Upload Card */}
-            <div className="bg-white p-8 rounded-[40px] border border-slate-100 shadow-sm space-y-6">
-              <h3 className="text-sm font-black text-slate-900 uppercase tracking-widest">Provider Branding</h3>
-              <input 
-                type="file" 
-                id="logo-upload" 
-                className="hidden" 
-                accept="image/*"
+            <div className="bg-white p-6 rounded-[32px] border border-slate-100 shadow-sm space-y-4 text-center">
+              <h3 className="text-[11px] font-black text-slate-900 uppercase tracking-widest">Branding</h3>
+              <input type="file" id="logo-upload" className="hidden" accept="image/*"
                 onChange={(e) => {
                   const file = e.target.files?.[0];
                   if (file) {
                     const reader = new FileReader();
-                    reader.onloadend = () => {
-                      setFormData({...formData, logoPreview: reader.result as string});
-                    };
+                    reader.onloadend = () => setFormData({...formData, logoPreview: reader.result as string});
                     reader.readAsDataURL(file);
-                    toast.success('Logo asset uploaded');
+                    toast.success('Logo asset attached');
                   }
                 }}
               />
-              <label 
-                htmlFor="logo-upload"
-                className="aspect-square bg-slate-50 border-2 border-dashed border-slate-200 rounded-[32px] flex flex-col items-center justify-center p-8 text-center group hover:border-blue-400 hover:bg-blue-50/30 transition-all cursor-pointer relative overflow-hidden"
-              >
+              <label htmlFor="logo-upload" className="aspect-square w-32 mx-auto bg-slate-50 border-2 border-dashed border-slate-200 rounded-3xl flex flex-col items-center justify-center group hover:border-blue-400 hover:bg-blue-50/30 transition-all cursor-pointer relative overflow-hidden">
                 {formData.logoPreview ? (
-                  <div className="absolute inset-0 p-6 bg-white flex items-center justify-center group/preview">
-                    <img src={formData.logoPreview} alt="Preview" className="w-full h-full object-contain" />
-                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/preview:opacity-100 transition-opacity flex items-center justify-center">
-                       <Upload className="w-8 h-8 text-white" />
-                    </div>
-                  </div>
+                  <img src={formData.logoPreview} alt="Preview" className="w-full h-full object-contain p-4" />
                 ) : (
-                  <>
-                    <div className="w-16 h-16 bg-white rounded-2xl shadow-sm flex items-center justify-center text-slate-400 group-hover:text-blue-600 transition-all mb-4">
-                      <Upload className="w-8 h-8" />
-                    </div>
-                    <p className="text-xs font-black text-slate-900">Upload Official Logo</p>
-                    <p className="text-[10px] text-slate-400 font-bold uppercase mt-1 tracking-widest">PNG or SVG (Max 2MB)</p>
-                  </>
+                  <Upload className="w-6 h-6 text-slate-300 group-hover:text-blue-500 transition-all" />
                 )}
               </label>
-              {formData.logoPreview && (
-                <button 
-                  onClick={() => setFormData({...formData, logoPreview: ''})}
-                  className="w-full py-2 text-[10px] font-black text-red-500 uppercase tracking-widest hover:text-red-600 transition-colors"
-                >
-                  Remove Logo
-                </button>
-              )}
+              <p className="text-[9px] text-slate-400 font-bold uppercase tracking-widest">PNG or SVG (Max 2MB)</p>
             </div>
 
             {/* Quick Summary Card */}
             <div className="bg-slate-900 p-8 rounded-[40px] text-white shadow-xl relative overflow-hidden">
                <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/10 rounded-full blur-2xl"></div>
-               <h4 className="text-[10px] font-black text-blue-400 uppercase tracking-[0.3em] mb-8">Deployment Preview</h4>
-               <div className="space-y-6">
-                  <div className="p-5 bg-white/5 border border-white/10 rounded-2xl">
-                    <p className="text-[9px] font-bold text-slate-500 uppercase tracking-widest mb-1">Status</p>
-                    <p className="text-sm font-black text-emerald-400 flex items-center gap-2">
-                      <div className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse"></div>
-                      Ready for Deployment
+               <h4 className="text-[10px] font-black text-blue-400 uppercase tracking-[0.3em] mb-6">Preview</h4>
+               <div className="space-y-4">
+                  <div className="p-4 bg-white/5 border border-white/10 rounded-xl">
+                    <p className="text-[8px] font-bold text-slate-500 uppercase tracking-widest mb-1">Status</p>
+                    <p className="text-xs font-black text-emerald-400 flex items-center gap-2">
+                      <div className="w-1 h-1 bg-emerald-400 rounded-full animate-pulse"></div>
+                      Operational Ready
                     </p>
                   </div>
-                  <div className="p-5 bg-white/5 border border-white/10 rounded-2xl">
-                    <p className="text-[9px] font-bold text-slate-500 uppercase tracking-widest mb-1">Calculated Annual Premium</p>
-                    <p className="text-xl font-black">₹{(parseInt(formData.monthlyPrice) || 0) * 12}</p>
+                  <div className="p-4 bg-white/5 border border-white/10 rounded-xl">
+                    <p className="text-[8px] font-bold text-slate-500 uppercase tracking-widest mb-1">Annual Value</p>
+                    <p className="text-lg font-black">₹{(parseInt(formData.monthlyPrice) || 0) * 12}</p>
                   </div>
                </div>
             </div>
@@ -523,55 +525,92 @@ const PolicyPlanManagement: React.FC = () => {
 
   if (view === 'details' && selectedPlan) {
     return (
-      <div className="animate-in fade-in slide-in-from-bottom-10 duration-500">
-        <div className="flex items-center gap-4 mb-10">
-          <button 
-            onClick={() => setView('list')}
-            className="w-12 h-12 bg-white border border-slate-200 rounded-2xl flex items-center justify-center text-slate-400 hover:text-blue-600 transition-all"
-          >
-            <ChevronRight className="w-5 h-5 rotate-180" />
-          </button>
-          <h1 className="text-2xl font-black text-slate-900 tracking-tight">Plan Analysis: {selectedPlan.name}</h1>
+      <div className="animate-in fade-in slide-in-from-bottom-5 duration-500">
+        <div className="flex items-center justify-between mb-8">
+          <div className="flex items-center gap-4">
+            <button 
+              onClick={() => { setView('list'); setSelectedPlan(null); }}
+              className="w-10 h-10 bg-white border border-slate-200 rounded-xl flex items-center justify-center text-slate-400 hover:text-blue-600 transition-all"
+            >
+              <ChevronRight className="w-4 h-4 rotate-180" />
+            </button>
+            <div>
+              <h1 className="text-xl font-black text-slate-900 tracking-tight">Plan Analysis</h1>
+              <p className="text-[9px] text-slate-400 font-bold uppercase tracking-[0.2em] mt-0.5">{selectedPlan.id}</p>
+            </div>
+          </div>
+          <div className="flex items-center gap-3">
+             <button 
+               onClick={handleEditPlan}
+               className="flex items-center gap-2 px-5 py-2.5 bg-white border border-slate-200 text-slate-600 rounded-xl text-[10px] font-black uppercase tracking-widest hover:border-blue-500 hover:text-blue-600 transition-all shadow-sm"
+             >
+               <Edit2 className="w-3 h-3" /> Edit Plan Details
+             </button>
+             <button className="flex items-center gap-2 px-5 py-2.5 bg-slate-900 text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-blue-600 transition-all shadow-lg shadow-blue-500/10">
+               Generate PDF Report
+             </button>
+          </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
-          <div className="lg:col-span-2 space-y-10">
-            <div className="bg-white p-12 rounded-[48px] border border-slate-100 shadow-sm relative overflow-hidden">
-               <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500/5 rounded-full blur-3xl -mr-20 -mt-20"></div>
-               <div className="flex justify-between items-start mb-12">
-                  <div>
-                    <span className="px-3 py-1 bg-blue-50 text-blue-600 text-[10px] font-black uppercase tracking-[0.2em] rounded-lg mb-3 inline-block">
-                      {selectedPlan.category}
-                    </span>
-                    <h2 className="text-4xl font-black text-slate-900">{selectedPlan.name}</h2>
-                    <p className="text-slate-500 font-medium mt-4 max-w-xl leading-relaxed">{selectedPlan.description}</p>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div className="lg:col-span-2 space-y-8">
+            <div className="bg-white p-10 rounded-[40px] border border-slate-100 shadow-sm relative overflow-hidden">
+               <div className="absolute top-0 right-0 w-48 h-48 bg-blue-500/5 rounded-full blur-3xl -mr-10 -mt-10"></div>
+               
+               <div className="flex justify-between items-start mb-10 relative z-10">
+                  <div className="flex items-start gap-6">
+                    <div className="w-20 h-20 rounded-[24px] bg-white border border-slate-100 flex items-center justify-center shadow-md p-3">
+                      <img 
+                        src={selectedPlan.logo || `https://www.google.com/s2/favicons?domain=${
+                          selectedPlan.provider === 'Star Health' ? 'starhealth.in' :
+                          selectedPlan.provider === 'HDFC Ergo' ? 'hdfcergo.com' :
+                          selectedPlan.provider === 'ICICI Lombard' ? 'icicilombard.com' :
+                          selectedPlan.provider === 'Tata AIG' ? 'tataaig.com' :
+                          selectedPlan.provider === 'SBI Life' ? 'sbilife.co.in' :
+                          selectedPlan.provider.toLowerCase().replace(/ /g, '') + '.com'
+                        }&sz=128`} 
+                        alt={selectedPlan.provider}
+                        className="w-full h-full object-contain"
+                        onError={(e) => {
+                          const target = e.target as HTMLImageElement;
+                          target.src = `https://ui-avatars.com/api/?name=${selectedPlan.provider}&background=f1f5f9&color=2563eb&bold=true&font-size=0.33`;
+                        }}
+                      />
+                    </div>
+                    <div>
+                      <span className="px-2.5 py-1 bg-blue-50 text-blue-600 text-[9px] font-black uppercase tracking-widest rounded-lg mb-3 inline-block">
+                        {selectedPlan.category}
+                      </span>
+                      <h2 className="text-3xl font-black text-slate-900 tracking-tight">{selectedPlan.name}</h2>
+                      <p className="text-slate-400 font-bold text-[10px] uppercase tracking-widest mt-1">{selectedPlan.provider} • Premium Product</p>
+                    </div>
                   </div>
                   <div className="text-right">
-                    <p className="text-3xl font-black text-blue-600">₹{selectedPlan.monthlyPrice}</p>
-                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-1">Per Month</p>
+                    <p className="text-3xl font-black text-blue-600 leading-none">₹{selectedPlan.monthlyPrice}</p>
+                    <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mt-2">Monthly Premium</p>
                   </div>
                </div>
 
-               <div className="grid grid-cols-2 gap-8 pt-10 border-t border-slate-50">
-                 <div className="p-8 bg-slate-50 rounded-[32px] border border-slate-100">
-                   <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Coverage Threshold</p>
-                   <p className="text-2xl font-black text-slate-900">{selectedPlan.coverage}</p>
+               <div className="grid grid-cols-2 gap-6 pt-10 border-t border-slate-50 relative z-10">
+                 <div className="p-6 bg-slate-50/50 rounded-3xl border border-slate-100">
+                   <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-2">Coverage Threshold</p>
+                   <p className="text-xl font-black text-slate-900">{selectedPlan.coverage}</p>
                  </div>
-                 <div className="p-8 bg-slate-50 rounded-[32px] border border-slate-100">
-                   <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Lead Provider</p>
-                   <p className="text-2xl font-black text-slate-900">{selectedPlan.provider}</p>
+                 <div className="p-6 bg-slate-50/50 rounded-3xl border border-slate-100">
+                   <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-2">Provider Status</p>
+                   <p className="text-xl font-black text-slate-900">Verified Partner</p>
                  </div>
                </div>
 
-               <div className="pt-12">
-                 <h3 className="text-sm font-black text-slate-900 uppercase tracking-widest mb-6">Verified Benefits</h3>
+               <div className="pt-10 relative z-10">
+                 <h3 className="text-[10px] font-black text-slate-900 uppercase tracking-widest mb-6">Key Performance Benefits</h3>
                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                    {selectedPlan.topBenefits.map((benefit, i) => (
-                     <div key={i} className="flex items-center gap-4 p-5 bg-emerald-50/50 border border-emerald-100 rounded-2xl">
-                       <div className="w-10 h-10 rounded-xl bg-emerald-500 text-white flex items-center justify-center shadow-lg shadow-emerald-500/20">
-                         <CheckCircle2 className="w-5 h-5" />
+                     <div key={i} className="flex items-center gap-4 p-4 bg-white border border-slate-100 rounded-2xl shadow-sm hover:border-emerald-500/30 transition-all group">
+                       <div className="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center group-hover:bg-emerald-600 group-hover:text-white transition-all">
+                         <CheckCircle2 className="w-4 h-4" />
                        </div>
-                       <span className="text-xs font-black text-slate-700">{benefit}</span>
+                       <span className="text-[11px] font-bold text-slate-700">{benefit}</span>
                      </div>
                    ))}
                  </div>
@@ -580,27 +619,27 @@ const PolicyPlanManagement: React.FC = () => {
           </div>
 
           <div className="space-y-8">
-            <div className="bg-slate-900 p-10 rounded-[48px] text-white shadow-2xl relative overflow-hidden">
+            <div className="bg-slate-900 p-8 rounded-[40px] text-white shadow-2xl relative overflow-hidden">
                <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/10 rounded-full blur-2xl"></div>
-               <h4 className="text-[10px] font-black text-blue-400 uppercase tracking-[0.3em] mb-10">Market Intelligence</h4>
-               <div className="space-y-8">
-                  <div className="flex justify-between items-end">
+               <h4 className="text-[10px] font-black text-blue-400 uppercase tracking-[0.3em] mb-8">Intelligence</h4>
+               <div className="space-y-6">
+                  <div className="flex justify-between items-end border-b border-white/5 pb-6">
                     <div>
-                      <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Customer Sentiment</p>
-                      <p className="text-2xl font-black">{selectedPlan.rating}/5.0</p>
+                      <p className="text-[8px] font-bold text-slate-500 uppercase tracking-widest mb-1">Sentiment</p>
+                      <p className="text-xl font-black">{selectedPlan.rating}/5.0</p>
                     </div>
-                    <Star className="w-6 h-6 text-amber-400 fill-amber-400" />
+                    <Star className="w-5 h-5 text-amber-400 fill-amber-400" />
                   </div>
                   <div className="flex justify-between items-end">
                     <div>
-                      <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Growth Indicator</p>
-                      <p className="text-2xl font-black">+14.2%</p>
+                      <p className="text-[8px] font-bold text-slate-500 uppercase tracking-widest mb-1">Growth Indicator</p>
+                      <p className="text-xl font-black">+14.2%</p>
                     </div>
-                    <TrendingUp className="w-6 h-6 text-emerald-400" />
+                    <TrendingUp className="w-5 h-5 text-emerald-400" />
                   </div>
                </div>
-               <button className="w-full mt-12 py-5 bg-blue-600 hover:bg-blue-700 rounded-2xl text-[10px] font-black uppercase tracking-widest shadow-xl shadow-blue-600/20 transition-all">
-                 Generate Performance Report
+               <button className="w-full mt-10 py-4 bg-blue-600 hover:bg-blue-700 rounded-2xl text-[9px] font-black uppercase tracking-widest transition-all">
+                 Market Performance Link
                </button>
             </div>
           </div>
@@ -615,8 +654,8 @@ const PolicyPlanManagement: React.FC = () => {
       <div className="bg-white/40 backdrop-blur-xl p-7 rounded-[32px] border border-white/60 shadow-sm flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
         <div>
           <div className="flex items-center gap-3 mb-2">
-             <div className="w-1.5 h-7 bg-gradient-to-b from-blue-600 to-indigo-600 rounded-full"></div>
-             <h1 className="text-2xl font-black text-slate-900 tracking-tight">Policy Plan Repository</h1>
+            <div className="w-1.5 h-7 bg-gradient-to-b from-blue-600 to-indigo-600 rounded-full"></div>
+            <h1 className="text-2xl font-black text-slate-900 tracking-tight">Policy Plan Repository</h1>
           </div>
           <p className="text-slate-500 font-bold max-w-2xl leading-relaxed text-[11px] tracking-normal uppercase">
             Product catalog management authority
