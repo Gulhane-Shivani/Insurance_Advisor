@@ -33,6 +33,8 @@ import PolicyDetailView from './sections/PolicyDetailView';
 import RenewalManagement from './sections/RenewalManagement';
 import PaymentManagement from './sections/PaymentManagement';
 import NotificationCenter from './sections/NotificationCenter';
+import PolicyPlanManagement from './sections/PolicyPlanManagement';
+
 
 const SuperAdminDashboard: React.FC = () => {
   const { logout } = useAuth();
@@ -40,7 +42,9 @@ const SuperAdminDashboard: React.FC = () => {
   const [activeSection, setActiveSection] = useState('overview');
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [openMenus, setOpenMenus] = useState<string[]>(['users', 'policies']); // Default open
   const dropdownRef = useRef<HTMLDivElement>(null);
+
   const [selectedPolicyId, setSelectedPolicyId] = useState<string | null>(null);
 
   useEffect(() => {
@@ -57,6 +61,13 @@ const SuperAdminDashboard: React.FC = () => {
   // if (!user) return <Navigate to="/login" />;
 
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  
+  const toggleMenu = (id: string) => {
+    setOpenMenus(prev => 
+      prev.includes(id) ? prev.filter(m => m !== id) : [...prev, id]
+    );
+  };
+
 
   useEffect(() => {
     const handleViewCustomer = () => {
@@ -78,7 +89,13 @@ const SuperAdminDashboard: React.FC = () => {
         { id: 'customers', label: 'Customers', icon: Users },
       ]
     },
-    { id: 'policies', label: 'Policies', icon: ShieldCheck },
+    {
+      id: 'policy-management', label: 'Policy Management', icon: ShieldCheck, hasSub: true, subItems: [
+        { id: 'policy-list', label: 'Policies', icon: FileText },
+        { id: 'policy-plan', label: 'Policy Plan', icon: LayoutDashboard },
+      ]
+    },
+
     { id: 'renewals', label: 'Renewals', icon: RefreshCw },
     { id: 'payments', label: 'Payments', icon: CreditCard },
     { id: 'notifications', label: 'Notifications', icon: Bell },
@@ -111,13 +128,18 @@ const SuperAdminDashboard: React.FC = () => {
       case 'audit': return <AuditLogs />;
       case 'stats': return <SystemStats />;
       case 'policies':
+      case 'policy-list':
         return <PolicyLifecycleManagement onViewPolicy={handleViewPolicy} />;
+      case 'policy-plan':
+        return <PolicyPlanManagement />;
+
       case 'policy-detail':
         return selectedPolicyId ? (
           <PolicyDetailView policyId={selectedPolicyId} onBack={() => setActiveSection('policies')} />
         ) : (
           <PolicyLifecycleManagement onViewPolicy={handleViewPolicy} />
         );
+
       case 'renewals':
         return <RenewalManagement />;
       case 'payments':
@@ -156,13 +178,14 @@ const SuperAdminDashboard: React.FC = () => {
           <div className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-6 px-4">Master Console</div>
           {adminMenuItems.map((item) => {
             const Icon = item.icon;
+            const isMenuOpen = openMenus.includes(item.id);
             const isActive = activeSection === item.id || (item.subItems && item.subItems.some(s => s.id === activeSection));
 
             if (item.hasSub) {
               return (
                 <div key={item.id} className="space-y-1">
                   <button
-                    onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
+                    onClick={() => toggleMenu(item.id)}
                     className={`w-full flex items-center px-4 py-3 text-sm font-bold rounded-xl transition-all duration-200 ${isActive
                       ? 'bg-indigo-600/10 text-indigo-400'
                       : 'text-slate-400 hover:bg-slate-800 hover:text-white'
@@ -170,9 +193,10 @@ const SuperAdminDashboard: React.FC = () => {
                   >
                     <Icon className={`mr-3 h-5 w-5 ${isActive ? 'text-indigo-400' : 'text-slate-500'}`} />
                     <span className="flex-1 text-left">{item.label}</span>
-                    {isUserMenuOpen ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+                    {isMenuOpen ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
                   </button>
-                  {isUserMenuOpen && (
+                  {isMenuOpen && (
+
                     <div className="pl-12 space-y-1">
                       {item.subItems?.map((sub) => (
                         <button
