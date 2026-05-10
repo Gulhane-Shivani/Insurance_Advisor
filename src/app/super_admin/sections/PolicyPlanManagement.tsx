@@ -239,6 +239,14 @@ const PolicyPlanManagement: React.FC = () => {
     return Array.from(new Set(providers)).sort();
   }, [plans]);
 
+  // Derive repository statistics
+  const stats = useMemo(() => ({
+    totalPlans: plans.length,
+    totalProviders: new Set(plans.map(p => p.provider)).size,
+    totalCategories: new Set(plans.map(p => p.category)).size,
+    activeStatus: plans.filter(p => p.status === 'Active').length
+  }), [plans]);
+
   const filteredPlans = plans.filter(plan => {
     const matchesSearch = plan.name.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesCategory = selectedCategory === 'All Categories' || plan.category === selectedCategory;
@@ -687,6 +695,32 @@ const PolicyPlanManagement: React.FC = () => {
           <Plus className="relative z-10 w-4 h-4 group-hover:rotate-90 transition-transform duration-300" />
           <span className="relative z-10 text-[12px] tracking-tight">Deploy New Policy Plan</span>
         </button>
+      </div>
+
+      {/* Statistics Quick-View */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 animate-in slide-in-from-top-4 duration-700 delay-150">
+        {[
+          { label: 'Total Plans', value: stats.totalPlans, icon: LayoutGrid, color: 'text-blue-600', bg: 'bg-blue-50', trend: 'Catalog Depth' },
+          { label: 'Active Providers', value: stats.totalProviders, icon: ShieldCheck, color: 'text-emerald-600', bg: 'bg-emerald-50', trend: 'Partner Network' },
+          { label: 'Product Categories', value: stats.totalCategories, icon: Layers, color: 'text-indigo-600', bg: 'bg-indigo-50', trend: 'Market Variety' },
+          { label: 'Active Policies', value: stats.activeStatus, icon: Zap, color: 'text-amber-600', bg: 'bg-amber-50', trend: 'Live Status' },
+        ].map((item, i) => (
+          <div key={i} className="bg-white p-6 rounded-[32px] border border-slate-100 shadow-sm hover:shadow-md transition-all group overflow-hidden relative">
+            <div className={`absolute top-0 right-0 w-24 h-24 ${item.bg}/30 blur-3xl rounded-full -mr-8 -mt-8`}></div>
+            <div className="flex items-center justify-between mb-4 relative z-10">
+              <div className={`w-12 h-12 ${item.bg} ${item.color} rounded-2xl flex items-center justify-center shadow-sm group-hover:scale-110 transition-transform duration-500`}>
+                <item.icon className="w-6 h-6" />
+              </div>
+              <div className="text-right">
+                <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{item.trend}</span>
+              </div>
+            </div>
+            <div className="relative z-10">
+              <h4 className="text-3xl font-black text-slate-900 tracking-tight">{item.value}</h4>
+              <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-1">{item.label}</p>
+            </div>
+          </div>
+        ))}
       </div>
 
       {/* Filter Bar */}
