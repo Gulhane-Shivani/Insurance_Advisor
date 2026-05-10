@@ -268,6 +268,7 @@ const PolicyDetailView: React.FC<PolicyDetailViewProps> = ({ policyId, onBack })
       ...basePolicy,
       id: storedPolicy.id,
       name: storedPolicy.type, // Using the type (e.g., 'Health Insurance') as the name for custom ones
+      provider: storedPolicy.provider,
       status: storedPolicy.status,
       customer: {
          fullName: storedPolicy.customer || basePolicy.customer.fullName,
@@ -311,53 +312,86 @@ const PolicyDetailView: React.FC<PolicyDetailViewProps> = ({ policyId, onBack })
                <button className="p-2.5 bg-white/40 backdrop-blur-md rounded-xl border border-white/60 text-slate-400 hover:text-violet-600 transition-all shadow-sm">
                   <LayoutGrid className="w-3.5 h-3.5" />
                </button>
-               <button className="flex items-center gap-2 px-5 py-2.5 bg-slate-900 text-white rounded-xl font-black text-[11px] hover:bg-slate-800 transition-all shadow-lg">
-                  <Download className="w-3.5 h-3.5" />
-                  Download Statement
-               </button>
             </div>
          </div>
 
          {/* Asset Header */}
          <div className="bg-[#0f172a] rounded-[40px] p-10 flex flex-col lg:flex-row justify-between items-center gap-8 relative overflow-hidden shadow-2xl border border-white/5">
-            <div className="absolute top-0 right-0 w-64 h-64 bg-violet-600/20 rounded-full blur-[80px] -mr-32 -mt-32"></div>
+            <div className="absolute top-0 right-0 w-64 h-64 bg-blue-600/10 rounded-full blur-[80px] -mr-32 -mt-32"></div>
 
-            <div className="flex items-center gap-8 z-10">
+            <div className="flex items-center gap-10 z-10">
                <div className="relative">
-                  <div className="w-20 h-20 rounded-[28px] bg-gradient-to-br from-violet-500 to-indigo-600 flex items-center justify-center shadow-xl">
-                     <ShieldCheck className="w-10 h-10 text-white" />
+                  <div className="w-24 h-24 rounded-[32px] bg-white flex items-center justify-center shadow-2xl p-4 transition-transform hover:scale-105 duration-500">
+                     <img 
+                        src={policyData.logo || `https://www.google.com/s2/favicons?domain=${
+                          policyData.provider?.toLowerCase().includes('star') ? 'starhealth.in' :
+                          policyData.provider?.toLowerCase().includes('hdfc') ? 'hdfcergo.com' :
+                          policyData.provider?.toLowerCase().includes('icici') ? 'icicilombard.com' :
+                          policyData.provider?.toLowerCase().includes('tata') ? 'tataaig.com' :
+                          policyData.provider?.toLowerCase().includes('sbi') ? 'sbilife.co.in' :
+                          policyData.provider?.toLowerCase().includes('lic') ? 'licindia.in' :
+                          
+                          policyData.period.premium === '₹1,200' ? 'starhealth.in' :
+                          policyData.period.premium === '₹1,550' ? 'hdfcergo.com' :
+                          policyData.period.premium === '₹850' ? 'icicilombard.com' :
+                          policyData.period.premium === '₹12,500' ? 'icicilombard.com' :
+                          policyData.period.premium === '₹45,000' ? 'licindia.in' :
+                          policyData.period.premium === '₹80,000' ? 'starhealth.in' :
+                          
+                          policyData.name.toLowerCase().includes('motor') ? 'icicilombard.com' :
+                          policyData.name.toLowerCase().includes('health') ? 'starhealth.in' :
+                          policyData.name.toLowerCase().includes('life') ? 'licindia.in' :
+                          
+                          policyData.name.toLowerCase().includes('star') ? 'starhealth.in' :
+                          policyData.name.toLowerCase().includes('hdfc') ? 'hdfcergo.com' :
+                          policyData.name.toLowerCase().includes('icici') ? 'icicilombard.com' :
+                          policyData.name.toLowerCase().includes('tata') ? 'tataaig.com' :
+                          
+                          policyData.portfolio?.toLowerCase().includes('motor') ? 'icicilombard.com' :
+                          policyData.portfolio?.toLowerCase().includes('health') ? 'starhealth.in' :
+                          policyData.portfolio?.toLowerCase().includes('life') ? 'licindia.in' :
+                          
+                          'insuranceadvisor.com'
+                        }&sz=128`} 
+                        alt={policyData.name}
+                        className="w-full h-full object-contain"
+                        onError={(e) => {
+                          const target = e.target as HTMLImageElement;
+                          target.src = `https://ui-avatars.com/api/?name=${policyData.name}&background=f1f5f9&color=2563eb&bold=true&font-size=0.33`;
+                        }}
+                     />
                   </div>
-                  <div className="absolute -bottom-1.5 -right-1.5 w-7 h-7 rounded-lg bg-emerald-500 border-4 border-[#0f172a] flex items-center justify-center">
-                     <CheckCircle2 className="w-3.5 h-3.5 text-white" />
+                  <div className="absolute -bottom-2 -right-2 w-8 h-8 rounded-xl bg-emerald-500 border-4 border-[#0f172a] flex items-center justify-center shadow-lg">
+                     <CheckCircle2 className="w-4 h-4 text-white" />
                   </div>
                </div>
                <div>
-                  <div className="flex items-center gap-5 mb-2">
-                     <h1 className="text-2xl font-black text-white tracking-tight">{policyData.name}</h1>
-                     <span className={`px-3 py-1 rounded-lg text-[10px] font-bold border backdrop-blur-md ${policyData.status === 'Active' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30' :
+                  <div className="flex items-center gap-5 mb-3">
+                     <h1 className="text-4xl font-black text-white tracking-tight leading-none">{policyData.name}</h1>
+                     <span className={`px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-widest border backdrop-blur-md ${policyData.status === 'Active' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30' :
                            policyData.status === 'Renewal Due' ? 'bg-amber-500/10 text-amber-400 border-amber-500/30' : 'bg-rose-500/10 text-rose-400 border-rose-500/30'
                         }`}>
                         {policyData.status}
                      </span>
                   </div>
-                  <div className="flex items-center gap-3">
-                     <div className="w-1 h-1 rounded-full bg-violet-500"></div>
-                     <p className="text-slate-400 font-bold text-[11px] tracking-widest">
-                        {policyData.id} <span className="mx-2 text-slate-700">|</span> {policyData.portfolio}
+                  <div className="flex items-center gap-4">
+                     <div className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse"></div>
+                     <p className="text-slate-400 font-bold text-[11px] tracking-[0.2em] uppercase">
+                        {policyData.id} <span className="mx-3 text-slate-700">|</span> {policyData.portfolio}
                      </p>
                   </div>
                </div>
             </div>
 
-            <div className="bg-white/5 backdrop-blur-xl rounded-[28px] p-5 border border-white/10 flex items-center gap-6 z-10">
+            <div className="flex items-center gap-10 z-10">
                <div className="text-right">
-                  <p className="text-[10px] font-bold text-slate-500 mb-0.5 tracking-widest">Current Valuation</p>
-                  <p className="text-xl font-black text-white">{policyData.period.premium}</p>
+                  <p className="text-4xl font-black text-blue-400 tracking-tight mb-1">{policyData.period.premium}</p>
+                  <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em]">Policy Premium</p>
                </div>
-               <div className="w-px h-10 bg-white/10"></div>
-               <div className="text-right">
-                  <p className="text-[10px] font-bold text-slate-500 mb-0.5 tracking-widest">Maturity Date</p>
-                  <p className="text-[13px] font-black text-violet-400">{policyData.period.expiryDate}</p>
+               <div className="w-px h-16 bg-white/10 hidden lg:block"></div>
+               <div className="text-right hidden sm:block">
+                  <p className="text-xl font-black text-white tracking-tight mb-1">{policyData.period.expiryDate}</p>
+                  <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em]">Maturity Date</p>
                </div>
             </div>
          </div>

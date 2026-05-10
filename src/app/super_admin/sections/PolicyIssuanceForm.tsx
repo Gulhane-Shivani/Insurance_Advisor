@@ -50,6 +50,7 @@ const PLANS = [
 ];
 
 const PolicyIssuanceForm: React.FC<PolicyIssuanceFormProps> = ({ onBack, onSave, editingPolicyId }) => {
+  const [availablePlans, setAvailablePlans] = useState(PLANS);
   const [selectedPlanId, setSelectedPlanId] = useState('');
   const [customerName, setCustomerName] = useState('');
   const [email, setEmail] = useState('');
@@ -60,6 +61,36 @@ const PolicyIssuanceForm: React.FC<PolicyIssuanceFormProps> = ({ onBack, onSave,
   const [expiryDate, setExpiryDate] = useState('');
   const [customBenefits, setCustomBenefits] = useState<string[]>([]);
   const [customCoverage, setCustomCoverage] = useState<string[]>([]);
+
+  // Load plans from storage
+  useEffect(() => {
+    const savedPlansRaw = localStorage.getItem('custom_insurance_plans');
+    if (savedPlansRaw) {
+      try {
+        const savedPlans = JSON.parse(savedPlansRaw);
+        const mapped = savedPlans.map((p: any) => ({
+          id: p.id,
+          name: p.name,
+          category: p.category,
+          provider: p.provider,
+          premium: `₹${p.monthlyPrice.toLocaleString()}`,
+          color: p.category.toLowerCase().includes('health') ? 'violet' : 
+                 p.category.toLowerCase().includes('life') ? 'blue' : 
+                 p.category.toLowerCase().includes('motor') ? 'indigo' : 'slate',
+          coverage: [p.coverage],
+          benefits: p.topBenefits
+        }));
+        // Merge with defaults but prefer custom IDs
+        const combined = [...mapped];
+        PLANS.forEach(p => {
+          if (!combined.find(c => c.id === p.id)) combined.push(p);
+        });
+        setAvailablePlans(combined);
+      } catch (e) {
+        console.error('Failed to load custom plans:', e);
+      }
+    }
+  }, []);
 
   useEffect(() => {
     if (editingPolicyId) {
@@ -96,13 +127,13 @@ const PolicyIssuanceForm: React.FC<PolicyIssuanceFormProps> = ({ onBack, onSave,
         setCustomCoverage(Array.isArray(c) ? c : c.split(',').map((s: string) => s.trim()).filter(Boolean));
 
         // Try to match plan
-        const match = PLANS.find(plan => plan.category === p.type || plan.name === p.name);
+        const match = availablePlans.find(plan => plan.category === p.type || plan.name === p.name);
         if (match) setSelectedPlanId(match.id);
       }
     }
-  }, [editingPolicyId]);
+  }, [editingPolicyId, availablePlans]);
 
-  const selectedPlan = PLANS.find(p => p.id === selectedPlanId);
+  const selectedPlan = availablePlans.find(p => p.id === selectedPlanId);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -111,6 +142,7 @@ const PolicyIssuanceForm: React.FC<PolicyIssuanceFormProps> = ({ onBack, onSave,
     const newPolicy = {
       id: editingPolicyId || `IA-${selectedPlan.category.substring(0, 4).toUpperCase()}-${Math.floor(100 + Math.random() * 900)}`,
       type: selectedPlan.category,
+      provider: selectedPlan.provider,
       customer: customerName,
       email: email,
       contact: contact,
@@ -363,7 +395,7 @@ const PolicyIssuanceForm: React.FC<PolicyIssuanceFormProps> = ({ onBack, onSave,
                            className={`w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-2xl text-[13px] font-black text-slate-800 focus:outline-none focus:ring-4 focus:ring-violet-500/5 focus:border-violet-600 transition-all appearance-none ${editingPolicyId ? 'opacity-60 cursor-not-allowed' : 'cursor-pointer'}`}
                         >
                            <option value="">Choose Catalog...</option>
-                           {PLANS.map(plan => (
+                           {availablePlans.map(plan => (
                               <option key={plan.id} value={plan.id}>
                                  {plan.name} ({plan.category})
                               </option>
