@@ -46,7 +46,7 @@ const INITIAL_PLANS: PolicyPlan[] = [
     coverage: '₹5,00,000',
     status: 'Active',
     description: 'Comprehensive health coverage for the whole family.',
-    topBenefits: ['Cashless Treatment', 'No Room Rent Cap']
+    topBenefits: ['Cashless Treatment', 'No Room Rent Cap', 'Air Ambulance']
   },
   {
     id: 'PLN-HLTH-02',
@@ -58,9 +58,143 @@ const INITIAL_PLANS: PolicyPlan[] = [
     coverage: '₹10,00,000',
     status: 'Active',
     description: 'Advanced health protection with secure benefits.',
-    topBenefits: ['2x Coverage', 'Global Coverage']
+    topBenefits: ['2x Coverage', 'Global Coverage', 'OPD Benefit']
+  },
+  {
+    id: 'PLN-MTR-03',
+    name: 'Motor Insurance Plus',
+    category: 'Motor Insurance',
+    provider: 'ICICI Lombard',
+    rating: 4.6,
+    monthlyPrice: 850,
+    coverage: 'IDV ₹8,50,000',
+    status: 'Active',
+    description: 'High-value protection for your vehicle.',
+    topBenefits: ['Zero Dep', 'Personal Accident', 'Key Replacement']
+  },
+  {
+    id: 'PLN-MTR-04',
+    name: 'Auto Safe',
+    category: 'Motor Insurance',
+    provider: 'Tata AIG',
+    rating: 4.4,
+    monthlyPrice: 790,
+    coverage: 'IDV ₹7,90,000',
+    status: 'Active',
+    description: 'Reliable and affordable motor insurance.',
+    topBenefits: ['Engine Secure', 'Invoice Cover', 'Emergency Med-Evac']
+  },
+  {
+    id: 'PLN-LIFE-05',
+    name: 'Life Click 2 Protect',
+    category: 'Life Insurance',
+    provider: 'HDFC Ergo',
+    rating: 4.8,
+    monthlyPrice: 2200,
+    coverage: '₹1,00,00,000',
+    status: 'Active',
+    description: 'Pure term life insurance for complete peace of mind.',
+    topBenefits: ['Critical Illness', 'Terminal Illness Cover', 'Accident Rider']
+  },
+  {
+    id: 'PLN-HLTH-06',
+    name: 'Senior Citizens Red Carpet',
+    category: 'Health Insurance',
+    provider: 'Star Health',
+    rating: 4.7,
+    monthlyPrice: 3500,
+    coverage: '₹20,00,000',
+    status: 'Active',
+    description: 'Dedicated health support for senior citizens.',
+    topBenefits: ['Ayush Cover', 'No Pre-medical', 'Modern Treatments']
+  },
+  {
+    id: 'PLN-BIZ-07',
+    name: 'Business Shield',
+    category: 'Business Insurance',
+    provider: 'ICICI Lombard',
+    rating: 4.6,
+    monthlyPrice: 2800,
+    coverage: '₹50,00,000',
+    status: 'Active',
+    description: 'Protect your business assets and liabilities.',
+    topBenefits: ['Fire & Burglary', 'Employee Liability', 'Digital Assets']
+  },
+  {
+    id: 'PLN-BIZ-08',
+    name: 'SME Shield',
+    category: 'Business Insurance',
+    provider: 'Tata AIG',
+    rating: 4.5,
+    monthlyPrice: 1950,
+    coverage: '₹25,00,000',
+    status: 'Active',
+    description: 'Comprehensive protection for small and medium enterprises.',
+    topBenefits: ['Public Liability', 'Machinery Breakdown', 'Money Cover']
+  },
+  {
+    id: 'PLN-MTR-09',
+    name: 'Elite Private Car',
+    category: 'Motor Insurance',
+    provider: 'HDFC Ergo',
+    rating: 4.9,
+    monthlyPrice: 1100,
+    coverage: 'IDV ₹12,00,000',
+    status: 'Active',
+    description: 'Premium protection for luxury and private vehicles.',
+    topBenefits: ['Consumables Cover', 'Tyre Secure', 'Loss of Content']
+  },
+  {
+    id: 'PLN-HLTH-10',
+    name: 'Diabetes Safe',
+    category: 'Health Insurance',
+    provider: 'Star Health',
+    rating: 4.4,
+    monthlyPrice: 1800,
+    coverage: '₹7,00,000',
+    status: 'Active',
+    description: 'Specialized health management for diabetic patients.',
+    topBenefits: ['Diabetes Management', 'No Wait Period', 'Dialysis Cover']
+  },
+  {
+    id: 'PLN-LIFE-11',
+    name: 'Pru iProtect Smart',
+    category: 'Life Insurance',
+    provider: 'ICICI Lombard',
+    rating: 4.8,
+    monthlyPrice: 1500,
+    coverage: '₹50,00,000',
+    status: 'Active',
+    description: 'Smart term plan with critical illness benefits.',
+    topBenefits: ['Waiver of Premium', 'Accident Death', 'Life Stage Protect']
+  },
+  {
+    id: 'PLN-LIFE-12',
+    name: 'Maha Raksha',
+    category: 'Life Insurance',
+    provider: 'Tata AIG',
+    rating: 4.7,
+    monthlyPrice: 2100,
+    coverage: '₹1,50,00,000',
+    status: 'Active',
+    description: 'Ultimate protection with high coverage thresholds.',
+    topBenefits: ['Whole Life Cover', 'Return of Premium', 'Income Benefit']
+  },
+  {
+    id: 'PLN-BIZ-13',
+    name: 'Small Business Protection',
+    category: 'Business Insurance',
+    provider: 'HDFC Ergo',
+    rating: 4.3,
+    monthlyPrice: 1300,
+    coverage: '₹10,00,000',
+    status: 'Active',
+    description: 'Essential safeguards for small scale business operations.',
+    topBenefits: ['Stock Protection', 'Interruption Cover', 'Glass Cover']
   }
 ];
+
+
 
 const PolicyPlanManagement: React.FC = () => {
   const [plans, setPlans] = useState<PolicyPlan[]>(INITIAL_PLANS);
