@@ -45,12 +45,19 @@ const SuperAdminDashboard: React.FC = () => {
   const [openMenus, setOpenMenus] = useState<string[]>(['users', 'policies']); // Default open
   const dropdownRef = useRef<HTMLDivElement>(null);
 
+  const [searchQuery, setSearchQuery] = useState('');
+  const [showSearchResults, setShowSearchResults] = useState(false);
+  const searchRef = useRef<HTMLDivElement>(null);
+
   const [selectedPolicyId, setSelectedPolicyId] = useState<string | null>(null);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
         setDropdownOpen(false);
+      }
+      if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
+        setShowSearchResults(false);
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
@@ -113,6 +120,39 @@ const SuperAdminDashboard: React.FC = () => {
     setSelectedPolicyId(policyId);
     setActiveSection('policy-detail');
   };
+
+  const getSearchResults = () => {
+    if (!searchQuery.trim()) return [];
+    const query = searchQuery.toLowerCase();
+    const results: { id: string, label: string, icon: any, type: string, action?: () => void }[] = [];
+
+    adminMenuItems.forEach(item => {
+      if (item.label.toLowerCase().includes(query)) {
+        results.push({ id: item.id, label: item.label, icon: item.icon, type: 'Module' });
+      }
+      if (item.hasSub && item.subItems) {
+        item.subItems.forEach(sub => {
+          if (sub.label.toLowerCase().includes(query)) {
+            results.push({ id: sub.id, label: sub.label, icon: sub.icon, type: 'Module' });
+          }
+        });
+      }
+    });
+
+    if ('sg-hlth-002'.includes(query) || query.includes('policy')) {
+        results.push({ 
+            id: 'mock-policy', 
+            label: 'View Policy: SG-HLTH-002', 
+            icon: FileText, 
+            type: 'Action',
+            action: () => handleViewPolicy('SG-HLTH-002')
+        });
+    }
+
+    return results;
+  };
+
+  const searchResults = getSearchResults();
 
   const renderSection = () => {
     switch (activeSection) {
@@ -252,13 +292,55 @@ const SuperAdminDashboard: React.FC = () => {
             <button onClick={() => setIsSidebarOpen(true)} className="p-2 text-slate-600 lg:hidden">
               <Menu size={20} />
             </button>
-            <div className="relative w-full max-w-md hidden md:block">
+            <div className="relative w-full max-w-md hidden md:block" ref={searchRef}>
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4" />
               <input
                 type="text"
-                placeholder="Global search..."
-                className="w-full bg-slate-50 border border-slate-200 rounded-2xl py-2.5 pl-11 pr-4 text-xs font-medium focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all"
+                placeholder="Global search (modules, policies)..."
+                value={searchQuery}
+                onChange={(e) => {
+                  setSearchQuery(e.target.value);
+                  setShowSearchResults(true);
+                }}
+                onFocus={() => setShowSearchResults(true)}
+                className="w-full bg-slate-50 border border-slate-200 rounded-2xl py-2.5 pl-11 pr-4 text-xs font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all"
               />
+              
+              {showSearchResults && searchQuery.trim() !== '' && (
+                <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden z-50">
+                  {searchResults.length > 0 ? (
+                    <div className="max-h-64 overflow-y-auto py-2">
+                      {searchResults.map((result, idx) => (
+                        <button
+                          key={idx}
+                          onClick={() => {
+                            if (result.action) {
+                              result.action();
+                            } else {
+                              setActiveSection(result.id);
+                            }
+                            setSearchQuery('');
+                            setShowSearchResults(false);
+                          }}
+                          className="w-full text-left px-4 py-3 hover:bg-slate-50 flex items-center gap-3 transition-colors"
+                        >
+                          <div className="w-8 h-8 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center flex-shrink-0">
+                            <result.icon size={16} />
+                          </div>
+                          <div>
+                            <p className="text-sm font-bold text-slate-800">{result.label}</p>
+                            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{result.type}</p>
+                          </div>
+                        </button>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="px-4 py-8 text-center">
+                      <p className="text-sm font-medium text-slate-500">No results found for "{searchQuery}"</p>
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
           </div>
 
