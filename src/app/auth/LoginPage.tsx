@@ -77,7 +77,7 @@ const LoginPage: React.FC = () => {
           <div className="space-y-2">
             <div className="flex justify-between items-center">
               <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Password</label>
-              <a href="#" className="text-[10px] font-black text-blue-600 uppercase tracking-widest hover:text-blue-700 transition-colors">Reset</a>
+              <Link to="/reset-password" className="text-[10px] font-black text-blue-600 uppercase tracking-widest hover:text-blue-700 transition-colors">Reset</Link>
             </div>
             <div className="relative">
               <input

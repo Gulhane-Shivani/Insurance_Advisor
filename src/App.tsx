@@ -24,6 +24,7 @@ import HelpCenterPage from './app/support/HelpCenterPage';
 import CalculatorPage from './app/tools/CalculatorPage';
 import LoginPage from './app/auth/LoginPage';
 import RegisterPage from './app/auth/RegisterPage';
+import ResetPasswordPage from './app/auth/ResetPasswordPage';
 import ScrollToTop from './components/common/ScrollToTop';
 import SuperAdminDashboard from './app/super_admin/page';
 
@@ -65,6 +66,7 @@ const App: React.FC = () => {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
+          <Route path="/reset-password" element={<ResetPasswordPage />} />
           <Route path="/tools/calculator/:type" element={<CalculatorPage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/compare" element={<ComparePage />} />
