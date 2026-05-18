@@ -15,8 +15,7 @@ import {
   RefreshCw,
   CreditCard,
   Bell,
-  Menu,
-  X
+  Menu
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 

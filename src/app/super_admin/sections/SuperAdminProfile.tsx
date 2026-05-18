@@ -1,13 +1,11 @@
 import React, { useState } from 'react';
 import { 
-  User, 
   MapPin, 
   Briefcase, 
   Phone, 
   Mail, 
   ShieldCheck, 
   Users, 
-  Settings,
   Edit2,
   Camera,
   Activity,
