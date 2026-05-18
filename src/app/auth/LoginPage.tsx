@@ -25,7 +25,7 @@ const LoginPage: React.FC = () => {
         if (userData.role === 'SUPER_ADMIN') {
           navigate('/super_admin');
         } else if (userData.role === 'ADMIN') {
-          navigate('/admin/dashboard');
+          navigate('/admin/overview');
         } else if (userData.role === 'AGENT') {
           navigate('/agent_dashboard');
         } else if (userData.role === 'CSR') {
