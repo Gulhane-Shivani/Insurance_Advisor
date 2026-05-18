@@ -45,6 +45,7 @@ import RenewalManagement from './app/super_admin/sections/RenewalManagement';
 import PaymentManagement from './app/super_admin/sections/PaymentManagement';
 import NotificationCenter from './app/super_admin/sections/NotificationCenter';
 import AdminOverview from './app/super_admin/sections/AdminOverview';
+import AdminProfile from './app/admin/sections/AdminProfile';
 
 import AgentDashboard from './app/agent_dashboard/page';
 import CSRDashboard from './app/customer_service_dashboard';
@@ -102,6 +103,7 @@ const App: React.FC = () => {
             <Route path="reports" element={<OperationsReports />} />
             <Route path="communication" element={<ContentCommunication />} />
             <Route path="users" element={<AdminUsers />} />
+            <Route path="profile" element={<AdminProfile />} />
             <Route path="dashboard" element={<AdminDashboard />} />
             <Route path="insurance" element={<AdminInsurance />} />
             <Route path="renewals" element={<RenewalManagement />} />

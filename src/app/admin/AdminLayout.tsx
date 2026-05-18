@@ -128,7 +128,10 @@ const AdminLayout: React.FC = () => {
         </nav>
 
         <div className="p-4 border-t border-slate-800">
-          <div className="bg-slate-800/50 rounded-2xl p-4 flex items-center gap-3 border border-slate-700">
+          <div 
+            onClick={() => navigate('/admin/profile')}
+            className="bg-slate-800/50 rounded-2xl p-4 flex items-center gap-3 border border-slate-700 cursor-pointer hover:bg-slate-800 transition-colors"
+          >
             <div className="w-10 h-10 rounded-full bg-indigo-600 flex items-center justify-center flex-shrink-0 text-white font-bold border-2 border-indigo-500/50 shadow-lg">
               {user?.full_name?.charAt(0) || 'A'}
             </div>
@@ -143,7 +146,7 @@ const AdminLayout: React.FC = () => {
       {/* Main Content Wrapper */}
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden relative">
         {/* Top Header - Slimmer */}
-        <header className="h-14 bg-white border-b border-slate-200 flex items-center justify-between px-6 z-10 flex-shrink-0 shadow-sm">
+        <header className="relative h-14 bg-white border-b border-slate-200 flex items-center justify-between px-6 z-40 flex-shrink-0 shadow-sm">
           <div className="flex items-center gap-4">
             <h1 className="text-lg font-black text-slate-800 tracking-tight">{getPageTitle()}</h1>
             <div className="h-4 w-px bg-slate-200"></div>
@@ -180,7 +183,10 @@ const AdminLayout: React.FC = () => {
                     <p className="text-[10px] text-slate-500 truncate">{user?.email || 'admin@system.com'}</p>
                   </div>
 
-                  <button className="w-full text-left px-4 py-2 text-[11px] font-bold text-slate-700 hover:bg-slate-50 flex items-center">
+                  <button 
+                    onClick={() => { navigate('/admin/profile'); setDropdownOpen(false); }}
+                    className="w-full text-left px-4 py-2 text-[11px] font-bold text-slate-700 hover:bg-slate-50 flex items-center"
+                  >
                     <User className="w-3.5 h-3.5 mr-2.5 text-slate-400" />
                     Profile Settings
                   </button>
