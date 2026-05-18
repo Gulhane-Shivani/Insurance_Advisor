@@ -34,6 +34,7 @@ import RenewalManagement from './sections/RenewalManagement';
 import PaymentManagement from './sections/PaymentManagement';
 import NotificationCenter from './sections/NotificationCenter';
 import PolicyPlanManagement from './sections/PolicyPlanManagement';
+import SuperAdminProfile from './sections/SuperAdminProfile';
 
 
 const SuperAdminDashboard: React.FC = () => {
@@ -157,6 +158,7 @@ const SuperAdminDashboard: React.FC = () => {
   const renderSection = () => {
     switch (activeSection) {
       case 'overview': return <AdminOverview />;
+      case 'profile': return <SuperAdminProfile />;
       case 'users':
       case 'staff':
         return <UserManagement viewType="staff" />;
@@ -272,12 +274,15 @@ const SuperAdminDashboard: React.FC = () => {
         </nav>
 
         <div className="p-4 border-t border-slate-800">
-          <div className="bg-slate-800/50 rounded-2xl p-4 flex items-center gap-3 cursor-pointer hover:bg-slate-800 transition-colors border border-slate-700">
-            <div className="w-10 h-10 rounded-full bg-indigo-600 flex items-center justify-center flex-shrink-0 text-white font-bold border-2 border-indigo-500/50 shadow-lg">
-              SA
+          <div 
+            onClick={() => { setActiveSection('profile'); setIsSidebarOpen(false); }}
+            className="bg-slate-800/50 rounded-2xl p-4 flex items-center gap-3 cursor-pointer hover:bg-slate-800 transition-colors border border-slate-700"
+          >
+            <div className="w-10 h-10 rounded-full bg-[#0061FF] flex items-center justify-center flex-shrink-0 text-white font-bold border-2 border-blue-500/50 shadow-lg">
+              RK
             </div>
             <div className="overflow-hidden">
-              <p className="text-sm font-black text-white truncate">Super Administrator</p>
+              <p className="text-sm font-black text-white truncate">Rohit kumar</p>
               <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Master Authority</p>
             </div>
           </div>
@@ -287,7 +292,7 @@ const SuperAdminDashboard: React.FC = () => {
       {/* Main Content Wrapper */}
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden relative">
         {/* Top Header - Matching Admin Style */}
-        <header className="h-20 bg-white/80 backdrop-blur-md border-b border-slate-200 flex items-center justify-between px-8 z-10 flex-shrink-0">
+        <header className="relative h-20 bg-white/80 backdrop-blur-md border-b border-slate-200 flex items-center justify-between px-8 z-40 flex-shrink-0">
           <div className="flex items-center gap-8 flex-1">
             <button onClick={() => setIsSidebarOpen(true)} className="p-2 text-slate-600 lg:hidden">
               <Menu size={20} />
@@ -367,28 +372,28 @@ const SuperAdminDashboard: React.FC = () => {
                 className="flex items-center gap-3 hover:bg-slate-50 p-1 rounded-2xl transition-all focus:outline-none"
               >
                 <div className="text-right hidden sm:block">
-                  <p className="text-[11px] font-black text-slate-900 leading-tight">Super Administrator</p>
+                  <p className="text-[11px] font-black text-slate-900 leading-tight">Rohit kumar</p>
                   <p className="text-[9px] text-slate-400 font-bold uppercase tracking-widest leading-tight">Super Admin</p>
                 </div>
-                <div className="w-10 h-10 rounded-xl bg-slate-900 text-white flex items-center justify-center font-black shadow-lg">
-                  SA
+                <div className="w-10 h-10 rounded-xl bg-[#0061FF] text-white flex items-center justify-center font-black shadow-lg">
+                  RK
                 </div>
               </button>
 
               {dropdownOpen && (
                 <div className="absolute right-0 mt-3 w-64 bg-white rounded-[24px] shadow-2xl border border-slate-100 p-2 z-50 animate-in fade-in slide-in-from-top-4">
                   <div className="px-5 py-4 border-b border-slate-50 mb-2">
-                    <p className="text-sm font-black text-slate-800">Super Administrator</p>
+                    <p className="text-sm font-black text-slate-800">Rohit kumar</p>
                     <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Master Authority Hub</p>
                   </div>
 
-                  <button onClick={() => { setActiveSection('users'); setDropdownOpen(false); }} className="w-full text-left px-5 py-3 text-xs font-bold text-slate-600 hover:bg-slate-50 rounded-xl flex items-center gap-3 transition-colors">
+                  <button onClick={() => { setActiveSection('profile'); setDropdownOpen(false); }} className="w-full text-left px-5 py-3 text-xs font-bold text-slate-600 hover:bg-slate-50 rounded-xl flex items-center gap-3 transition-colors">
                     <UserIcon className="w-4 h-4 text-slate-400" />
-                    Console Profile
+                    Profile
                   </button>
                   <button onClick={() => { setActiveSection('system'); setDropdownOpen(false); }} className="w-full text-left px-5 py-3 text-xs font-bold text-slate-600 hover:bg-slate-50 rounded-xl flex items-center gap-3 transition-colors">
                     <Settings className="w-4 h-4 text-slate-400" />
-                    Security Settings
+                    Settings
                   </button>
 
                   <div className="h-px bg-slate-100 my-2"></div>
@@ -398,7 +403,7 @@ const SuperAdminDashboard: React.FC = () => {
                     className="w-full text-left px-5 py-3 text-xs font-bold text-red-600 hover:bg-red-50 rounded-xl flex items-center gap-3 transition-colors"
                   >
                     <LogOut className="w-4 h-4" />
-                    Sign Out Console
+                    Sign Out 
                   </button>
                 </div>
               )}
