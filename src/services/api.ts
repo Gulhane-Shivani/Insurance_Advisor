@@ -29,11 +29,16 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => response,
   (error) => {
+    // Only auto-logout if we have a token AND it's not a login request
     if (error.response?.status === 401) {
-      // Auto logout on 401 Unauthorized
-      localStorage.removeItem('token');
-      localStorage.removeItem('user');
-      window.location.href = '/'; // Or handle via state if preferred
+      const isLoginRequest = error.config?.url?.includes('/auth/login');
+      const hasToken = localStorage.getItem('token') !== null;
+      
+      if (hasToken && !isLoginRequest) {
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        window.location.href = '/login';
+      }
     }
     return Promise.reject(error);
   }

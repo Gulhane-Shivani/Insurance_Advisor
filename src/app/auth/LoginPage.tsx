@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, Navigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { useAuth } from '../../context/AuthContext';
 import { Eye, EyeOff } from 'lucide-react';
@@ -8,8 +8,17 @@ const LoginPage: React.FC = () => {
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const { login } = useAuth();
+  const { login, user } = useAuth();
   const navigate = useNavigate();
+
+  // If already logged in, redirect to correct dashboard
+  if (user) {
+    if (user.role === 'SUPER_ADMIN') return <Navigate to="/super_admin" replace />;
+    if (user.role === 'ADMIN') return <Navigate to="/admin/overview" replace />;
+    if (user.role === 'AGENT') return <Navigate to="/agent_dashboard" replace />;
+    if (user.role === 'CSR') return <Navigate to="/csr_dashboard" replace />;
+    return <Navigate to="/dashboard" replace />;
+  }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });

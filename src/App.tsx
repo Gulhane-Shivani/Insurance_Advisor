@@ -49,6 +49,7 @@ import AdminProfile from './app/admin/sections/AdminProfile';
 
 import AgentDashboard from './app/agent_dashboard/page';
 import CSRDashboard from './app/customer_service_dashboard';
+import ProtectedRoute from './components/ProtectedRoute';
 
 const App: React.FC = () => {
   return (
@@ -73,7 +74,7 @@ const App: React.FC = () => {
           <Route path="/compare" element={<ComparePage />} />
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/quote" element={<QuotePage />} />
-          <Route path="/dashboard" element={<DashboardPage />} />
+          <Route path="/dashboard" element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
           <Route path="/feedback" element={<FeedbackPage />} />
           <Route path="/insurance" element={<InsuranceOverview />} />
           <Route path="/insurance/life" element={<LifeInsurancePage />} />
@@ -86,12 +87,12 @@ const App: React.FC = () => {
           <Route path="/renewal" element={<RenewalPage />} />
           <Route path="/care" element={<CarePage />} />
           <Route path="/help" element={<HelpCenterPage />} />
-          <Route path="/super_admin" element={<SuperAdminDashboard />} />
-          <Route path="/agent_dashboard" element={<AgentDashboard />} />
-          <Route path="/csr_dashboard" element={<CSRDashboard />} />
+          <Route path="/super_admin" element={<ProtectedRoute allowedRoles={['SUPER_ADMIN']}><SuperAdminDashboard /></ProtectedRoute>} />
+          <Route path="/agent_dashboard" element={<ProtectedRoute allowedRoles={['AGENT']}><AgentDashboard /></ProtectedRoute>} />
+          <Route path="/csr_dashboard" element={<ProtectedRoute allowedRoles={['CSR']}><CSRDashboard /></ProtectedRoute>} />
 
           {/* Admin Routes */}
-          <Route path="/admin" element={<AdminLayout />}>
+          <Route path="/admin" element={<ProtectedRoute allowedRoles={['ADMIN']}><AdminLayout /></ProtectedRoute>}>
             <Route index element={<Navigate to="/admin/overview" replace />} />
             <Route path="overview" element={<AdminOverview />} />
             <Route path="leads" element={<LeadManagement />} />
