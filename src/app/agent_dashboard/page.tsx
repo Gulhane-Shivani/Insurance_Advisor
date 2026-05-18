@@ -36,8 +36,13 @@ const AgentDashboard: React.FC = () => {
   const { logout } = useAuth();
   const navigate = useNavigate();
   const [activeSection, setActiveSection] = useState('Dashboard');
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+
+  const handleNavClick = (id: string) => {
+    setActiveSection(id);
+    setIsSidebarOpen(false); // close on mobile
+  };
 
   // Mock Agent Data
   const agentData = {
@@ -90,6 +95,14 @@ const AgentDashboard: React.FC = () => {
 
   return (
     <div className="flex h-screen bg-[#F0F2F5] overflow-hidden font-sans">
+      {/* Mobile Backdrop */}
+      {isSidebarOpen && (
+        <div
+          className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-40 lg:hidden"
+          onClick={() => setIsSidebarOpen(false)}
+        />
+      )}
+
       {/* Sidebar */}
       <aside 
         className={`fixed inset-y-0 left-0 z-50 w-72 bg-slate-900 text-white transition-all duration-300 transform ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:relative lg:translate-x-0 flex flex-col shadow-2xl`}
@@ -108,7 +121,7 @@ const AgentDashboard: React.FC = () => {
           {navItems.map((item) => (
             <button
               key={item.id}
-              onClick={() => setActiveSection(item.id)}
+              onClick={() => handleNavClick(item.id)}
               className={`w-full flex items-center justify-between px-4 py-3.5 rounded-2xl text-sm font-bold transition-all group ${
                 activeSection === item.id 
                 ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/20' 

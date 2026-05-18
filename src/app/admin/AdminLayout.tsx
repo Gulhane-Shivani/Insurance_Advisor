@@ -14,7 +14,9 @@ import {
   Briefcase,
   RefreshCw,
   CreditCard,
-  Bell
+  Bell,
+  Menu,
+  X
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 
@@ -23,6 +25,7 @@ const AdminLayout: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const handleLogout = () => {
@@ -39,6 +42,11 @@ const AdminLayout: React.FC = () => {
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
+
+  // Close sidebar on route change (mobile)
+  useEffect(() => {
+    setIsSidebarOpen(false);
+  }, [location.pathname]);
 
   const navGroups = [
     {
@@ -78,13 +86,32 @@ const AdminLayout: React.FC = () => {
       const link = group.links.find(l => location.pathname.includes(l.to));
       if (link) return link.label;
     }
+    if (location.pathname.includes('/admin/profile')) return 'Admin Profile';
     return 'Admin Panel';
   };
 
+  const initials = user?.full_name
+    ? user.full_name.split(' ').map((n: string) => n[0]).join('').toUpperCase()
+    : 'A';
+
   return (
     <div className="flex h-screen w-full bg-[#f8fafc] overflow-hidden font-sans antialiased text-slate-900">
-      {/* Sidebar - Matching Super Admin */}
-      <aside className="w-64 bg-slate-900 text-white flex flex-col flex-shrink-0 shadow-2xl z-20">
+
+      {/* Mobile Backdrop */}
+      {isSidebarOpen && (
+        <div
+          className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-40 lg:hidden"
+          onClick={() => setIsSidebarOpen(false)}
+        />
+      )}
+
+      {/* Sidebar */}
+      <aside className={`
+        fixed inset-y-0 left-0 z-50 w-64 bg-slate-900 text-white flex flex-col flex-shrink-0 shadow-2xl
+        transition-transform duration-300 ease-in-out
+        ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}
+        lg:relative lg:translate-x-0
+      `}>
         <div className="h-24 flex flex-col items-center justify-center bg-slate-900 border-b border-white/5">
           <span className="text-xl font-black tracking-tighter text-white flex items-center gap-3">
             <div className="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center shadow-lg shadow-indigo-900/50">
@@ -133,7 +160,7 @@ const AdminLayout: React.FC = () => {
             className="bg-slate-800/50 rounded-2xl p-4 flex items-center gap-3 border border-slate-700 cursor-pointer hover:bg-slate-800 transition-colors"
           >
             <div className="w-10 h-10 rounded-full bg-indigo-600 flex items-center justify-center flex-shrink-0 text-white font-bold border-2 border-indigo-500/50 shadow-lg">
-              {user?.full_name?.charAt(0) || 'A'}
+              {initials}
             </div>
             <div className="overflow-hidden">
               <p className="text-sm font-black text-white truncate">{user?.full_name || 'Administrator'}</p>
@@ -145,17 +172,24 @@ const AdminLayout: React.FC = () => {
 
       {/* Main Content Wrapper */}
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden relative">
-        {/* Top Header - Slimmer */}
-        <header className="relative h-14 bg-white border-b border-slate-200 flex items-center justify-between px-6 z-40 flex-shrink-0 shadow-sm">
-          <div className="flex items-center gap-4">
+        {/* Top Header */}
+        <header className="relative h-14 bg-white border-b border-slate-200 flex items-center justify-between px-4 md:px-6 z-40 flex-shrink-0 shadow-sm">
+          <div className="flex items-center gap-3">
+            {/* Hamburger - mobile only */}
+            <button
+              onClick={() => setIsSidebarOpen(true)}
+              className="lg:hidden p-2 text-slate-600 hover:bg-slate-100 rounded-lg transition-all"
+            >
+              <Menu size={20} />
+            </button>
             <h1 className="text-lg font-black text-slate-800 tracking-tight">{getPageTitle()}</h1>
-            <div className="h-4 w-px bg-slate-200"></div>
+            <div className="h-4 w-px bg-slate-200 hidden sm:block"></div>
             <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest hidden md:block">
               {new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' })}
             </p>
           </div>
 
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3">
             <button
               onClick={() => navigate('/')}
               className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 text-[10px] font-black text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-lg transition-all uppercase tracking-wider"
@@ -171,7 +205,7 @@ const AdminLayout: React.FC = () => {
                 className="flex items-center gap-2 hover:bg-slate-50 p-1 pr-2 rounded-full border border-transparent hover:border-slate-200 transition-all focus:outline-none"
               >
                 <div className="w-8 h-8 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center font-black text-xs shadow-inner">
-                  {user?.full_name?.charAt(0) || 'A'}
+                  {initials}
                 </div>
                 <ChevronDown size={14} className={`text-slate-400 transition-transform ${dropdownOpen ? 'rotate-180' : ''}`} />
               </button>
@@ -207,7 +241,7 @@ const AdminLayout: React.FC = () => {
         </header>
 
         {/* Page Content */}
-        <main className="flex-1 overflow-y-auto scrollbar-hide p-6 scroll-smooth">
+        <main className="flex-1 overflow-y-auto scrollbar-hide p-4 md:p-6 scroll-smooth">
           <div className="max-w-7xl mx-auto h-full">
             <Outlet />
           </div>

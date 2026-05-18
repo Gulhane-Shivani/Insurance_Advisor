@@ -292,7 +292,7 @@ const SuperAdminDashboard: React.FC = () => {
       {/* Main Content Wrapper */}
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden relative">
         {/* Top Header - Matching Admin Style */}
-        <header className="relative h-20 bg-white/80 backdrop-blur-md border-b border-slate-200 flex items-center justify-between px-8 z-40 flex-shrink-0">
+        <header className="relative h-16 md:h-20 bg-white/80 backdrop-blur-md border-b border-slate-200 flex items-center justify-between px-4 md:px-8 z-40 flex-shrink-0">
           <div className="flex items-center gap-8 flex-1">
             <button onClick={() => setIsSidebarOpen(true)} className="p-2 text-slate-600 lg:hidden">
               <Menu size={20} />

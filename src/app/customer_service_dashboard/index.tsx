@@ -23,7 +23,7 @@ const CSRDashboard: React.FC = () => {
   const { logout } = useAuth();
   const navigate = useNavigate();
   const [activeSection, setActiveSection] = useState('Overview');
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isSupportModalOpen, setIsSupportModalOpen] = useState(false);
   const [supportRequest, setSupportRequest] = useState({ subject: '', priority: 'Normal', description: '' });
 
@@ -95,7 +95,7 @@ const CSRDashboard: React.FC = () => {
               {navItems.map((item) => (
                 <button
                   key={item.id}
-                  onClick={() => setActiveSection(item.id)}
+                  onClick={() => { setActiveSection(item.id); setIsSidebarOpen(false); }}
                   className={`w-full flex items-center gap-3 px-5 py-4 rounded-2xl text-sm font-semibold transition-all group ${activeSection === item.id
                       ? 'bg-violet-600 text-white shadow-xl shadow-violet-600/20'
                       : 'text-slate-400 hover:bg-white/5 hover:text-white'
